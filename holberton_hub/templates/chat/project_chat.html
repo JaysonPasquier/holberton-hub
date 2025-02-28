@@ -1,0 +1,231 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Chat - {{ project.titre }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4>{{ project.titre }} - Chat</h4>
+                <a href="{% url 'project_detail' project.id %}" class="btn btn-outline-secondary btn-sm">
+                    Retour au projet
+                </a>
+            </div>
+            <div class="card-body chat-container" style="height: 900px; overflow-y: auto;">
+                <div id="messages">
+                    {% for message in chat_messages %}
+                        <div class="message mb-4" data-message-id="{{ message.id }}">
+                            <div class="message-header d-flex align-items-center mb-2">
+                                {% if message.sender.profile_picture %}
+                                    <img src="{{ message.sender.profile_picture.url }}"
+                                         class="rounded-circle me-2"
+                                         style="width: 32px; height: 32px; object-fit: cover;">
+                                {% else %}
+                                    <img src="https://res.cloudinary.com/dsvolcznm/image/upload/v1/profile_pictures/default_avatar.png"
+                                         class="rounded-circle me-2"
+                                         style="width: 32px; height: 32px; object-fit: cover;">
+                                {% endif %}
+                                <a href="{% url 'user_profile' message.sender.username %}"
+                                   class="text-decoration-none fw-bold">
+                                    {{ message.sender.username }}
+                                </a>
+                            </div>
+
+                            <div class="ms-4">
+                                <div class="message-content {% if message.sender == user %}bg-primary text-white{% else %}bg-light{% endif %} p-2 rounded">
+                                    {{ message.content }}
+                                    <div class="message-time">
+                                        <small class="{% if message.sender == user %}text-white-50{% else %}text-muted{% endif %}">
+                                            {{ message.created_at|date:"H:i" }}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p class="text-center text-muted">Aucun message pour le moment.</p>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="card-footer">
+                <form method="POST" id="chat-form" onsubmit="return handleSubmit(event)">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <input type="text" name="message" class="form-control" placeholder="Votre message..." required>
+                        <button type="submit" class="btn btn-primary">Envoyer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Variables initiales
+    const chatContainer = document.querySelector('.chat-container');
+    const messagesContainer = document.getElementById('messages');
+    let lastMessageId = '{{ chat_messages.first.id|default:0 }}';
+    let oldestMessageId = parseInt('{{ oldest_id|default:0 }}');
+    const loadedMessageIds = new Set(
+        Array.from(document.querySelectorAll('.message')).map(el => el.dataset.messageId)
+    );
+
+    // Nouvelle fonction pour éviter les doublons
+    function addMessageIfNotExists(message) {
+        if (!loadedMessageIds.has(message.id.toString())) {
+            loadedMessageIds.add(message.id.toString());
+            const messageHtml = formatMessage(message);
+            return messageHtml;
+        }
+        return null;
+    }
+
+    function loadNewMessages() {
+        if (isLoading) return;
+
+        fetch(`/api/messages/?room={{ chat_room.id }}&after=${lastMessageId}`)
+            .then(response => response.json())
+            .then(data => {
+                let newContent = '';
+                data.forEach(message => {
+                    const messageHtml = addMessageIfNotExists(message);
+                    if (messageHtml) {
+                        newContent = messageHtml + newContent;
+                        lastMessageId = Math.max(lastMessageId, message.id);
+                    }
+                });
+                if (newContent) {
+                    messagesContainer.insertAdjacentHTML('afterbegin', newContent);
+                }
+            });
+    }
+
+    let isLoading = false;
+    let hasReachedBottom = false;
+
+    function handleScroll() {
+        const scrollPosition = chatContainer.scrollTop;
+        if (scrollPosition < 100 && !isLoading && !hasReachedBottom) {
+            isLoading = true;
+            const oldScrollHeight = chatContainer.scrollHeight;
+
+            fetch(`/api/messages/?room={{ chat_room.id }}&before=${oldestMessageId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length === 0) {
+                        hasReachedBottom = true;
+                        return;
+                    }
+
+                    let newContent = '';
+                    data.forEach(message => {
+                        const messageHtml = addMessageIfNotExists(message);
+                        if (messageHtml) {
+                            newContent += messageHtml;
+                            oldestMessageId = Math.min(oldestMessageId, message.id);
+                        }
+                    });
+
+                    if (newContent) {
+                        messagesContainer.insertAdjacentHTML('beforeend', newContent);
+                        chatContainer.scrollTop = chatContainer.scrollHeight - oldScrollHeight;
+                    }
+                })
+                .finally(() => {
+                    isLoading = false;
+                });
+        }
+    }
+
+    // Initialisation
+    chatContainer.addEventListener('scroll', handleScroll);
+    setInterval(loadNewMessages, 3000);
+
+    // Gestion du formulaire (inchangée)
+    const form = document.getElementById('chat-form');
+    let isSubmitting = false;
+
+    function getCsrfToken() {
+        return document.querySelector('[name=csrfmiddlewaretoken]').value;
+    }
+
+    // Correction du handleSubmit
+    async function handleSubmit(event) {
+        event.preventDefault();
+        if (isSubmitting) return false;
+
+        isSubmitting = true;
+        const input = form.querySelector('input[name="message"]');
+        const content = input.value.trim();
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        if (content) {
+            fetch('/api/messages/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify({
+                    content: content,
+                    room: parseInt('{{ chat_room.id }}')  // Utilisation de parseInt pour assurer un nombre
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        throw new Error(text);
+                    });
+                }
+                return response.json();
+            })
+            .then(message => {
+                input.value = '';
+                loadNewMessages();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                isSubmitting = false;
+            });
+        }
+        return false;
+    }
+
+    function formatMessage(message) {
+        const isCurrentUser = message.sender.username === '{{ user.username }}';
+        const profilePicture = message.sender.profile_picture_url;  // Utiliser l'URL fournie par le serializer
+
+        return `
+            <div class="message mb-4" data-message-id="${message.id}">
+                <div class="message-header d-flex align-items-center mb-2">
+                    <img src="${profilePicture}"
+                         class="rounded-circle me-2"
+                         style="width: 32px; height: 32px; object-fit: cover;"
+                         alt="${message.sender.username}'s avatar">
+                    <a href="/user/${message.sender.username}/"
+                       class="text-decoration-none fw-bold">
+                        ${message.sender.username}
+                    </a>
+                </div>
+                <div class="ms-4">
+                    <div class="message-content ${isCurrentUser ? 'bg-primary text-white' : 'bg-light'} p-2 rounded">
+                        ${message.content}
+                        <div class="message-time">
+                            <small class="${isCurrentUser ? 'text-white-50' : 'text-muted'}">
+                                ${new Date(message.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+</script>
+{% endblock %}

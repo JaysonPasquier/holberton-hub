@@ -1,0 +1,63 @@
+{% load static %}
+<script>
+const defaultAvatarUrl = "https://res.cloudinary.com/dsvolcznm/image/upload/v1/profile_pictures/default_avatar";
+
+function toggleUsersList() {
+    const card = document.getElementById('users-card');
+    const isHidden = card.style.display === 'none';
+    card.style.display = isHidden ? 'block' : 'none';
+
+    if (isHidden && !usersInitialized) {
+        loadUsers();
+        setInterval(loadUsers, 30000);
+        usersInitialized = true;
+    }
+}
+
+function loadUsers() {
+    fetch('/api/users/online/')
+        .then(response => response.json())
+        .then(users => {
+            const usersList = document.getElementById('users-list');
+            usersList.innerHTML = '';
+
+            users.forEach(user => {
+                const lastActivity = new Date(user.last_activity);
+                const now = new Date();
+                const isOnline = (now - lastActivity) / 1000 < 300; // 5 minutes
+
+                const statusColor = isOnline ? 'bg-success' : 'bg-secondary';
+                const statusText = isOnline ? 'En ligne' : 'Hors ligne';
+
+                usersList.insertAdjacentHTML('beforeend', `
+                    <div class="list-group-item border-0">
+                        <div class="d-flex align-items-center py-1">
+                            <div class="position-relative">
+                                <img src="${user.profile_picture_url || defaultAvatarUrl}"
+                                     class="rounded-circle me-2"
+                                     style="width: 32px; height: 32px; object-fit: cover;"
+                                     alt="${user.username}">
+                                <span class="position-absolute bottom-0 end-0 translate-middle p-1 rounded-circle ${statusColor}"
+                                      style="width: 8px; height: 8px;"
+                                      title="${statusText}">
+                                </span>
+                            </div>
+                            <div class="ms-2">
+                                <a href="/user/${user.username}/" class="text-decoration-none text-dark fw-medium">
+                                    ${user.username}
+                                </a>
+                                <small class="d-block text-muted">${user.specialty || ''}</small>
+                            </div>
+                        </div>
+                    </div>
+                `);
+            });
+        });
+}
+</script>
+
+<style>
+.hover-bg-light:hover {
+    background-color: rgba(0,0,0,0.05);
+}
+</style>

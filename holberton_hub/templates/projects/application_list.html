@@ -1,0 +1,12 @@
+
+<div class="applicant-info d-flex align-items-center">
+    {% if application.applicant.profile_picture %}
+        <img src="{{ application.applicant.profile_picture.url }}" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
+    {% else %}
+        <img src="https://res.cloudinary.com/dsvolcznm/image/upload/v1/profile_pictures/default_avatar.png" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
+    {% endif %}
+    <div>
+        <a href="{% url 'user_profile' application.applicant.username %}">{{ application.applicant.username }}</a>
+        
+    </div>
+</div>

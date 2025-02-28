@@ -1,0 +1,136 @@
+<div id="online-users-widget" class="online-users-widget">
+    <div class="card shadow online-users-card" id="online-users-card" style="display: none;">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                <i class="fas fa-users me-2"></i>Membres en ligne
+            </h5>
+            <button type="button" class="btn-close btn-close-white" onclick="toggleOnlineUsers()"></button>
+        </div>
+        <div class="card-body bg-light p-0" style="height: 300px; overflow-y: auto;">
+            <div id="users-list" class="list-group list-group-flush">
+                <!-- Les utilisateurs seront ajoutés ici dynamiquement -->
+            </div>
+        </div>
+    </div>
+
+    <button onclick="toggleOnlineUsers()" id="online-users-toggle" class="online-users-toggle-btn">
+        <i class="fas fa-users"></i>
+    </button>
+</div>
+
+<script>
+let usersInitialized = false;
+
+function toggleOnlineUsers() {
+    const card = document.getElementById('online-users-card');
+    const isHidden = card.style.display === 'none' || !card.style.display;
+    card.style.display = isHidden ? 'block' : 'none';
+
+    if (isHidden && !usersInitialized) {
+        loadOnlineUsers();
+        usersInitialized = true;
+        setInterval(loadOnlineUsers, 3000); // Rafraîchir toutes les 3 secondes
+    }
+}
+
+function loadOnlineUsers() {
+    fetch('/api/users/online/')
+        .then(response => response.json())
+        .then(users => {
+            const usersList = document.getElementById('users-list');
+            usersList.innerHTML = '';
+
+            users.forEach(user => {
+                const isOnline = (new Date() - new Date(user.last_activity)) / 1000 < 300; // 5 minutes
+                const userHtml = `
+                    <div class="list-group-item p-2">
+                        <div class="d-flex align-items-center">
+                            <div class="position-relative">
+                                <img src="${user.profile_picture_url || 'https://res.cloudinary.com/dsvolcznm/image/upload/v1/profile_pictures/default_avatar.png'}"
+                                     class="rounded-circle me-2"
+                                     style="width: 32px; height: 32px; object-fit: cover;">
+                                <span class="position-absolute bottom-0 end-0 translate-middle p-1 rounded-circle ${isOnline ? 'bg-success' : 'bg-secondary'}"
+                                      style="width: 8px; height: 8px;">
+                                </span>
+                            </div>
+                            <div>
+                                <a href="/user/${user.username}/"
+                                   class="text-decoration-none text-dark">
+                                    ${user.username}
+                                </a>
+                                <small class="d-block text-muted">${user.specialty || ''}</small>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                usersList.insertAdjacentHTML('beforeend', userHtml);
+            });
+        });
+}
+</script>
+
+<style>
+.online-users-widget {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000;
+}
+
+.online-users-toggle-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #0d6efd;
+    border: none;
+    color: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    padding: 0;
+}
+
+.online-users-toggle-btn i {
+    font-size: 24px;
+}
+
+.online-users-toggle-btn:hover {
+    transform: scale(1.1);
+    background-color: #157347;
+}
+
+.online-users-card {
+    display: none;
+    position: fixed;
+    bottom: 90px;
+    left: 20px;
+    width: 300px;
+}
+
+/* Styles pour mobile */
+@media (max-width: 768px) {
+    .online-users-toggle-btn {
+        width: 50px;
+        height: 50px;
+        left: 15px;
+        bottom: 85px;
+    }
+
+    .online-users-toggle-btn i {
+        font-size: 20px;
+    }
+
+    .online-users-card {
+        width: calc(100% - 30px);
+        bottom: 140px;
+        left: 15px;
+        max-height: calc(100% - 170px);
+    }
+}
+</style>

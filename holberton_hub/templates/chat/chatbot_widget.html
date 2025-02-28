@@ -1,0 +1,435 @@
+<div id="chatbot-container" class="chatbot-widget">
+    <div id="chatbot-widget" class="chat-widget">
+        {% csrf_token %}
+        <div class="card shadow chatbot-card" id="chatbot-card" style="display: none;">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-robot me-2"></i>Assistant IA
+                </h5>
+                <button type="button" class="btn-close btn-close-white" aria-label="Close" onclick="toggleChatbot()"></button>
+            </div>
+
+            <div class="card-body bg-light" id="chatbot-messages">
+            </div>
+
+            <div class="card-footer bg-white p-2">
+                <div class="quick-replies-grid" id="quick-replies">
+                    <button class="btn btn-outline-primary quick-reply-btn" onclick="handleQuickReply('create_project')">
+                        💡 Créer un projet
+                    </button>
+                    <button class="btn btn-outline-primary quick-reply-btn" onclick="handleQuickReply('search_project')">
+                        🔍 Chercher un projet
+                    </button>
+                    <button class="btn btn-outline-primary quick-reply-btn" onclick="handleQuickReply('profile')">
+                        👤 Mon profil
+                    </button>
+                    <button class="btn btn-outline-primary quick-reply-btn" onclick="handleQuickReply('about_site')">
+                        ℹ️ À propos
+                    </button>
+                    <button class="btn btn-outline-primary quick-reply-btn" onclick="handleQuickReply('help')">
+                        ❓ Aide
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <button onclick="toggleChatbot()" id="chatbot-toggle" class="chat-toggle-btn">
+            <i class="fas fa-robot"></i>
+        </button>
+    </div>
+</div>
+
+<script>
+let chatInitialized = false;
+
+function getCsrfToken() {
+    return document.querySelector('[name=csrfmiddlewaretoken]')?.value || '';
+}
+
+function toggleChat() {
+    const card = document.getElementById('chatbot-card');
+    const isHidden = card.style.display === 'none';
+    card.style.display = isHidden ? 'block' : 'none';
+
+    if (isHidden && !chatInitialized) {
+        initializeChat();
+        chatInitialized = true;
+    }
+}
+
+function initializeChat() {
+    const messages = document.getElementById('chat-messages');
+    messages.innerHTML = `
+        <div class="p-3">
+            <div class="d-flex mb-2">
+                <div class="chat-message bot-message">
+                    Bonjour ! Je suis l'assistant IA de Holberton Hub. Comment puis-je vous aider ?
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+async function sendBotMessage(event, command) {
+    const content = command;
+    if (!content) return;
+
+    try {
+        const csrfToken = getCsrfToken();
+        if (!csrfToken) throw new Error('CSRF token not available');
+
+        const response = await fetch('/chat/chatbot/', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
+            },
+            body: JSON.stringify({ message: content })
+        });
+
+        if (!response.ok) {
+            console.error('Response status:', response.status);
+            throw new Error(`Server responded with ${response.status}`);
+        }
+
+        const data = await response.json();
+        addMessage(data);
+    } catch (error) {
+        console.error('Error:', error);
+        addMessage({
+            response: "Désolé, une erreur s'est produite. Veuillez réessayer.",
+            quickReplies: [{text: "❓ Aide", value: "help"}]
+        });
+    }
+}
+
+function handleQuickReply(value) {
+    sendBotMessage(null, value);
+}
+
+function addMessage(message) {
+    const messagesDiv = document.getElementById('chatbot-messages');
+
+    if (message.response) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'd-flex justify-content-start mb-3';
+        messageDiv.innerHTML = `
+            <div class="px-3 py-2 rounded bg-white shadow-sm" style="max-width: 90%;">
+                ${message.response}
+            </div>
+        `;
+        messagesDiv.appendChild(messageDiv);
+
+        // Faire défiler jusqu'au dernier message
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    // Ne pas modifier les boutons quick reply existants
+    // Les boutons originaux restent en place
+}
+
+function toggleChatbot() {
+    const card = document.getElementById('chatbot-card');
+    const isHidden = card.style.display === 'none' || !card.style.display;
+
+    // Assurez-vous que tout autre chat est fermé d'abord
+    const allChats = document.querySelectorAll('.chatbot-card');
+    allChats.forEach(chat => {
+        if (chat !== card) {
+            chat.style.display = 'none';
+        }
+    });
+
+    // Afficher ou masquer le chat actuel
+    card.style.display = isHidden ? 'block' : 'none';
+
+    // Initialiser le chat si c'est la première ouverture
+    if (isHidden && !chatInitialized) {
+        handleQuickReply('help');
+        chatInitialized = true;
+    }
+}
+
+function sendMessage() {
+    const input = document.getElementById('user-input');
+    const message = input.value.trim();
+    if (!message) return;
+
+    const messages = document.getElementById('chat-messages');
+    messages.innerHTML += `
+        <div class="p-3">
+            <div class="d-flex justify-content-end mb-2">
+                <div class="chat-message user-message">
+                    ${message}
+                </div>
+            </div>
+        </div>
+    `;
+
+    input.value = '';
+    // Ici, vous pouvez ajouter la logique pour envoyer le message à votre backend
+}
+
+// Ajouter un événement pour la touche Entrée
+document.getElementById('user-input')?.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        sendMessage();
+    }
+});
+</script>
+
+<style>
+#chatbot-messages::-webkit-scrollbar {
+    width: 5px;
+}
+
+#chatbot-messages::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+#chatbot-messages::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+#quick-replies button {
+    transition: all 0.2s ease;
+}
+
+#quick-replies button:hover {
+    transform: scale(1.05);
+}
+
+.chat-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.chat-toggle-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #0d6efd;
+    border: none;
+    color: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    padding: 0;
+}
+
+.chat-toggle-btn i {
+    font-size: 24px;
+}
+
+.chat-toggle-btn:hover {
+    transform: scale(1.1);
+    background-color: #0b5ed7;
+}
+
+.chatbot-card {
+    display: none;
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 350px;
+    height: 75%;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.chat-message {
+    max-width: 80%;
+    padding: 0.75rem;
+    border-radius: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.bot-message {
+    background-color: #e9ecef;
+    color: #212529;
+    border-top-left-radius: 0.25rem;
+}
+
+.user-message {
+    background-color: #0d6efd;
+    color: white;
+    border-top-right-radius: 0.25rem;
+}
+
+#chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    min-height: 200px;
+}
+
+/* Styles pour mobile */
+@media (max-width: 768px) {
+    .chat-toggle-btn {
+        width: 50px;
+        height: 50px;
+        right: 15px;
+        bottom: 85px;
+    }
+
+    .chat-toggle-btn i {
+        font-size: 20px;
+    }
+
+    .chatbot-card {
+        width: calc(100% - 30px);
+        height: auto;
+        min-height: 500px;
+        max-height: 85vh;
+        bottom: 80px;
+        right: 15px;
+    }
+
+    #chat-messages {
+        max-height: calc(100% - 220px); /* Ajusté pour mobile */
+    }
+
+    .quick-replies-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card-header {
+    padding: 15px;
+    flex-shrink: 0; /* Empêche l'en-tête de rétrécir */
+}
+
+.card-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    padding: 15px;
+    height: auto;
+    min-height: 200px; /* Hauteur minimale pour les boutons */
+}
+
+.quick-replies-container {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+#chatbot-messages {
+    flex: 1;
+    height: calc(100% - 280px); /* Espace réduit pour accommoder les boutons */
+    background-color: #f8f9fa;
+    overflow-y: auto;
+}
+
+.quick-replies-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 5px;
+    width: 100%;
+}
+
+.quick-replies-grid button {
+    width: 100%;
+    text-align: left;
+    padding: 10px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 5px;
+}
+
+.quick-reply-btn {
+    width: 100%;
+    height: auto;
+    min-height: 44px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    color: #0d6efd;
+    background-color: white;
+    border: 2px solid #0d6efd;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    margin: 0;
+    text-align: left;
+    white-space: normal;
+    min-height: unset; /* Suppression du min-height conflit */
+    height: 55px; /* Hauteur fixe pour les boutons */
+}
+
+.quick-reply-btn:hover {
+    background-color: #0d6efd;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(13, 110, 253, 0.2);
+}
+
+/* Styles pour mobile */
+@media (max-width: 768px) {
+    .chatbot-card {
+        width: calc(100% - 30px);
+        height: auto;
+        min-height: 500px;
+        max-height: 85vh;
+        bottom: 80px;
+        right: 15px;
+    }
+
+    #chatbot-messages {
+        max-height: calc(100% - 220px); /* Ajusté pour mobile */
+    }
+
+    .quick-replies-grid {
+        grid-template-columns: 1fr; /* Une seule colonne sur mobile */
+    }
+
+    .card-footer {
+        min-height: 220px; /* Plus d'espace sur mobile */
+    }
+}
+
+.chat-message-container {
+    padding: 15px;
+}
+
+.bot-message {
+    background-color: #e3f2fd;
+    border-left: 4px solid #0d6efd;
+    margin-bottom: 15px;
+}
+
+.bot-message h5 {
+    color: #0d6efd;
+    margin-bottom: 10px;
+}
+
+.bot-message ul {
+    padding-left: 20px;
+    margin: 10px 0;
+}
+
+.bot-message li {
+    margin-bottom: 5px;
+}
+</style>

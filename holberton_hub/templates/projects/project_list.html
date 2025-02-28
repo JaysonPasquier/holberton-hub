@@ -1,0 +1,604 @@
+{% extends 'base/base.html' %}
+{% load markdown_extras %}
+{% load markdown_filters %}  {# Add this line at the top #}
+
+{% block title %}Projets - Holberton Hub{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Filtres</h5>
+                <form method="get">
+                    <div class="mb-3">
+                        <label for="type_projet" class="form-label">Type de projet</label>
+                        <select name="type_projet" id="type_projet" class="form-select">
+                            <option value="">Tous</option>
+                            {% for type in project_types %}
+                                <option value="{{ type.0 }}" {% if request.GET.type_projet == type.0 %}selected{% endif %}>
+                                    {{ type.1 }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="est_projet_entreprise" class="form-label">Origine du projet</label>
+                        <select name="est_projet_entreprise" id="est_projet_entreprise" class="form-select">
+                            <option value="">Tous</option>
+                            <option value="true" {% if request.GET.est_projet_entreprise == 'true' %}selected{% endif %}>Projets d'entreprise</option>
+                            <option value="false" {% if request.GET.est_projet_entreprise == 'false' %}selected{% endif %}>Projets étudiants</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="technologie" class="form-label">Technologie</label>
+                        <select name="technologie" id="technologie" class="form-select">
+                            <option value="">Toutes</option>
+                            <optgroup label="Langages">
+                                <option value="PYTHON" {% if request.GET.technologie == 'PYTHON' %}selected{% endif %}>Python</option>
+                                <option value="JAVASCRIPT" {% if request.GET.technologie == 'JAVASCRIPT' %}selected{% endif %}>JavaScript</option>
+                                <option value="TYPESCRIPT" {% if request.GET.technologie == 'TYPESCRIPT' %}selected{% endif %}>TypeScript</option>
+                                <option value="HTML" {% if request.GET.technologie == 'HTML' %}selected{% endif %}>HTML</option>
+                                <option value="CSS" {% if request.GET.technologie == 'CSS' %}selected{% endif %}>CSS</option>
+                                <option value="PHP" {% if request.GET.technologie == 'PHP' %}selected{% endif %}>PHP</option>
+                                <option value="JAVA" {% if request.GET.technologie == 'JAVA' %}selected{% endif %}>Java</option>
+                                <option value="RUBY" {% if request.GET.technologie == 'RUBY' %}selected{% endif %}>Ruby</option>
+                                <option value="CSHARP" {% if request.GET.technologie == 'CSHARP' %}selected{% endif %}>C#</option>
+                                <option value="GO" {% if request.GET.technologie == 'GO' %}selected{% endif %}>Go</option>
+                                <option value="RUST" {% if request.GET.technologie == 'RUST' %}selected{% endif %}>Rust</option>
+                                <option value="KOTLIN" {% if request.GET.technologie == 'KOTLIN' %}selected{% endif %}>Kotlin</option>
+                                <option value="SWIFT" {% if request.GET.technologie == 'SWIFT' %}selected{% endif %}>Swift</option>
+                            </optgroup>
+                            <optgroup label="Frameworks Web">
+                                <option value="DJANGO" {% if request.GET.technologie == 'DJANGO' %}selected{% endif %}>Django</option>
+                                <option value="FLASK" {% if request.GET.technologie == 'FLASK' %}selected{% endif %}>Flask</option>
+                                <option value="REACT" {% if request.GET.technologie == 'REACT' %}selected{% endif %}>React</option>
+                                <option value="VUEJS" {% if request.GET.technologie == 'VUEJS' %}selected{% endif %}>Vue.js</option>
+                                <option value="ANGULAR" {% if request.GET.technologie == 'ANGULAR' %}selected{% endif %}>Angular</option>
+                                <option value="SVELTE" {% if request.GET.technologie == 'SVELTE' %}selected{% endif %}>Svelte</option>
+                                <option value="NODEJS" {% if request.GET.technologie == 'NODEJS' %}selected{% endif %}>Node.js</option>
+                                <option value="EXPRESS" {% if request.GET.technologie == 'EXPRESS' %}selected{% endif %}>Express.js</option>
+                                <option value="NEXTJS" {% if request.GET.technologie == 'NEXTJS' %}selected{% endif %}>Next.js</option>
+                                <option value="NUXTJS" {% if request.GET.technologie == 'NUXTJS' %}selected{% endif %}>Nuxt.js</option>
+                                <option value="LARAVEL" {% if request.GET.technologie == 'LARAVEL' %}selected{% endif %}>Laravel</option>
+                                <option value="SYMFONY" {% if request.GET.technologie == 'SYMFONY' %}selected{% endif %}>Symfony</option>
+                                <option value="RAILS" {% if request.GET.technologie == 'RAILS' %}selected{% endif %}>Ruby on Rails</option>
+                            </optgroup>
+                            <optgroup label="DevOps & Cloud">
+                                <option value="DOCKER" {% if request.GET.technologie == 'DOCKER' %}selected{% endif %}>Docker</option>
+                                <option value="KUBERNETES" {% if request.GET.technologie == 'KUBERNETES' %}selected{% endif %}>Kubernetes</option>
+                                <option value="AWS" {% if request.GET.technologie == 'AWS' %}selected{% endif %}>AWS</option>
+                                <option value="AZURE" {% if request.GET.technologie == 'AZURE' %}selected{% endif %}>Azure</option>
+                                <option value="GCP" {% if request.GET.technologie == 'GCP' %}selected{% endif %}>Google Cloud</option>
+                                <option value="DIGITALOCEAN" {% if request.GET.technologie == 'DIGITALOCEAN' %}selected{% endif %}>Digital Ocean</option>
+                                <option value="HEROKU" {% if request.GET.technologie == 'HEROKU' %}selected{% endif %}>Heroku</option>
+                                <option value="NETLIFY" {% if request.GET.technologie == 'NETLIFY' %}selected{% endif %}>Netlify</option>
+                            </optgroup>
+                            <optgroup label="Base de données">
+                                <option value="MYSQL" {% if request.GET.technologie == 'MYSQL' %}selected{% endif %}>MySQL</option>
+                                <option value="POSTGRESQL" {% if request.GET.technologie == 'POSTGRESQL' %}selected{% endif %}>PostgreSQL</option>
+                                <option value="MONGODB" {% if request.GET.technologie == 'MONGODB' %}selected{% endif %}>MongoDB</option>
+                                <option value="REDIS" {% if request.GET.technologie == 'REDIS' %}selected{% endif %}>Redis</option>
+                                <option value="ELASTICSEARCH" {% if request.GET.technologie == 'ELASTICSEARCH' %}selected{% endif %}>Elasticsearch</option>
+                            </optgroup>
+                            <optgroup label="Systèmes d'exploitation">
+                                <option value="LINUX" {% if request.GET.technologie == 'LINUX' %}selected{% endif %}>Linux</option>
+                                <option value="UBUNTU" {% if request.GET.technologie == 'UBUNTU' %}selected{% endif %}>Ubuntu</option>
+                                <option value="WINDOWS" {% if request.GET.technologie == 'WINDOWS' %}selected{% endif %}>Windows</option>
+                                <option value="MACOS" {% if request.GET.technologie == 'MACOS' %}selected{% endif %}>macOS</option>
+                            </optgroup>
+                            <optgroup label="Mobile">
+                                <option value="ANDROID" {% if request.GET.technologie == 'ANDROID' %}selected{% endif %}>Android</option>
+                                <option value="IOS" {% if request.GET.technologie == 'IOS' %}selected{% endif %}>iOS</option>
+                                <option value="FLUTTER" {% if request.GET.technologie == 'FLUTTER' %}selected{% endif %}>Flutter</option>
+                                <option value="REACT_NATIVE" {% if request.GET.technologie == 'REACT_NATIVE' %}selected{% endif %}>React Native</option>
+                            </optgroup>
+                            <optgroup label="CMS & Outils">
+                                <option value="WORDPRESS" {% if request.GET.technologie == 'WORDPRESS' %}selected{% endif %}>WordPress</option>
+                                <option value="DRUPAL" {% if request.GET.technologie == 'DRUPAL' %}selected{% endif %}>Drupal</option>
+                                <option value="BOOTSTRAP" {% if request.GET.technologie == 'BOOTSTRAP' %}selected{% endif %}>Bootstrap</option>
+                                <option value="TAILWIND" {% if request.GET.technologie == 'TAILWIND' %}selected{% endif %}>Tailwind CSS</option>
+                                <option value="SASS" {% if request.GET.technologie == 'SASS' %}selected{% endif %}>Sass</option>
+                            </optgroup>
+                            <optgroup label="Outils de développement">
+                                <option value="GIT" {% if request.GET.technologie == 'GIT' %}selected{% endif %}>Git</option>
+                                <option value="GITHUB" {% if request.GET.technologie == 'GITHUB' %}selected{% endif %}>GitHub</option>
+                                <option value="GITLAB" {% if request.GET.technologie == 'GITLAB' %}selected{% endif %}>GitLab</option>
+                                <option value="WEBPACK" {% if request.GET.technologie == 'WEBPACK' %}selected{% endif %}>Webpack</option>
+                                <option value="NPM" {% if request.GET.technologie == 'NPM' %}selected{% endif %}>npm</option>
+                                <option value="YARN" {% if request.GET.technologie == 'YARN' %}selected{% endif %}>Yarn</option>
+                            </optgroup>
+                            <optgroup label="CI/CD & DevOps">
+                                <option value="JENKINS" {% if request.GET.technologie == 'JENKINS' %}selected{% endif %}>Jenkins</option>
+                                <option value="TRAVIS" {% if request.GET.technologie == 'TRAVIS' %}selected{% endif %}>Travis CI</option>
+                                <option value="CIRCLECI" {% if request.GET.technologie == 'CIRCLECI' %}selected{% endif %}>CircleCI</option>
+                                <option value="ANSIBLE" {% if request.GET.technologie == 'ANSIBLE' %}selected{% endif %}>Ansible</option>
+                                <option value="TERRAFORM" {% if request.GET.technologie == 'TERRAFORM' %}selected{% endif %}>Terraform</option>
+                            </optgroup>
+                            <optgroup label="Tests">
+                                <option value="JEST" {% if request.GET.technologie == 'JEST' %}selected{% endif %}>Jest</option>
+                                <option value="CYPRESS" {% if request.GET.technologie == 'CYPRESS' %}selected{% endif %}>Cypress</option>
+                                <option value="SELENIUM" {% if request.GET.technologie == 'SELENIUM' %}selected{% endif %}>Selenium</option>
+                            </optgroup>
+                            <optgroup label="IA & ML">
+                                <option value="PYTORCH" {% if request.GET.technologie == 'PYTORCH' %}selected{% endif %}>PyTorch</option>
+                                <option value="TENSORFLOW" {% if request.GET.technologie == 'TENSORFLOW' %}selected{% endif %}>TensorFlow</option>
+                            </optgroup>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="sort" class="form-label">Trier par</label>
+                        <select name="sort" id="sort" class="form-select">
+                            <option value="recent" {% if request.GET.sort == 'recent' %}selected{% endif %}>Plus récents</option>
+                            <option value="oldest" {% if request.GET.sort == 'oldest' %}selected{% endif %}>Plus anciens</option>
+                            <option value="most_participants" {% if request.GET.sort == 'most_participants' %}selected{% endif %}>Plus de participants</option>
+                            <option value="least_participants" {% if request.GET.sort == 'least_participants' %}selected{% endif %}>Moins de participants</option>
+                            <option value="most_likes" {% if request.GET.sort == 'most_likes' %}selected{% endif %}>Plus de likes</option>
+                            <option value="least_likes" {% if request.GET.sort == 'least_likes' %}selected{% endif %}>Moins de likes</option>
+                            <option value="most_upvotes" {% if request.GET.sort == 'most_upvotes' %}selected{% endif %}>Meilleur score</option>
+                            <option value="least_upvotes" {% if request.GET.sort == 'least_upvotes' %}selected{% endif %}>Plus bas score</option>
+                        </select>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Appliquer les filtres</button>
+                        <a href="{% url 'project_list' %}" class="btn btn-outline-secondary">Réinitialiser</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        {% if pinned_projects %}
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card border-primary">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">📌 Projets épinglés</h4>
+                    </div>
+                    <div class="card-body">
+                        {% for project in pinned_projects %}
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <a href="{% url 'project_detail' project.id %}">{{ project.title }}</a>
+                                    </h5>
+                                    <div class="markdown-content">
+                                        {% with description=project.description|truncatewords:28 %}
+                                            {{ description|markdown_to_html }}
+                                        {% endwith %}
+                                        <a href="{% url 'project_detail' project.id %}" class="btn btn-link p-0">Lire la suite...</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <div class="row">
+            {% for project in projects %}
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="project-info">
+                                <h5 class="card-title">{{ project.titre }}</h5>
+                                <div class="markdown-content">
+                                {% with description=project.description|truncatewords:28 %}
+                                    {{ description|markdown_to_html }}
+                                {% endwith %}
+                                </div>
+
+                                <div class="technologies-container mb-3">
+                                    {% for tech in project.technologies %}
+                                        <div class="tech-badge" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ tech }}">
+                                            {% if tech == 'PYTHON' %}<i class="fab fa-python"></i>
+                                            {% elif tech == 'DJANGO' %}<i class="fab fa-python"></i>
+                                            {% elif tech == 'FLASK' %}<i class="fab fa-python"></i>
+                                            {% elif tech == 'HTML' %}<i class="fab fa-html5"></i>
+                                            {% elif tech == 'CSS' %}<i class="fab fa-css3-alt"></i>
+                                            {% elif tech == 'JAVASCRIPT' %}<i class="fab fa-js"></i>
+                                            {% elif tech == 'TYPESCRIPT' %}<i class="fab fa-js"></i>
+                                            {% elif tech == 'REACT' %}<i class="fab fa-react"></i>
+                                            {% elif tech == 'NEXTJS' %}<i class="fab fa-react"></i>
+                                            {% elif tech == 'VUEJS' %}<i class="fab fa-vuejs"></i>
+                                            {% elif tech == 'NUXTJS' %}<i class="fab fa-vuejs"></i>
+                                            {% elif tech == 'ANGULAR' %}<i class="fab fa-angular"></i>
+                                            {% elif tech == 'SVELTE' %}<i class="fas fa-code"></i>
+                                            {% elif tech == 'NODEJS' %}<i class="fab fa-node-js"></i>
+                                            {% elif tech == 'EXPRESS' %}<i class="fab fa-node-js"></i>
+                                            {% elif tech == 'PHP' %}<i class="fab fa-php"></i>
+                                            {% elif tech == 'LARAVEL' %}<i class="fab fa-laravel"></i>
+                                            {% elif tech == 'SYMFONY' %}<i class="fab fa-symfony"></i>
+                                            {% elif tech == 'JAVA' %}<i class="fab fa-java"></i>
+                                            {% elif tech == 'SPRING' %}<i class="fas fa-leaf"></i>
+                                            {% elif tech == 'KOTLIN' %}<i class="fab fa-android"></i>
+                                            {% elif tech == 'SWIFT' %}<i class="fab fa-swift"></i>
+                                            {% elif tech == 'CSHARP' %}<i class="fab fa-microsoft"></i>
+                                            {% elif tech == 'DOTNET' %}<i class="fab fa-microsoft"></i>
+                                            {% elif tech == 'RUBY' %}<i class="fas fa-gem"></i>
+                                            {% elif tech == 'RAILS' %}<i class="fas fa-train"></i>
+                                            {% elif tech == 'GO' %}<i class="fas fa-circle"></i>
+                                            {% elif tech == 'RUST' %}<i class="fas fa-cog"></i>
+                                            {% elif tech == 'DOCKER' %}<i class="fab fa-docker"></i>
+                                            {% elif tech == 'KUBERNETES' %}<i class="fas fa-dharmachakra"></i>
+                                            {% elif tech == 'GIT' %}<i class="fab fa-git-alt"></i>
+                                            {% elif tech == 'GITHUB' %}<i class="fab fa-github"></i>
+                                            {% elif tech == 'GITLAB' %}<i class="fab fa-gitlab"></i>
+                                            {% elif tech == 'BITBUCKET' %}<i class="fab fa-bitbucket"></i>
+                                            {% elif tech == 'AWS' %}<i class="fab fa-aws"></i>
+                                            {% elif tech == 'AZURE' %}<i class="fab fa-microsoft"></i>
+                                            {% elif tech == 'GCP' %}<i class="fab fa-google"></i>
+                                            {% elif tech == 'DIGITALOCEAN' %}<i class="fab fa-digital-ocean"></i>
+                                            {% elif tech == 'HEROKU' %}<i class="fas fa-cloud"></i>
+                                            {% elif tech == 'NETLIFY' %}<i class="fas fa-cloud-upload-alt"></i>
+                                            {% elif tech == 'NGINX' %}<i class="fas fa-server"></i>
+                                            {% elif tech == 'APACHE' %}<i class="fas fa-server"></i>
+                                            {% elif tech == 'MYSQL' %}<i class="fas fa-database"></i>
+                                            {% elif tech == 'POSTGRESQL' %}<i class="fas fa-database"></i>
+                                            {% elif tech == 'MONGODB' %}<i class="fas fa-leaf"></i>
+                                            {% elif tech == 'REDIS' %}<i class="fas fa-database"></i>
+                                            {% elif tech == 'ELASTICSEARCH' %}<i class="fas fa-search"></i>
+                                            {% elif tech == 'GRAPHQL' %}<i class="fas fa-project-diagram"></i>
+                                            {% elif tech == 'LINUX' %}<i class="fab fa-linux"></i>
+                                            {% elif tech == 'UBUNTU' %}<i class="fab fa-ubuntu"></i>
+                                            {% elif tech == 'WINDOWS' %}<i class="fab fa-windows"></i>
+                                            {% elif tech == 'MACOS' %}<i class="fab fa-apple"></i>
+                                            {% elif tech == 'ANDROID' %}<i class="fab fa-android"></i>
+                                            {% elif tech == 'IOS' %}<i class="fab fa-apple"></i>
+                                            {% elif tech == 'FLUTTER' %}<i class="fas fa-mobile-alt"></i>
+                                            {% elif tech == 'REACT_NATIVE' %}<i class="fab fa-react"></i>
+                                            {% elif tech == 'WORDPRESS' %}<i class="fab fa-wordpress"></i>
+                                            {% elif tech == 'DRUPAL' %}<i class="fab fa-drupal"></i>
+                                            {% elif tech == 'BOOTSTRAP' %}<i class="fab fa-bootstrap"></i>
+                                            {% elif tech == 'TAILWIND' %}<i class="fab fa-css3"></i>
+                                            {% elif tech == 'SASS' %}<i class="fab fa-sass"></i>
+                                            {% elif tech == 'WEBPACK' %}<i class="fas fa-box-open"></i>
+                                            {% elif tech == 'BABEL' %}<i class="fas fa-boxes"></i>
+                                            {% elif tech == 'NPM' %}<i class="fab fa-npm"></i>
+                                            {% elif tech == 'YARN' %}<i class="fab fa-yarn"></i>
+                                            {% elif tech == 'JENKINS' %}<i class="fab fa-jenkins"></i>
+                                            {% elif tech == 'TRAVIS' %}<i class="fas fa-check-circle"></i>
+                                            {% elif tech == 'CIRCLECI' %}<i class="fas fa-circle-notch"></i>
+                                            {% elif tech == 'ANSIBLE' %}<i class="fas fa-terminal"></i>
+                                            {% elif tech == 'TERRAFORM' %}<i class="fas fa-cubes"></i>
+                                            {% elif tech == 'JIRA' %}<i class="fab fa-jira"></i>
+                                            {% elif tech == 'TRELLO' %}<i class="fab fa-trello"></i>
+                                            {% elif tech == 'FIGMA' %}<i class="fab fa-figma"></i>
+                                            {% elif tech == 'JEST' %}<i class="fas fa-vial"></i>
+                                            {% elif tech == 'CYPRESS' %}<i class="fas fa-check-double"></i>
+                                            {% elif tech == 'SELENIUM' %}<i class="fas fa-robot"></i>
+                                            {% elif tech == 'PYTORCH' %}<i class="fas fa-fire"></i>
+                                            {% elif tech == 'TENSORFLOW' %}<i class="fas fa-brain"></i>
+                                            {% else %}<i class="fas fa-code"></i>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="project-footer mt-auto">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="project-creator small text-muted">
+                                        {% if project.createur.profile_picture %}
+                                            <img src="{{ project.createur.profile_picture.url }}" class="rounded-circle me-1" style="width: 20px; height: 20px; object-fit: cover;">
+                                        {% else %}
+                                            <img src="https://res.cloudinary.com/dsvolcznm/image/upload/v1/profile_pictures/default_avatar.png" class="rounded-circle me-1" style="width: 20px; height: 20px; object-fit: cover;">
+                                        {% endif %}
+                                        <a href="{% url 'user_profile' project.createur.username %}">{{ project.createur.username }}</a>
+                                    </div>
+
+                                    <div class="project-stats d-flex align-items-center gap-3">
+                                        <div class="like-count">
+                                            <i class="fas fa-heart text-danger"></i>
+                                            <span>{{ project.total_likes }}</span>
+                                        </div>
+                                        <div class="vote-count">
+                                            <i class="fas fa-star text-warning"></i>
+                                            <span>{{ project.score }}</span>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <a href="{% url 'project_detail' project.id %}" class="btn btn-primary btn-sm">Voir plus</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-info">
+                        Aucun projet trouvé.
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <h2 class="mb-4 mt-5">Projets Archivés</h2>
+        <div class="row">
+            {% for project in archived_projects %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="project-info">
+                                <h5 class="card-title">{{ project.title }}</h5>
+                                <span class="badge bg-secondary mb-2">Archivé le {{ project.archived_date|date:"d/m/Y" }}</span>
+                                <p class="card-text">{{ project.short_description }}</p>
+
+                                <div class="technologies-container">
+                                    {% for tech in project.technologies %}
+                                        <span class="tech-badge">{{ tech }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="project-footer mt-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="project-creator small text-muted mb-2">
+                                        {% if project.createur.profile_picture %}
+                                            <img src="{{ project.createur.profile_picture.url }}" class="rounded-circle me-1" style="width: 20px; height: 20px; object-fit: cover;">
+                                        {% else %}
+                                            <img src="https://res.cloudinary.com/dsvolcznm/image/upload/v1/profile_pictures/default_avatar.png" class="rounded-circle me-1" style="width: 20px; height: 20px; object-fit: cover;">
+                                        {% endif %}
+                                        <a href="{% url 'user_profile' project.createur.username %}">{{ project.createur.username }}</a>
+                                    </div>
+                                    <a href="{% url 'project_detail' project.id %}" class="btn btn-secondary btn-sm">Voir le projet</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-muted">Aucun projet archivé.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<style>
+.markdown-content {
+    margin: 10px 0;
+    color: #666;
+    line-height: 1.4;
+    overflow: hidden;
+}
+
+.card.border-primary .markdown-content {
+    font-size: 1.4em;
+    max-height: 150px;
+}
+
+.col-md-6 .markdown-content {
+    font-size: 0.75em;
+    max-height: 80px;
+    line-height: 1.3; 
+}
+
+.markdown-content h1 { font-size: 1.4em; }
+.markdown-content h2 { font-size: 1.2em; }
+.markdown-content h3 { font-size: 1.1em; }
+.markdown-content h4 { font-size: 1em; }
+.markdown-content p { margin-bottom: 0.5em; }
+
+.tech-badge {
+    display: inline-block;
+    padding: 0.25em 0.6em;
+    margin: 0.2em;
+    border-radius: 3px;
+    background-color: #e9ecef;
+    color: #495057;
+    font-size: 0.75em;
+}
+
+.technologies-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.tech-badge {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    background-color: #f8f9fa;
+    transition: transform 0.2s;
+}
+
+.tech-badge:hover {
+    transform: scale(1.1);
+    background-color: #e9ecef;
+}
+
+.tech-badge i {
+    font-size: 1.2rem;
+    color: #0d6efd;
+}
+
+.tech-badge i.fa-python { color: #3776AB; }
+.tech-badge i.fa-django { color: #092E20; }
+.tech-badge i.fa-flask { color: #000000; }
+.tech-badge i.fa-html5 { color: #E34F26; }
+.tech-badge i.fa-css3-alt { color: #1572B6; }
+.tech-badge i.fa-js { color: #F7DF1E; }
+.tech-badge i.fa-react { color: #61DAFB; }
+.tech-badge i.fa-vuejs { color: #4FC08D; }
+.tech-badge i.fa-angular { color: #DD0031; }
+.tech-badge i.fa-node-js { color: #339933; }
+.tech-badge i.fa-php { color: #777BB4; }
+.tech-badge i.fa-java { color: #007396; }
+.tech-badge i.fa-docker { color: #2496ED; }
+.tech-badge i.fa-git-alt { color: #F05032; }
+.tech-badge i.fa-aws { color: #FF9900; }
+.tech-badge i.fa-linux { color: #000000; }
+.tech-badge i.fa-windows { color: #0078D6; }
+.tech-badge i.fa-apple { color: #999999; }
+.tech-badge i.fa-android { color: #3DDC84; }
+.tech-badge i.fa-wordpress { color: #21759B; }
+.tech-badge i.fa-bootstrap { color: #7952B3; }
+.tech-badge i.fa-sass { color: #CC6699; }
+.tech-badge i.fa-npm { color: #CB3837; }
+.tech-badge i.fa-yarn { color: #2C8EBB; }
+.tech-badge i.fa-github { color: #181717; }
+.tech-badge i.fa-gitlab { color: #FCA121; }
+.tech-badge i.fa-bitbucket { color: #0052CC; }
+.tech-badge i.fa-digital-ocean { color: #0080FF; }
+.tech-badge i.fa-ubuntu { color: #E95420; }
+.tech-badge i.fa-microsoft { color: #00A4EF; }
+.tech-badge i.fa-google { color: #4285F4; }
+.tech-badge i.fa-swift { color: #FA7343; }
+.tech-badge i.fa-drupal { color: #0678BE; }
+.tech-badge i.fa-laravel { color: #FF2D20; }
+.tech-badge i.fa-symfony { color: #000000; }
+.tech-badge i.fa-jira { color: #0052CC; }
+.tech-badge i.fa-trello { color: #0079BF; }
+.tech-badge i.fa-figma { color: #F24E1E; }
+
+.tech-badge i.fa-gem { color: #CC342D; } /* Ruby */
+.tech-badge i.fa-leaf { color: #6DB33F; } /* Spring */
+.tech-badge i.fa-train { color: #CC0000; } /* Rails */
+.tech-badge i.fa-circle { color: #00ADD8; } /* Go */
+.tech-badge i.fa-cog { color: #000000; } /* Rust */
+.tech-badge i.fa-dharmachakra { color: #326CE5; } /* Kubernetes */
+.tech-badge i.fa-cloud { color: #430098; } /* Heroku */
+.tech-badge i.fa-cloud-upload-alt { color: #00C7B7; } /* Netlify */
+.tech-badge i.fa-server { color: #009639; } /* Nginx/Apache */
+.tech-badge i.fa-database { color: #4479A1; } /* Databases */
+.tech-badge i.fa-search { color: #005571; } /* Elasticsearch */
+.tech-badge i.fa-project-diagram { color: #E10098; } /* GraphQL */
+.tech-badge i.fa-mobile-alt { color: #02569B; } /* Flutter */
+.tech-badge i.fa-box-open { color: #8DD6F9; } /* Webpack */
+.tech-badge i.fa-boxes { color: #F9DC3E; } /* Babel */
+.tech-badge i.fa-terminal { color: #EE0000; } /* Ansible */
+.tech-badge i.fa-cubes { color: #7B42BC; } /* Terraform */
+.tech-badge i.fa-check-circle { color: #3EAAAF; } /* Travis */
+.tech-badge i.fa-circle-notch { color: #343434; } /* CircleCI */
+.tech-badge i.fa-vial { color: #C21325; } /* Jest */
+.tech-badge i.fa-check-double { color: #17202C; } /* Cypress */
+.tech-badge i.fa-robot { color: #43B02A; } /* Selenium */
+.tech-badge i.fa-fire { color: #EE4C2C; } /* PyTorch */
+.tech-badge i.fa-brain { color: #FF6F00; } /* TensorFlow */
+
+.project-creator-section {
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.project-stats {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.project-stats i {
+    margin-right: 0.25rem;
+}
+
+.project-footer {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid #dee2e6;
+}
+
+.project-creator {
+    display: flex;
+    align-items: center;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.project-info {
+    flex: 1; 
+    overflow: hidden; 
+    margin-bottom: 1rem;
+}
+
+.project-footer {
+    position: relative;
+    margin-top: auto;
+    padding: 1rem;
+    background: white;
+    border-top: 1px solid #dee2e6;
+}
+
+.markdown-content {
+    max-height: 100px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+
+.project-footer .d-flex {
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+
+.project-stats {
+    white-space: nowrap;
+}
+
+.col-md-6 .card {
+    height: 450px;
+    display: flex;
+    flex-direction: column;
+}
+
+.col-md-6 .card-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding-bottom: 0;
+}
+
+.col-md-6 .project-info {
+    flex: 1;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.col-md-6 .project-footer {
+    position: relative;
+    margin-top: auto;
+    padding: 1rem;
+    background: white;
+    border-top: 1px solid #dee2e6;
+}
+
+.col-md-6 .markdown-content {
+    max-height: 100px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+});
+</script>
+{% endblock %}

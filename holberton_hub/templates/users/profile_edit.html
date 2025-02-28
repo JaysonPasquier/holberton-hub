@@ -1,0 +1,543 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Modifier le profil - {{ user.username }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card company-profile-card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">
+                        {% if user.is_company %}
+                            <i class="fas fa-building me-2"></i>Profil Entreprise
+                        {% else %}
+                            Modifier le profil
+                        {% endif %}
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        {% if user.is_company %}
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-group company-field">
+                                        <label for="{{ form.username.id_for_label }}" class="form-label">
+                                            <i class="fas fa-building me-2"></i>{{ form.username.label }}
+                                        </label>
+                                        {{ form.username }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-group company-field">
+                                        <label for="{{ form.email.id_for_label }}" class="form-label">
+                                            <i class="fas fa-envelope me-2"></i>{{ form.email.label }}
+                                        </label>
+                                        {{ form.email }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-group company-field">
+                                        <label for="{{ form.company_location.id_for_label }}" class="form-label">
+                                            <i class="fas fa-map-marker-alt me-2"></i>{{ form.company_location.label }}
+                                        </label>
+                                        {{ form.company_location }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-group company-field">
+                                        <label for="{{ form.company_coordinates.id_for_label }}" class="form-label">
+                                            <i class="fas fa-map-pin me-2"></i>{{ form.company_coordinates.label }}
+                                        </label>
+                                        {{ form.company_coordinates }}
+                                        {% if form.company_coordinates.help_text %}
+                                            <small class="form-text text-muted">{{ form.company_coordinates.help_text }}</small>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-group company-field">
+                                        <label for="{{ form.linkedin_profile.id_for_label }}" class="form-label">
+                                            <i class="fab fa-linkedin me-2"></i>LinkedIn
+                                        </label>
+                                        {{ form.linkedin_profile }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-group company-field">
+                                        <label for="{{ form.github_profile.id_for_label }}" class="form-label">
+                                            <i class="fab fa-github me-2"></i>GitHub
+                                        </label>
+                                        {{ form.github_profile }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="form-group company-field">
+                                    <label for="{{ form.company_bio.id_for_label }}" class="form-label">
+                                        <i class="fas fa-info-circle me-2"></i>{{ form.company_bio.label }}
+                                    </label>
+                                    {{ form.company_bio }}
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="form-group company-field">
+                                    <label for="{{ form.profile_picture.id_for_label }}" class="form-label">
+                                        <i class="fas fa-image me-2"></i>Logo de l'entreprise
+                                    </label>
+                                    {{ form.profile_picture }}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="row">
+                                {% for field in form %}
+                                    {% if field.name != 'skills' %}
+                                        {% if field.name == 'username' or field.name == 'email' %}
+                                            <div class="col-md-6 mb-3">
+                                                <div class="form-group company-field">
+                                                    <label for="{{ field.id_for_label }}" class="form-label">
+                                                        <i class="fas {% if field.name == 'username' %}fa-user{% else %}fa-envelope{% endif %} me-2"></i>
+                                                        {{ field.label }}
+                                                    </label>
+                                                    {{ field }}
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <div class="col-12 mb-3">
+                                                <div class="form-group company-field">
+                                                    <label for="{{ field.id_for_label }}" class="form-label">
+                                                        <i class="{% if field.name == 'github_profile' or field.name == 'linkedin_profile' %}fab{% else %}fas{% endif %}
+                                                            {% if field.name == 'specialty' %}fa-graduation-cap
+                                                            {% elif field.name == 'cohort' %}fa-users
+                                                            {% elif field.name == 'campus' %}fa-university
+                                                            {% elif field.name == 'bio' %}fa-info-circle
+                                                            {% elif field.name == 'github_profile' %}fa-github
+                                                            {% elif field.name == 'linkedin_profile' %}fa-linkedin
+                                                            {% elif field.name == 'profile_picture' %}fa-image
+                                                            {% else %}fa-star{% endif %} me-2">
+                                                        </i>
+                                                        {{ field.label }}
+                                                    </label>
+                                                    {{ field }}
+                                                    {% if field.help_text %}
+                                                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                                                    {% endif %}
+                                                    {% if field.errors %}
+                                                        <div class="invalid-feedback d-block">
+                                                            {{ field.errors }}
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+
+                            <!-- Section des compétences stylisée -->
+                            <div class="mb-4">
+                                <div class="form-group company-field">
+                                    <label class="form-label">
+                                        <i class="fas fa-code me-2"></i>Compétences
+                                    </label>
+                                    <div class="skills-grid">
+                                        {% for value, label in form.fields.skills.choices %}
+                                        <div class="form-check skill-check">
+                                            <input type="checkbox"
+                                                   name="skills"
+                                                   value="{{ value }}"
+                                                   id="skill_{{ value }}"
+                                                   class="form-check-input visually-hidden"
+                                                   {% if value in form.initial.skills %}checked{% endif %}>
+                                            <label class="form-check-label skill-label" for="skill_{{ value }}">
+                                                <div class="skill-icon">
+                                                    {% if value == 'PYTHON' %}<i class="fab fa-python"></i>
+                                                    {% elif value == 'DJANGO' %}<i class="fab fa-python"></i>
+                                                    {% elif value == 'FLASK' %}<i class="fab fa-python"></i>
+                                                    {% elif value == 'HTML' %}<i class="fab fa-html5"></i>
+                                                    {% elif value == 'CSS' %}<i class="fab fa-css3-alt"></i>
+                                                    {% elif value == 'JAVASCRIPT' %}<i class="fab fa-js"></i>
+                                                    {% elif value == 'TYPESCRIPT' %}<i class="fab fa-js"></i>
+                                                    {% elif value == 'REACT' %}<i class="fab fa-react"></i>
+                                                    {% elif value == 'NEXTJS' %}<i class="fab fa-react"></i>
+                                                    {% elif value == 'VUEJS' %}<i class="fab fa-vuejs"></i>
+                                                    {% elif value == 'NUXTJS' %}<i class="fab fa-vuejs"></i>
+                                                    {% elif value == 'ANGULAR' %}<i class="fab fa-angular"></i>
+                                                    {% elif value == 'SVELTE' %}<i class="fas fa-code"></i>
+                                                    {% elif value == 'NODEJS' %}<i class="fab fa-node-js"></i>
+                                                    {% elif value == 'EXPRESS' %}<i class="fab fa-node-js"></i>
+                                                    {% elif value == 'PHP' %}<i class="fab fa-php"></i>
+                                                    {% elif value == 'LARAVEL' %}<i class="fab fa-laravel"></i>
+                                                    {% elif value == 'SYMFONY' %}<i class="fab fa-symfony"></i>
+                                                    {% elif value == 'JAVA' %}<i class="fab fa-java"></i>
+                                                    {% elif value == 'SPRING' %}<i class="fas fa-leaf"></i>
+                                                    {% elif value == 'KOTLIN' %}<i class="fab fa-android"></i>
+                                                    {% elif value == 'SWIFT' %}<i class="fab fa-swift"></i>
+                                                    {% elif value == 'CSHARP' %}<i class="fab fa-microsoft"></i>
+                                                    {% elif value == 'DOTNET' %}<i class="fab fa-microsoft"></i>
+                                                    {% elif value == 'RUBY' %}<i class="fas fa-gem"></i>
+                                                    {% elif value == 'RAILS' %}<i class="fas fa-train"></i>
+                                                    {% elif value == 'GO' %}<i class="fas fa-circle"></i>
+                                                    {% elif value == 'RUST' %}<i class="fas fa-cog"></i>
+                                                    {% elif value == 'DOCKER' %}<i class="fab fa-docker"></i>
+                                                    {% elif value == 'KUBERNETES' %}<i class="fas fa-dharmachakra"></i>
+                                                    {% elif value == 'GIT' %}<i class="fab fa-git-alt"></i>
+                                                    {% elif value == 'GITHUB' %}<i class="fab fa-github"></i>
+                                                    {% elif value == 'GITLAB' %}<i class="fab fa-gitlab"></i>
+                                                    {% elif value == 'BITBUCKET' %}<i class="fab fa-bitbucket"></i>
+                                                    {% elif value == 'AWS' %}<i class="fab fa-aws"></i>
+                                                    {% elif value == 'AZURE' %}<i class="fab fa-microsoft"></i>
+                                                    {% elif value == 'GCP' %}<i class="fab fa-google"></i>
+                                                    {% elif value == 'DIGITALOCEAN' %}<i class="fab fa-digital-ocean"></i>
+                                                    {% elif value == 'HEROKU' %}<i class="fas fa-cloud"></i>
+                                                    {% elif value == 'NETLIFY' %}<i class="fas fa-cloud-upload-alt"></i>
+                                                    {% elif value == 'NGINX' %}<i class="fas fa-server"></i>
+                                                    {% elif value == 'APACHE' %}<i class="fas fa-server"></i>
+                                                    {% elif value == 'MYSQL' %}<i class="fas fa-database"></i>
+                                                    {% elif value == 'POSTGRESQL' %}<i class="fas fa-database"></i>
+                                                    {% elif value == 'MONGODB' %}<i class="fas fa-leaf"></i>
+                                                    {% elif value == 'REDIS' %}<i class="fas fa-database"></i>
+                                                    {% elif value == 'ELASTICSEARCH' %}<i class="fas fa-search"></i>
+                                                    {% elif value == 'GRAPHQL' %}<i class="fas fa-project-diagram"></i>
+                                                    {% elif value == 'LINUX' %}<i class="fab fa-linux"></i>
+                                                    {% elif value == 'UBUNTU' %}<i class="fab fa-ubuntu"></i>
+                                                    {% elif value == 'WINDOWS' %}<i class="fab fa-windows"></i>
+                                                    {% elif value == 'MACOS' %}<i class="fab fa-apple"></i>
+                                                    {% elif value == 'ANDROID' %}<i class="fab fa-android"></i>
+                                                    {% elif value == 'IOS' %}<i class="fab fa-apple"></i>
+                                                    {% elif value == 'FLUTTER' %}<i class="fas fa-mobile-alt"></i>
+                                                    {% elif value == 'REACT_NATIVE' %}<i class="fab fa-react"></i>
+                                                    {% elif value == 'WORDPRESS' %}<i class="fab fa-wordpress"></i>
+                                                    {% elif value == 'DRUPAL' %}<i class="fab fa-drupal"></i>
+                                                    {% elif value == 'BOOTSTRAP' %}<i class="fab fa-bootstrap"></i>
+                                                    {% elif value == 'TAILWIND' %}<i class="fab fa-css3"></i>
+                                                    {% elif value == 'SASS' %}<i class="fab fa-sass"></i>
+                                                    {% elif value == 'WEBPACK' %}<i class="fas fa-box-open"></i>
+                                                    {% elif value == 'BABEL' %}<i class="fas fa-boxes"></i>
+                                                    {% elif value == 'NPM' %}<i class="fab fa-npm"></i>
+                                                    {% elif value == 'YARN' %}<i class="fab fa-yarn"></i>
+                                                    {% elif value == 'JENKINS' %}<i class="fab fa-jenkins"></i>
+                                                    {% elif value == 'TRAVIS' %}<i class="fas fa-check-circle"></i>
+                                                    {% elif value == 'CIRCLECI' %}<i class="fas fa-circle-notch"></i>
+                                                    {% elif value == 'ANSIBLE' %}<i class="fas fa-terminal"></i>
+                                                    {% elif value == 'TERRAFORM' %}<i class="fas fa-cubes"></i>
+                                                    {% elif value == 'JIRA' %}<i class="fab fa-jira"></i>
+                                                    {% elif value == 'TRELLO' %}<i class="fab fa-trello"></i>
+                                                    {% elif value == 'FIGMA' %}<i class="fab fa-figma"></i>
+                                                    {% elif value == 'PHOTOSHOP' %}<i class="fas fa-paint-brush"></i>
+                                                    {% elif value == 'ILLUSTRATOR' %}<i class="fas fa-pencil-alt"></i>
+                                                    {% elif value == 'JEST' %}<i class="fas fa-vial"></i>
+                                                    {% elif value == 'CYPRESS' %}<i class="fas fa-check-double"></i>
+                                                    {% elif value == 'SELENIUM' %}<i class="fas fa-robot"></i>
+                                                    {% elif value == 'PYTORCH' %}<i class="fas fa-fire"></i>
+                                                    {% elif value == 'TENSORFLOW' %}<i class="fas fa-brain"></i>
+                                                    {% else %}<i class="fas fa-code"></i>
+                                                    {% endif %}
+                                                </div>
+                                                <span class="skill-name">{{ label }}</span>
+                                            </label>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save me-2"></i>Enregistrer les modifications
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.skill-check {
+    margin: 0;
+    padding: 0;
+}
+
+.skill-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background-color: #f8f9fa;
+    border: 2px solid transparent;
+}
+
+.skill-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #6c757d;
+}
+
+.skill-name {
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+input[type="checkbox"]:checked + .skill-label {
+    background-color: #e3f2fd;
+    border-color: #0d6efd;
+}
+
+input[type="checkbox"]:checked + .skill-label .skill-icon {
+    color: #0d6efd;
+}
+
+.skill-label:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.skill-icon i {
+    font-size: 1.5rem;
+}
+
+/* Mise à jour complète des couleurs des technologies */
+.skill-icon i.fa-python { color: #3776AB; }
+.skill-icon i.fa-django { color: #092E20; }
+.skill-icon i.fa-flask { color: #000000; }
+.skill-icon i.fa-html5 { color: #E34F26; }
+.skill-icon i.fa-css3-alt { color: #1572B6; }
+.skill-icon i.fa-js { color: #F7DF1E; }
+.skill-icon i.fa-react { color: #61DAFB; }
+.skill-icon i.fa-vuejs { color: #4FC08D; }
+.skill-icon i.fa-angular { color: #DD0031; }
+.skill-icon i.fa-node-js { color: #339933; }
+.skill-icon i.fa-php { color: #777BB4; }
+.skill-icon i.fa-java { color: #007396; }
+.skill-icon i.fa-docker { color: #2496ED; }
+.skill-icon i.fa-git-alt { color: #F05032; }
+.skill-icon i.fa-aws { color: #FF9900; }
+.skill-icon i.fa-linux { color: #000000; }
+.skill-icon i.fa-windows { color: #0078D6; }
+.skill-icon i.fa-apple { color: #999999; }
+.skill-icon i.fa-android { color: #3DDC84; }
+.skill-icon i.fa-wordpress { color: #21759B; }
+.skill-icon i.fa-bootstrap { color: #7952B3; }
+.skill-icon i.fa-sass { color: #CC6699; }
+.skill-icon i.fa-npm { color: #CB3837; }
+.skill-icon i.fa-yarn { color: #2C8EBB; }
+.skill-icon i.fa-github { color: #181717; }
+.skill-icon i.fa-gitlab { color: #FCA121; }
+.skill-icon i.fa-bitbucket { color: #0052CC; }
+.skill-icon i.fa-digital-ocean { color: #0080FF; }
+.skill-icon i.fa-ubuntu { color: #E95420; }
+.skill-icon i.fa-microsoft { color: #00A4EF; }
+.skill-icon i.fa-google { color: #4285F4; }
+.skill-icon i.fa-swift { color: #FA7343; }
+.skill-icon i.fa-drupal { color: #0678BE; }
+.skill-icon i.fa-laravel { color: #FF2D20; }
+.skill-icon i.fa-symfony { color: #000000; }
+.skill-icon i.fa-jira { color: #0052CC; }
+.skill-icon i.fa-trello { color: #0079BF; }
+.skill-icon i.fa-figma { color: #F24E1E; }
+
+/* Icônes Font Awesome personnalisées */
+.skill-icon i.fa-gem { color: #CC342D; } /* Ruby */
+.skill-icon i.fa-leaf { color: #6DB33F; } /* Spring */
+.skill-icon i.fa-train { color: #CC0000; } /* Rails */
+.skill-icon i.fa-circle { color: #00ADD8; } /* Go */
+.skill-icon i.fa-cog { color: #000000; } /* Rust */
+.skill-icon i.fa-dharmachakra { color: #326CE5; } /* Kubernetes */
+.skill-icon i.fa-cloud { color: #430098; } /* Heroku */
+.skill-icon i.fa-cloud-upload-alt { color: #00C7B7; } /* Netlify */
+.skill-icon i.fa-server { color: #009639; } /* Nginx/Apache */
+.skill-icon i.fa-database { color: #4479A1; } /* Databases */
+.skill-icon i.fa-search { color: #005571; } /* Elasticsearch */
+.skill-icon i.fa-project-diagram { color: #E10098; } /* GraphQL */
+.skill-icon i.fa-mobile-alt { color: #02569B; } /* Flutter */
+.skill-icon i.fa-box-open { color: #8DD6F9; } /* Webpack */
+.skill-icon i.fa-boxes { color: #F9DC3E; } /* Babel */
+.skill-icon i.fa-terminal { color: #EE0000; } /* Ansible */
+.skill-icon i.fa-cubes { color: #7B42BC; } /* Terraform */
+.skill-icon i.fa-check-circle { color: #3EAAAF; } /* Travis */
+.skill-icon i.fa-circle-notch { color: #343434; } /* CircleCI */
+.skill-icon i.fa-vial { color: #C21325; } /* Jest */
+.skill-icon i.fa-check-double { color: #17202C; } /* Cypress */
+.skill-icon i.fa-robot { color: #43B02A; } /* Selenium */
+.skill-icon i.fa-fire { color: #EE4C2C; } /* PyTorch */
+.skill-icon i.fa-brain { color: #FF6F00; } /* TensorFlow */
+.skill-icon i.fa-paint-brush { color: #31A8FF; } /* Photoshop */
+.skill-icon i.fa-pencil-alt { color: #FF9A00; } /* Illustrator */
+
+/* Styles spécifiques pour le formulaire entreprise */
+.company-profile-card {
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    border: none;
+    border-radius: 15px;
+}
+
+.company-profile-card .card-header {
+    border-radius: 15px 15px 0 0;
+    padding: 1.25rem;
+}
+
+.company-field {
+    margin-bottom: 1.5rem;
+}
+
+.company-field label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.company-field input,
+.company-field textarea {
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.company-field input:focus,
+.company-field textarea:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.company-field textarea {
+    min-height: 120px;
+}
+
+.company-field .form-text {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-top: 0.25rem;
+}
+
+.btn-primary {
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(13, 110, 253, 0.2);
+}
+
+/* Style pour les icônes dans les labels */
+.company-field label i {
+    width: 20px;
+    text-align: center;
+    color: #0d6efd;
+}
+
+/* Style pour le champ de téléchargement du logo */
+.company-field input[type="file"] {
+    padding: 0.5rem;
+    background-color: #f8f9fa;
+    border: 2px dashed #dee2e6;
+}
+
+.company-field input[type="file"]:hover {
+    background-color: #e9ecef;
+    border-color: #0d6efd;
+}
+
+/* Ajout de styles pour les champs étudiants */
+.form-control {
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Style pour les select */
+select.form-control {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1em;
+    padding-right: 2.5rem;
+}
+
+/* Style amélioré pour la grille de compétences */
+.skills-grid {
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border: 2px solid #e9ecef;
+}
+
+/* Style pour les labels de champs */
+.form-label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.form-label i {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.5rem;
+    color: #0d6efd;
+}
+
+/* Style pour les messages d'aide */
+.form-text {
+    color: #6c757d;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Style pour les messages d'erreur */
+.invalid-feedback {
+    font-size: 0.875rem;
+    color: #dc3545;
+    margin-top: 0.25rem;
+}
+
+/* Style pour les sections */
+.section-title {
+    font-size: 1.25rem;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e9ecef;
+}
+</style>
+{% endblock %}

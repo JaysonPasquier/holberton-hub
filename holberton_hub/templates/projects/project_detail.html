@@ -1,0 +1,540 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load project_markdown %}
+{% load markdown_extras %}
+
+{% block title %}{{ project.titre }} - Holberton Hub{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 class="card-title">{{ project.titre }}</h2>
+        
+        <div class="project-interactions mb-4">
+            <div class="d-flex align-items-center gap-4">
+                
+                <div class="like-section">
+                    <button id="like-btn-{{ project.id }}"
+                            onclick="likeProject('{{ project.id }}')"
+                            class="btn btn-outline-primary {% if user in project.likes.all %}liked{% endif %}">
+                        <i class="fas fa-heart"></i>
+                        <span id="like-count-{{ project.id }}">{{ project.total_likes }}</span>
+                    </button>
+                </div>
+
+                <div class="vote-section d-flex align-items-center gap-2">
+                    <button id="upvote-{{ project.id }}"
+                            onclick="voteProject('{{ project.id }}', 'up')"
+                            class="btn btn-outline-success {% if user in project.upvotes.all %}active{% endif %}">
+                        <i class="fas fa-arrow-up"></i>
+                    </button>
+
+                    <span id="score-{{ project.id }}" class="vote-score">
+                        {{ project.score }}
+                    </span>
+
+                    <button id="downvote-{{ project.id }}"
+                            onclick="voteProject('{{ project.id }}', 'down')"
+                            class="btn btn-outline-danger {% if user in project.downvotes.all %}active{% endif %}">
+                        <i class="fas fa-arrow-down"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+                <div class="project-technologies mb-4">
+                    <div class="technologies-container">
+                        {% for tech in project.technologies %}
+                            <div class="tech-badge" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ tech }}">
+                                {% if tech == 'PYTHON' %}<i class="fab fa-python"></i>
+                                {% elif tech == 'DJANGO' %}<i class="fab fa-python"></i>
+                                {% elif tech == 'FLASK' %}<i class="fab fa-python"></i>
+                                {% elif tech == 'HTML' %}<i class="fab fa-html5"></i>
+                                {% elif tech == 'CSS' %}<i class="fab fa-css3-alt"></i>
+                                {% elif tech == 'JAVASCRIPT' %}<i class="fab fa-js"></i>
+                                {% elif tech == 'TYPESCRIPT' %}<i class="fab fa-js"></i>
+                                {% elif tech == 'REACT' %}<i class="fab fa-react"></i>
+                                {% elif tech == 'NEXTJS' %}<i class="fab fa-react"></i>
+                                {% elif tech == 'VUEJS' %}<i class="fab fa-vuejs"></i>
+                                {% elif tech == 'NUXTJS' %}<i class="fab fa-vuejs"></i>
+                                {% elif tech == 'ANGULAR' %}<i class="fab fa-angular"></i>
+                                {% elif tech == 'SVELTE' %}<i class="fas fa-code"></i>
+                                {% elif tech == 'NODEJS' %}<i class="fab fa-node-js"></i>
+                                {% elif tech == 'EXPRESS' %}<i class="fab fa-node-js"></i>
+                                {% elif tech == 'PHP' %}<i class="fab fa-php"></i>
+                                {% elif tech == 'LARAVEL' %}<i class="fab fa-laravel"></i>
+                                {% elif tech == 'SYMFONY' %}<i class="fab fa-symfony"></i>
+                                {% elif tech == 'JAVA' %}<i class="fab fa-java"></i>
+                                {% elif tech == 'SPRING' %}<i class="fas fa-leaf"></i>
+                                {% elif tech == 'KOTLIN' %}<i class="fab fa-android"></i>
+                                {% elif tech == 'SWIFT' %}<i class="fab fa-swift"></i>
+                                {% elif tech == 'CSHARP' %}<i class="fab fa-microsoft"></i>
+                                {% elif tech == 'DOTNET' %}<i class="fab fa-microsoft"></i>
+                                {% elif tech == 'RUBY' %}<i class="fas fa-gem"></i>
+                                {% elif tech == 'RAILS' %}<i class="fas fa-train"></i>
+                                {% elif tech == 'GO' %}<i class="fas fa-circle"></i>
+                                {% elif tech == 'RUST' %}<i class="fas fa-cog"></i>
+                                {% elif tech == 'DOCKER' %}<i class="fab fa-docker"></i>
+                                {% elif tech == 'KUBERNETES' %}<i class="fas fa-dharmachakra"></i>
+                                {% elif tech == 'GIT' %}<i class="fab fa-git-alt"></i>
+                                {% elif tech == 'GITHUB' %}<i class="fab fa-github"></i>
+                                {% elif tech == 'GITLAB' %}<i class="fab fa-gitlab"></i>
+                                {% elif tech == 'BITBUCKET' %}<i class="fab fa-bitbucket"></i>
+                                {% elif tech == 'AWS' %}<i class="fab fa-aws"></i>
+                                {% elif tech == 'AZURE' %}<i class="fab fa-microsoft"></i>
+                                {% elif tech == 'GCP' %}<i class="fab fa-google"></i>
+                                {% elif tech == 'DIGITALOCEAN' %}<i class="fab fa-digital-ocean"></i>
+                                {% elif tech == 'HEROKU' %}<i class="fas fa-cloud"></i>
+                                {% elif tech == 'NETLIFY' %}<i class="fas fa-cloud-upload-alt"></i>
+                                {% elif tech == 'NGINX' %}<i class="fas fa-server"></i>
+                                {% elif tech == 'APACHE' %}<i class="fas fa-server"></i>
+                                {% elif tech == 'MYSQL' %}<i class="fas fa-database"></i>
+                                {% elif tech == 'POSTGRESQL' %}<i class="fas fa-database"></i>
+                                {% elif tech == 'MONGODB' %}<i class="fas fa-leaf"></i>
+                                {% elif tech == 'REDIS' %}<i class="fas fa-database"></i>
+                                {% elif tech == 'ELASTICSEARCH' %}<i class="fas fa-search"></i>
+                                {% elif tech == 'GRAPHQL' %}<i class="fas fa-project-diagram"></i>
+                                {% elif tech == 'LINUX' %}<i class="fab fa-linux"></i>
+                                {% elif tech == 'UBUNTU' %}<i class="fab fa-ubuntu"></i>
+                                {% elif tech == 'WINDOWS' %}<i class="fab fa-windows"></i>
+                                {% elif tech == 'MACOS' %}<i class="fab fa-apple"></i>
+                                {% elif tech == 'ANDROID' %}<i class="fab fa-android"></i>
+                                {% elif tech == 'IOS' %}<i class="fab fa-apple"></i>
+                                {% elif tech == 'FLUTTER' %}<i class="fas fa-mobile-alt"></i>
+                                {% elif tech == 'REACT_NATIVE' %}<i class="fab fa-react"></i>
+                                {% elif tech == 'WORDPRESS' %}<i class="fab fa-wordpress"></i>
+                                {% elif tech == 'DRUPAL' %}<i class="fab fa-drupal"></i>
+                                {% elif tech == 'BOOTSTRAP' %}<i class="fab fa-bootstrap"></i>
+                                {% elif tech == 'TAILWIND' %}<i class="fab fa-css3"></i>
+                                {% elif tech == 'SASS' %}<i class="fab fa-sass"></i>
+                                {% elif tech == 'WEBPACK' %}<i class="fas fa-box-open"></i>
+                                {% elif tech == 'BABEL' %}<i class="fas fa-boxes"></i>
+                                {% elif tech == 'NPM' %}<i class="fab fa-npm"></i>
+                                {% elif tech == 'YARN' %}<i class="fab fa-yarn"></i>
+                                {% elif tech == 'JENKINS' %}<i class="fab fa-jenkins"></i>
+                                {% elif tech == 'TRAVIS' %}<i class="fas fa-check-circle"></i>
+                                {% elif tech == 'CIRCLECI' %}<i class="fas fa-circle-notch"></i>
+                                {% elif tech == 'ANSIBLE' %}<i class="fas fa-terminal"></i>
+                                {% elif tech == 'TERRAFORM' %}<i class="fas fa-cubes"></i>
+                                {% elif tech == 'JIRA' %}<i class="fab fa-jira"></i>
+                                {% elif tech == 'TRELLO' %}<i class="fab fa-trello"></i>
+                                {% elif tech == 'FIGMA' %}<i class="fab fa-figma"></i>
+                                {% elif tech == 'PHOTOSHOP' %}<i class="fas fa-paint-brush"></i>
+                                {% elif tech == 'ILLUSTRATOR' %}<i class="fas fa-pencil-alt"></i>
+                                {% elif tech == 'JEST' %}<i class="fas fa-vial"></i>
+                                {% elif tech == 'CYPRESS' %}<i class="fas fa-check-double"></i>
+                                {% elif tech == 'SELENIUM' %}<i class="fas fa-robot"></i>
+                                {% elif tech == 'PYTORCH' %}<i class="fas fa-fire"></i>
+                                {% elif tech == 'TENSORFLOW' %}<i class="fas fa-brain"></i>
+                                {% else %}<i class="fas fa-code"></i>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="d-flex gap-2 mb-3">
+                    <span class="badge bg-info">{{ project.get_project_type_display }}</span>
+                    <span class="badge bg-{{ project.status|lower }}">{{ project.get_status_display }}</span>
+                    {% if project.is_paid %}
+                        <span class="badge bg-success">Rémunéré</span>
+                    {% endif %}
+                </div>
+                <div class="markdown-content">
+                    {{ project.description|convert_markdown }}
+                </div>
+                {% if project.github_repo %}
+                    <div class="mt-3">
+                        <a href="{{ project.github_repo }}" target="_blank" class="btn btn-outline-secondary">
+                            <i class="fab fa-github"></i> GitHub Repository
+                        </a>
+                    </div>
+                {% endif %}
+                {% if project.createur == request.user %}
+                <a href="{% url 'project_edit' project.pk %}" class="btn btn-warning" style="margin-top: 15px;">Éditer</a>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <small class="text-muted">
+                    <div class="project-creator">
+                        {% if project.createur.profile_picture %}
+                            <img src="{{ project.createur.profile_picture.url }}" class="rounded-circle me-2" style="width: 25px; height: 25px; object-fit: cover;" alt="{{ project.createur.username }}">
+                        {% else %}
+                            <img src="https://res.cloudinary.com/dsvolcznm/image/upload/v1/profile_pictures/default_avatar.png" class="rounded-circle me-2" style="width: 25px; height: 25px; object-fit: cover;" alt="Default avatar">
+                        {% endif %}
+                        <a href="{% url 'user_profile' project.createur.username %}">{{ project.createur.username }}</a>
+                    </div>
+                    le {{ project.date_creation|date:"d/m/Y à H:i" }}
+                </small>
+            </div>
+        </div>
+
+        {% if user.is_authenticated and user != project.createur %}
+            {% with existing_application=project.applications.filter.first %}
+                {% if not existing_application %}
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Postuler pour ce projet</h5>
+                            <form method="post" action="{% url 'project_apply' project.id %}">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="message" class="form-label">Message de candidature</label>
+                                    <textarea class="form-control" id="message" name="message" rows="3" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Envoyer ma candidature</button>
+                            </form>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        Vous avez déjà postulé à ce projet.
+                        État de votre candidature : {{ existing_application.get_status_display }}
+                    </div>
+                {% endif %}
+            {% endwith %}
+        {% endif %}
+    </div>
+
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Détails du projet</h5>
+                <ul class="list-unstyled">
+                    <li><strong>Taille de l'équipe :</strong> {{ project.max_participants }} personne(s)</li>
+                    {% if project.is_paid %}
+                        <li><strong>Compensation :</strong> {{ project.compensation }}</li>
+                    {% endif %}
+                    <li><strong>Participants actuels :</strong> {{ project.participants.count }}/{{ project.max_participants }}</li>
+                    {% if project.github_link != none %}
+                        <li><strong>Projet Github :</strong><a href="{{ project.github_link }}" target="_blank" class="btn btn-outline-secondary" style="margin-left: 10px"><i class="fab fa-github"></i></a></li>
+                    {% else %}
+                        <li><strong>Aucun Github pour ce projet !</strong></li>
+                    {% endif %}
+                </ul>
+                {% if user == project.createur or user in project.participants.all %}
+                    <div class="mt-3">
+                        <a href="{% url 'project_chat' project.id %}" class="btn btn-primary">
+                            <i class="fas fa-comments"></i> Accéder au chat
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if user == project.createur %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Candidatures</h5>
+                    {% for application in project.applications.all %}
+                        <div class="mb-3">
+                            <strong>
+                                <div class="project-creator">
+                                    {% if application.applicant.profile_picture %}
+                                        <img src="{{ application.applicant.profile_picture.url }}" class="rounded-circle me-2" style="width: 25px; height: 25px; object-fit: cover;" alt="{{ application.applicant.username }}">
+                                    {% else %}
+                                        <img src="https://res.cloudinary.com/dsvolcznm/image/upload/v1/profile_pictures/default_avatar.png" class="rounded-circle me-2" style="width: 25px; height: 25px; object-fit: cover;" alt="Default avatar">
+                                    {% endif %}
+                                    <a href="{% url 'user_profile' application.applicant.username %}">{{ application.applicant.username }}</a>
+                                </div>
+                            </strong>
+                            <p>{{ application.message }}</p>
+                            {% if application.status == 'PENDING' %}
+                                <div class="btn-group">
+                                    <form method="post" action="{% url 'application_status' application.id %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="status" value="ACCEPTED">
+                                        <button type="submit" class="btn btn-success btn-sm">Accepter</button>
+                                    </form>
+                                    <form method="post" action="{% url 'application_status' application.id %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="status" value="REJECTED">
+                                        <button type="submit" class="btn btn-danger btn-sm">Refuser</button>
+                                    </form>
+                                </div>
+                            {% else %}
+                                <span class="badge bg-{{ application.status|lower }}">
+                                    {{ application.get_status_display }}
+                                </span>
+                            {% endif %}
+                        </div>
+                    {% empty %}
+                        <p>Aucune candidature pour le moment.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if user == project.createur and not project.is_archived %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Actions</h5>
+                    <form method="post" action="{% url 'archive_project' project.id %}" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-warning" onclick="return confirm('Êtes-vous sûr de vouloir archiver ce projet ?')">
+                            Archiver le projet
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if project.is_archived %}
+            <div class="alert alert-secondary">
+                Ce projet a été archivé le {{ project.archived_date|date:"d/m/Y" }}
+            </div>
+        {% endif %}
+        {% if user == project.createur %}
+<div class="card mt-4">
+    <div class="card-header">
+        <h4>Candidatures ({{ project.candidatures.count }})</h4>
+    </div>
+    <div class="card-body">
+        {% if project.candidatures.exists %}
+            {% for candidature in project.candidatures.all %}
+            <div class="candidature-item mb-3 p-3 border rounded">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h5 class="mb-1">{{ candidature.candidat.username }}</h5>
+                        <p class="mb-2">{{ candidature.message }}</p>
+                        <small class="text-muted">Posté le {{ candidature.date_creation|date:"d/m/Y H:i" }}</small>
+                    </div>
+                    {% if candidature.statut == 'EN_ATTENTE' %}
+                    <div class="btn-group">
+                        <form method="post" action="{% url 'application_status' candidature.pk %}" class="d-inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="status" value="ACCEPTE">
+                            <button type="submit" class="btn btn-success btn-sm mx-1">Accepter</button>
+                        </form>
+                        <form method="post" action="{% url 'application_status' candidature.pk %}" class="d-inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="status" value="REFUSE">
+                            <button type="submit" class="btn btn-danger btn-sm">Refuser</button>
+                        </form>
+                    </div>
+                    {% else %}
+                    <span class="badge bg-{{ candidature.statut|lower }}">
+                        {{ candidature.get_statut_display }}
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted">Aucune candidature pour le moment.</p>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+    </div>
+</div>
+
+<style>
+.project-interactions.mb-4 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.markdown-content {
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 5px;
+}
+
+.markdown-content h1 { font-size: 2em; margin-top: 1em; }
+.markdown-content h2 { font-size: 1.5em; margin-top: 0.83em; }
+.markdown-content h3 { font-size: 1.17em; margin-top: 0.67em; }
+.markdown-content h4 { font-size: 1em; margin-top: 0.5em; }
+
+.markdown-content ul,
+.markdown-content ol {
+    padding-left: 2em;
+    margin: 1em 0;
+}
+
+.markdown-content pre {
+    background: #282c34;
+    color: #abb2bf;
+    padding: 1em;
+    border-radius: 5px;
+    overflow-x: auto;
+}
+
+.markdown-content table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+}
+
+.markdown-content th,
+.markdown-content td {
+    border: 1px solid #dee2e6;
+    padding: 8px;
+}
+
+.markdown-content blockquote {
+    border-left: 4px solid #007bff;
+    padding-left: 1em;
+    margin: 1em 0;
+    color: #6c757d;
+}
+
+.badge.bg-accepte { background-color: #28a745; }
+.badge.bg-refuse { background-color: #dc3545; }
+.badge.bg-en_attente { background-color: #ffc107; }
+
+.candidature-item {
+    transition: all 0.3s ease;
+}
+
+.candidature-item:hover {
+    background-color: #f8f9fa;
+}
+
+.technologies-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.tech-badge {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    background-color: #f8f9fa;
+    transition: transform 0.2s;
+    cursor: pointer;  /* Ajout du curseur pointer pour indiquer l'interactivité */
+}
+
+.tech-badge:hover {
+    transform: scale(1.1);
+    background-color: #e9ecef;
+}
+
+.tech-badge {
+    font-size: 2em;
+}
+
+.tech-badge i.fa-python { color: #3776AB; }
+.tech-badge i.fa-django { color: #092E20; }
+.tech-badge i.fa-flask { color: #000000; }
+.tech-badge i.fa-html5 { color: #E34F26; }
+.tech-badge i.fa-css3-alt { color: #1572B6; }
+.tech-badge i.fa-js { color: #F7DF1E; }
+.tech-badge i.fa-react { color: #61DAFB; }
+.tech-badge i.fa-vuejs { color: #4FC08D; }
+.tech-badge i.fa-angular { color: #DD0031; }
+.tech-badge i.fa-node-js { color: #339933; }
+.tech-badge i.fa-php { color: #777BB4; }
+.tech-badge i.fa-java { color: #007396; }
+.tech-badge i.fa-docker { color: #2496ED; }
+.tech-badge i.fa-git-alt { color: #F05032; }
+.tech-badge i.fa-aws { color: #FF9900; }
+.tech-badge i.fa-linux { color: #000000; }
+.tech-badge i.fa-windows { color: #0078D6; }
+.tech-badge i.fa-apple { color: #999999; }
+.tech-badge i.fa-android { color: #3DDC84; }
+.tech-badge i.fa-wordpress { color: #21759B; }
+.tech-badge i.fa-bootstrap { color: #7952B3; }
+.tech-badge i.fa-sass { color: #CC6699; }
+.tech-badge i.fa-npm { color: #CB3837; }
+.tech-badge i.fa-yarn { color: #2C8EBB; }
+.tech-badge i.fa-github { color: #181717; }
+.tech-badge i.fa-gitlab { color: #FCA121; }
+.tech-badge i.fa-bitbucket { color: #0052CC; }
+.tech-badge i.fa-digital-ocean { color: #0080FF; }
+.tech-badge i.fa-ubuntu { color: #E95420; }
+.tech-badge i.fa-microsoft { color: #00A4EF; }
+.tech-badge i.fa-google { color: #4285F4; }
+.tech-badge i.fa-swift { color: #FA7343; }
+.tech-badge i.fa-drupal { color: #0678BE; }
+.tech-badge i.fa-laravel { color: #FF2D20; }
+.tech-badge i.fa-symfony { color: #000000; }
+.tech-badge i.fa-jira { color: #0052CC; }
+.tech-badge i.fa-trello { color: #0079BF; }
+.tech-badge i.fa-figma { color: #F24E1E; }
+
+/* Icônes Font Awesome personnalisées */
+.tech-badge i.fa-gem { color: #CC342D; } /* Ruby */
+.tech-badge i.fa-leaf { color: #6DB33F; } /* Spring */
+.tech-badge i.fa-train { color: #CC0000; } /* Rails */
+.tech-badge i.fa-circle { color: #00ADD8; } /* Go */
+.tech-badge i.fa-cog { color: #000000; } /* Rust */
+.tech-badge i.fa-dharmachakra { color: #326CE5; } /* Kubernetes */
+.tech-badge i.fa-cloud { color: #430098; } /* Heroku */
+.tech-badge i.fa-cloud-upload-alt { color: #00C7B7; } /* Netlify */
+.tech-badge i.fa-server { color: #009639; } /* Nginx/Apache */
+.tech-badge i.fa-database { color: #4479A1; } /* Databases */
+.tech-badge i.fa-search { color: #005571; } /* Elasticsearch */
+.tech-badge i.fa-project-diagram { color: #E10098; } /* GraphQL */
+.tech-badge i.fa-mobile-alt { color: #02569B; } /* Flutter */
+.tech-badge i.fa-box-open { color: #8DD6F9; } /* Webpack */
+.tech-badge i.fa-boxes { color: #F9DC3E; } /* Babel */
+.tech-badge i.fa-terminal { color: #EE0000; } /* Ansible */
+.tech-badge i.fa-cubes { color: #7B42BC; } /* Terraform */
+.tech-badge i.fa-check-circle { color: #3EAAAF; } /* Travis */
+.tech-badge i.fa-circle-notch { color: #343434; } /* CircleCI */
+.tech-badge i.fa-vial { color: #C21325; } /* Jest */
+.tech-badge i.fa-check-double { color: #17202C; } /* Cypress */
+.tech-badge i.fa-robot { color: #43B02A; } /* Selenium */
+.tech-badge i.fa-fire { color: #EE4C2C; } /* PyTorch */
+.tech-badge i.fa-brain { color: #FF6F00; } /* TensorFlow */
+
+.project-interactions {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.like-section button {
+    transition: all 0.3s ease;
+}
+
+.like-section button.liked {
+    background-color: #dc3545;
+    color: white;
+    border-color: #dc3545;
+}
+
+.vote-section button {
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.vote-section button.active.btn-outline-success {
+    background-color: #198754;
+    color: white;
+}
+
+.vote-section button.active.btn-outline-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.vote-score {
+    font-size: 1.2rem;
+    font-weight: bold;
+    min-width: 3rem;
+    text-align: center;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl, {
+            placement: 'top'
+        });
+    });
+});
+</script>
+<script src="{% static 'js/project_votes.js' %}"></script>
+{% endblock %}

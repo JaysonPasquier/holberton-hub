@@ -1,0 +1,134 @@
+## 🌟 Introduction
+Bienvenue dans ce guide qui vous aidera à créer un projet professionnel et attractif. Une bonne description est la clé pour attirer les bons collaborateurs !
+------------------------------
+
+## 📝 Structure de Base
+
+# [Titre du Projet]
+> Exemple: "DevConnect - Plateforme de Mentorat pour Développeurs"
+------------------------------
+
+## 📋 Résumé
+Une phrase percutante qui décrit votre projet.
+> Exemple: "Une plateforme web qui met en relation étudiants et mentors dans le domaine du développement."
+------------------------------
+
+## 🎯 Objectifs
+- **Principal**: [Objectif central du projet]
+- **Secondaires**:
+  * Objectif 1
+  * Objectif 2
+  * Objectif 3
+> Exemple:
+> - **Principal**: Créer une plateforme de mentorat intuitive
+> - **Secondaires**:
+>   * Système de matching automatique
+>   * Chat en temps réel
+>   * Système de réservation de sessions
+------------------------------
+
+## 💻 Stack Technique
+------------------------------
+
+### Frontend
+- HTML5/CSS3 - Structure et style
+- JavaScript/TypeScript - Logique client
+- React.js - Framework UI
+- TailwindCSS - Styling
+- Redux - State Management
+
+### Backend
+- Python 3.10+
+- Django 4.0+ - Framework
+- PostgreSQL - Base de données
+- Redis - Cache et WebSocket
+- Celery - Tâches asynchrones
+
+### DevOps
+- Git/GitHub - Versionning
+- Docker - Conteneurisation
+- AWS - Hébergement
+- CI/CD - GitHub Actions
+------------------------------
+
+## 👥 Équipe Recherchée
+| Rôle | Nombre | Compétences Requises |
+|------|---------|---------------------|
+| Frontend | 2 | React, CSS avancé |
+| Backend | 2 | Python, Django |
+| DevOps | 1 | Docker, AWS |
+
+------------------------------
+
+## 📅 Planning Prévisionnel
+1. **Phase Design** (2 semaines)
+   - Maquettes UI/UX
+   - Architecture technique
+   - Planning détaillé
+
+2. **Phase Développement** (6 semaines)
+   - Sprint 1: Core features
+   - Sprint 2: Authentification
+   - Sprint 3: Fonctionnalités avancées
+
+3. **Phase Test** (2 semaines)
+   - Tests unitaires
+   - Tests d'intégration
+   - Tests utilisateurs
+
+4. **Déploiement** (1 semaine)
+   - Migration des données
+   - Mise en production
+   - Monitoring
+
+------------------------------
+## 📚 Resources
+- [Design Figma](lien)
+- [Documentation](lien)
+- [Trello/Jira](lien)
+- [GitHub Repository](lien)
+------------------------------
+
+## 📎 Contact
+Pour plus d'informations, contactez [Nom] via:
+- Chat du projet
+- Email: exemple@holberton.fr
+- LinkedIn: [lien]
+------------------------------
+
+## 💡 Conseils pour une Description Réussie
+1. Soyez Précis
+
+- Évitez le jargon inutile
+- Donnez des exemples concrets
+- Chiffrez vos objectifs
+
+2. Structurez Bien
+
+- Utilisez des titres clairs
+- Faites des listes à puces
+- Ajoutez des tableaux si nécessaire
+
+3. Restez Professionnel
+
+- Orthographe impeccable
+- Ton constructif
+- Format cohérent
+
+4. Montrez la Valeur
+
+- Expliquez l'impact
+- Détaillez les apprentissages
+- Précisez les opportunités
+
+------------------------------
+
+## ⭐ Points Clés à Vérifier
+
+- <input disabled="" type="checkbox"> Titre clair et accrocheur
+- <input disabled="" type="checkbox"> Description complète
+- <input disabled="" type="checkbox"> Technologies bien détaillées
+- <input disabled="" type="checkbox"> Rôles clairement définis
+- <input disabled="" type="checkbox"> Planning réaliste
+- <input disabled="" type="checkbox"> Ressources fournies
+- <input disabled="" type="checkbox"> Contact facile

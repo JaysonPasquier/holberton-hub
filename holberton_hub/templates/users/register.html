@@ -1,0 +1,276 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Inscription - Holberton Hub{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-6">
+            <div class="card shadow-lg border-0 registration-card">
+                <div class="card-header bg-white border-0 pt-4">
+                    <div class="text-center mb-3">
+                        <img src="{% static 'images/logo.png' %}" alt="Logo" height="50" class="mb-3">
+                        <h2 class="text-primary">Inscription</h2>
+                    </div>
+                </div>
+                <div class="card-body p-md-5">
+                    {% if messages %}
+                        <div class="messages mb-4">
+                            {% for message in messages %}
+                                <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+
+                        <!-- Username field -->
+                        <div class="form-floating mb-4">
+                            <input type="text" name="username"
+                                   class="form-control"
+                                   required id="id_username"
+                                   placeholder="johndoe123"
+                                   maxlength="30">
+                            <label for="id_username">Nom d'utilisateur</label>
+                            <div class="form-text">30 caractères maximum. Lettres, chiffres et @/./+/-/_ uniquement.</div>
+                        </div>
+
+                        <!-- Email field -->
+                        <div class="form-floating mb-4">
+                            <input type="email" name="email"
+                                   class="form-control"
+                                   required id="id_email"
+                                   placeholder="john.doe@example.com">
+                            <label for="id_email">Email</label>
+                            <div class="form-text">Votre email restera confidentiel.</div>
+                        </div>
+
+                        <!-- Password fields -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-4">
+                                    <input type="password" name="password1"
+                                           class="form-control"
+                                           required id="id_password1"
+                                           placeholder="Mot de passe">
+                                    <label for="id_password1">Mot de passe</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-4">
+                                    <input type="password" name="password2"
+                                           class="form-control"
+                                           required id="id_password2"
+                                           placeholder="Confirmation">
+                                    <label for="id_password2">Mot de passe de Confirmation</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Password requirements -->
+                        <div class="password-requirements mb-4">
+                            <div class="form-text">
+                                <ul class="requirements-list">
+                                    <li><i class="fas fa-check-circle"></i> Au moins 8 caractères</li>
+                                    <li><i class="fas fa-check-circle"></i> Pas de mot de passe courant</li>
+                                    <li><i class="fas fa-check-circle"></i> Pas entièrement numérique</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Company option -->
+                        <div class="form-check form-switch mb-4">
+                            <input type="checkbox" class="form-check-input" id="is_company" name="is_company">
+                            <label class="form-check-label" for="is_company">
+                                S'inscrire en tant qu'entreprise
+                            </label>
+                        </div>
+
+                        <!-- Company fields -->
+                        <div id="company-fields" style="display: none;">
+                            <div class="form-group mb-3">
+                                <label for="company_website">Site web de l'entreprise:</label>
+                                <input type="url" class="form-control" id="company_website" name="company_website"
+                                       placeholder="https://www.votreentreprise.com">
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="linkedin_profile">LinkedIn:</label>
+                                <input type="url" class="form-control" id="linkedin_profile" name="linkedin_profile"
+                                       placeholder="https://www.linkedin.com/company/votre-entreprise">
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="github_profile">GitHub:</label>
+                                <input type="url" class="form-control" id="github_profile" name="github_profile"
+                                       placeholder="https://github.com/votre-entreprise">
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="company_bio">Présentation de l'entreprise:</label>
+                                <textarea class="form-control" id="company_bio" name="company_bio" rows="3"
+                                          placeholder="Décrivez votre entreprise en quelques lignes..."></textarea>
+                                <small class="form-text text-muted">
+                                    Cette présentation sera visible sur votre profil entreprise.
+                                </small>
+                            </div>
+                        </div>
+
+                        <!-- Submit button -->
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-user-plus me-2"></i>S'inscrire
+                            </button>
+                            <a href="{% url 'login' %}" class="btn btn-outline-secondary">
+                                Déjà inscrit ? Se connecter
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('is_company').addEventListener('change', function() {
+    const companyFields = document.getElementById('company-fields');
+    companyFields.style.display = this.checked ? 'block' : 'none';
+
+    // Rendre les champs obligatoires si l'option entreprise est cochée
+    const companyBio = document.getElementById('company_bio');
+    companyBio.required = this.checked;
+});
+</script>
+
+<style>
+.registration-card {
+    border-radius: 20px;
+    overflow: hidden;
+    background: #ffffff;
+}
+
+.card-header {
+    padding: 2rem 1rem;
+}
+
+.form-floating {
+    position: relative;
+}
+
+.form-floating > .form-control {
+    height: calc(3.5rem + 2px);
+    padding: 1rem 0.75rem;
+}
+
+.form-floating > label {
+    padding: 1rem 0.75rem;
+}
+
+.form-control {
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.1);
+}
+
+.requirements-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.requirements-list li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    color: #6c757d;
+    font-size: 0.875rem;
+}
+
+.requirements-list li i {
+    margin-right: 0.5rem;
+    color: #198754;
+}
+
+.form-check-input {
+    width: 3em;
+    height: 1.5em;
+    margin-right: 1em;
+}
+
+.btn {
+    padding: 0.8rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #0d6efd;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #0b5ed7;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.2);
+}
+
+.form-text {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-top: 0.25rem;
+}
+
+/* Media queries pour la responsivité */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 1.5rem !important;
+    }
+
+    .registration-card {
+        margin: 0 10px;
+        border-radius: 15px;
+    }
+
+    .form-floating > .form-control {
+        height: calc(3rem + 2px);
+        font-size: 16px; /* Évite le zoom sur iOS */
+    }
+
+    .btn {
+        width: 100%;
+        padding: 0.75rem;
+    }
+}
+
+/* Animations */
+@keyframes slideUp {
+    from { transform: translateY(10px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.form-floating {
+    animation: slideUp 0.3s ease forwards;
+}
+
+.invalid-feedback {
+    display: block;
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+</style>
+{% endblock %}

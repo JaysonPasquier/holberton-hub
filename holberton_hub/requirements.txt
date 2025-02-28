@@ -1,0 +1,22 @@
+# Core Django requirements
+Django>=4.2.0
+djangorestframework>=3.14.0
+djangorestframework-simplejwt>=5.3.0
+django-cors-headers>=4.3.1
+
+# Image handling
+Pillow==10.2.0
+
+# Server and deployment
+whitenoise>=6.6.0
+gunicorn>=21.2.0
+
+# Utilities
+python-dotenv
+markdown>=3.7.0
+cloudinary
+
+# Additional found requirements
+setuptools
+brotli  # Optional for whitenoise compression
+types-setuptools  # For type checking setuptools

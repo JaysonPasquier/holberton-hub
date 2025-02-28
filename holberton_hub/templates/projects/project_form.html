@@ -1,0 +1,324 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Créer un projet - Holberton Hub{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>{% if form.instance.pk %}Modifier{% else %}Créer{% endif %} un projet</h2>
+    <form method="post" class="mt-4">
+        {% csrf_token %}
+
+        <div class="form-group mb-3">
+            <label for="{{ form.titre.id_for_label }}">Titre du projet</label>
+            {{ form.titre }}
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="{{ form.description.id_for_label }}">Description</label>
+            {{ form.description }}
+            <p class="text-muted">
+                Vous pouvez utiliser markdown pour ajouter du style, et je vous le conseille !
+                <a href="https://www.markdownguide.org/basic-syntax/" target="_blank">Voir le guide complet du Markdown</a>
+            </p>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="{{ form.type_projet.id_for_label }}">Type de projet</label>
+            {{ form.type_projet }}
+        </div>
+
+        <div class="form-group mb-3">
+            <div class="technologies-grid">
+                {% for value, label in form.fields.technologies.choices %}
+                <div class="tech-choice">
+                    <input type="checkbox"
+                           name="technologies"
+                           value="{{ value }}"
+                           id="tech_{{ value }}"
+                           class="tech-checkbox visually-hidden"
+                           {% if value in form.initial.technologies %}checked{% endif %}>
+                    <label for="tech_{{ value }}" class="tech-label">
+                        <div class="tech-icon">
+                            {% if value == 'PYTHON' %}<i class="fab fa-python"></i>
+                            {% elif value == 'DJANGO' %}<i class="fab fa-python"></i>
+                            {% elif value == 'FLASK' %}<i class="fab fa-python"></i>
+                            {% elif value == 'HTML' %}<i class="fab fa-html5"></i>
+                            {% elif value == 'CSS' %}<i class="fab fa-css3-alt"></i>
+                            {% elif value == 'JAVASCRIPT' %}<i class="fab fa-js"></i>
+                            {% elif value == 'TYPESCRIPT' %}<i class="fab fa-js"></i>
+                            {% elif value == 'REACT' %}<i class="fab fa-react"></i>
+                            {% elif value == 'NEXTJS' %}<i class="fab fa-react"></i>
+                            {% elif value == 'VUEJS' %}<i class="fab fa-vuejs"></i>
+                            {% elif value == 'NUXTJS' %}<i class="fab fa-vuejs"></i>
+                            {% elif value == 'ANGULAR' %}<i class="fab fa-angular"></i>
+                            {% elif value == 'SVELTE' %}<i class="fas fa-code"></i>
+                            {% elif value == 'NODEJS' %}<i class="fab fa-node-js"></i>
+                            {% elif value == 'EXPRESS' %}<i class="fab fa-node-js"></i>
+                            {% elif value == 'PHP' %}<i class="fab fa-php"></i>
+                            {% elif value == 'LARAVEL' %}<i class="fab fa-laravel"></i>
+                            {% elif value == 'SYMFONY' %}<i class="fab fa-symfony"></i>
+                            {% elif value == 'JAVA' %}<i class="fab fa-java"></i>
+                            {% elif value == 'SPRING' %}<i class="fas fa-leaf"></i>
+                            {% elif value == 'KOTLIN' %}<i class="fab fa-android"></i>
+                            {% elif value == 'SWIFT' %}<i class="fab fa-swift"></i>
+                            {% elif value == 'CSHARP' %}<i class="fab fa-microsoft"></i>
+                            {% elif value == 'DOTNET' %}<i class="fab fa-microsoft"></i>
+                            {% elif value == 'RUBY' %}<i class="fas fa-gem"></i>
+                            {% elif value == 'RAILS' %}<i class="fas fa-train"></i>
+                            {% elif value == 'GO' %}<i class="fas fa-circle"></i>
+                            {% elif value == 'RUST' %}<i class="fas fa-cog"></i>
+                            {% elif value == 'DOCKER' %}<i class="fab fa-docker"></i>
+                            {% elif value == 'KUBERNETES' %}<i class="fas fa-dharmachakra"></i>
+                            {% elif value == 'GIT' %}<i class="fab fa-git-alt"></i>
+                            {% elif value == 'GITHUB' %}<i class="fab fa-github"></i>
+                            {% elif value == 'GITLAB' %}<i class="fab fa-gitlab"></i>
+                            {% elif value == 'BITBUCKET' %}<i class="fab fa-bitbucket"></i>
+                            {% elif value == 'AWS' %}<i class="fab fa-aws"></i>
+                            {% elif value == 'AZURE' %}<i class="fab fa-microsoft"></i>
+                            {% elif value == 'GCP' %}<i class="fab fa-google"></i>
+                            {% elif value == 'DIGITALOCEAN' %}<i class="fab fa-digital-ocean"></i>
+                            {% elif value == 'HEROKU' %}<i class="fas fa-cloud"></i>
+                            {% elif value == 'NETLIFY' %}<i class="fas fa-cloud-upload-alt"></i>
+                            {% elif value == 'NGINX' %}<i class="fas fa-server"></i>
+                            {% elif value == 'APACHE' %}<i class="fas fa-server"></i>
+                            {% elif value == 'MYSQL' %}<i class="fas fa-database"></i>
+                            {% elif value == 'POSTGRESQL' %}<i class="fas fa-database"></i>
+                            {% elif value == 'MONGODB' %}<i class="fas fa-leaf"></i>
+                            {% elif value == 'REDIS' %}<i class="fas fa-database"></i>
+                            {% elif value == 'ELASTICSEARCH' %}<i class="fas fa-search"></i>
+                            {% elif value == 'GRAPHQL' %}<i class="fas fa-project-diagram"></i>
+                            {% elif value == 'LINUX' %}<i class="fab fa-linux"></i>
+                            {% elif value == 'UBUNTU' %}<i class="fab fa-ubuntu"></i>
+                            {% elif value == 'WINDOWS' %}<i class="fab fa-windows"></i>
+                            {% elif value == 'MACOS' %}<i class="fab fa-apple"></i>
+                            {% elif value == 'ANDROID' %}<i class="fab fa-android"></i>
+                            {% elif value == 'IOS' %}<i class="fab fa-apple"></i>
+                            {% elif value == 'FLUTTER' %}<i class="fas fa-mobile-alt"></i>
+                            {% elif value == 'WORDPRESS' %}<i class="fab fa-wordpress"></i>
+                            {% elif value == 'DRUPAL' %}<i class="fab fa-drupal"></i>
+                            {% elif value == 'BOOTSTRAP' %}<i class="fab fa-bootstrap"></i>
+                            {% elif value == 'TAILWIND' %}<i class="fab fa-css3"></i>
+                            {% elif value == 'SASS' %}<i class="fab fa-sass"></i>
+                            {% elif value == 'WEBPACK' %}<i class="fas fa-box-open"></i>
+                            {% elif value == 'BABEL' %}<i class="fas fa-boxes"></i>
+                            {% elif value == 'NPM' %}<i class="fab fa-npm"></i>
+                            {% elif value == 'YARN' %}<i class="fab fa-yarn"></i>
+                            {% elif value == 'JENKINS' %}<i class="fab fa-jenkins"></i>
+                            {% elif value == 'TRAVIS' %}<i class="fas fa-check-circle"></i>
+                            {% elif value == 'CIRCLECI' %}<i class="fas fa-circle-notch"></i>
+                            {% elif value == 'ANSIBLE' %}<i class="fas fa-terminal"></i>
+                            {% elif value == 'TERRAFORM' %}<i class="fas fa-cubes"></i>
+                            {% elif value == 'JIRA' %}<i class="fab fa-jira"></i>
+                            {% elif value == 'TRELLO' %}<i class="fab fa-trello"></i>
+                            {% elif value == 'FIGMA' %}<i class="fab fa-figma"></i>
+                            {% elif value == 'JEST' %}<i class="fas fa-vial"></i>
+                            {% elif value == 'CYPRESS' %}<i class="fas fa-check-double"></i>
+                            {% elif value == 'SELENIUM' %}<i class="fas fa-robot"></i>
+                            {% elif value == 'PYTORCH' %}<i class="fas fa-fire"></i>
+                            {% elif value == 'TENSORFLOW' %}<i class="fas fa-brain"></i>
+                            {% else %}<i class="fas fa-code"></i>
+                            {% endif %}
+                        </div>
+                        <span class="tech-name">{{ label }}</span>
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="{{ form.github_link.id_for_label }}">Lien GitHub (optionnel)</label>
+            {{ form.github_link }}
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="{{ form.max_participants.id_for_label }}">Nombre de participants</label>
+            {{ form.max_participants }}
+            {% if form.max_participants.help_text %}
+                <small class="form-text text-muted">{{ form.max_participants.help_text }}</small>
+            {% endif %}
+            {% if form.max_participants.errors %}
+                <div class="alert alert-danger">
+                    {{ form.max_participants.errors }}
+                </div>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            {% if form.instance.pk %}Modifier{% else %}Créer{% endif %}
+        </button>
+    </form>
+</div>
+
+<style>
+.tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.tech-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+}
+
+.technologies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.tech-choice {
+    margin: 0;
+    padding: 0;
+}
+
+.tech-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background-color: #f8f9fa;
+    border: 2px solid transparent;
+    position: relative;
+}
+
+.tech-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.tech-name {
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+.tech-checkbox:checked + .tech-label {
+    background-color: #e3f2fd;
+    border-color: #0d6efd;
+}
+
+.tech-label:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.tech-icon i.fa-python { color: #3776AB; }
+ .tech-icon i.fa-django { color: #092E20; }
+ .tech-icon i.fa-flask { color: #000000; }
+ .tech-icon i.fa-html5 { color: #E34F26; }
+ .tech-icon i.fa-css3-alt { color: #1572B6; }
+ .tech-icon i.fa-js { color: #F7DF1E; }
+ .tech-icon i.fa-react { color: #61DAFB; }
+ .tech-icon i.fa-vuejs { color: #4FC08D; }
+ .tech-icon i.fa-angular { color: #DD0031; }
+ .tech-icon i.fa-node-js { color: #339933; }
+ .tech-icon i.fa-php { color: #777BB4; }
+ .tech-icon i.fa-java { color: #007396; }
+ .tech-icon i.fa-docker { color: #2496ED; }
+ .tech-icon i.fa-git-alt { color: #F05032; }
+ .tech-icon i.fa-aws { color: #FF9900; }
+ .tech-icon i.fa-linux { color: #000000; }
+ .tech-icon i.fa-windows { color: #0078D6; }
+ .tech-icon i.fa-apple { color: #999999; }
+ .tech-icon i.fa-android { color: #3DDC84; }
+ .tech-icon i.fa-wordpress { color: #21759B; }
+ .tech-icon i.fa-bootstrap { color: #7952B3; }
+ .tech-icon i.fa-sass { color: #CC6699; }
+ .tech-icon i.fa-npm { color: #CB3837; }
+ .tech-icon i.fa-yarn { color: #2C8EBB; }
+ .tech-icon i.fa-github { color: #181717; }
+ .tech-icon i.fa-gitlab { color: #FCA121; }
+ .tech-icon i.fa-bitbucket { color: #0052CC; }
+ .tech-icon i.fa-digital-ocean { color: #0080FF; }
+ .tech-icon i.fa-ubuntu { color: #E95420; }
+ .tech-icon i.fa-microsoft { color: #00A4EF; }
+ .tech-icon i.fa-google { color: #4285F4; }
+ .tech-icon i.fa-swift { color: #FA7343; }
+ .tech-icon i.fa-drupal { color: #0678BE; }
+ .tech-icon i.fa-laravel { color: #FF2D20; }
+ .tech-icon i.fa-symfony { color: #000000; }
+ .tech-icon i.fa-jira { color: #0052CC; }
+ .tech-icon i.fa-trello { color: #0079BF; }
+ .tech-icon i.fa-figma { color: #F24E1E; }
+
+/* Icônes Font Awesome personnalisées */
+ .tech-icon i.fa-gem { color: #CC342D; } /* Ruby */
+ .tech-icon i.fa-leaf { color: #6DB33F; } /* Spring */
+ .tech-icon i.fa-train { color: #CC0000; } /* Rails */
+ .tech-icon i.fa-circle { color: #00ADD8; } /* Go */
+ .tech-icon i.fa-cog { color: #000000; } /* Rust */
+ .tech-icon i.fa-dharmachakra { color: #326CE5; } /* Kubernetes */
+ .tech-icon i.fa-cloud { color: #430098; } /* Heroku */
+ .tech-icon i.fa-cloud-upload-alt { color: #00C7B7; } /* Netlify */
+ .tech-icon i.fa-server { color: #009639; } /* Nginx/Apache */
+ .tech-icon i.fa-database { color: #4479A1; } /* Databases */
+ .tech-icon i.fa-search { color: #005571; } /* Elasticsearch */
+ .tech-icon i.fa-project-diagram { color: #E10098; } /* GraphQL */
+ .tech-icon i.fa-mobile-alt { color: #02569B; } /* Flutter */
+ .tech-icon i.fa-box-open { color: #8DD6F9; } /* Webpack */
+ .tech-icon i.fa-boxes { color: #F9DC3E; } /* Babel */
+ .tech-icon i.fa-terminal { color: #EE0000; } /* Ansible */
+ .tech-icon i.fa-cubes { color: #7B42BC; } /* Terraform */
+ .tech-icon i.fa-check-circle { color: #3EAAAF; } /* Travis */
+ .tech-icon i.fa-circle-notch { color: #343434; } /* CircleCI */
+ .tech-icon i.fa-vial { color: #C21325; } /* Jest */
+ .tech-icon i.fa-check-double { color: #17202C; } /* Cypress */
+ .tech-icon i.fa-robot { color: #43B02A; } /* Selenium */
+ .tech-icon i.fa-fire { color: #EE4C2C; } /* PyTorch */
+ .tech-icon i.fa-brain { color: #FF6F00; } /* TensorFlow */
+
+/* Pour une couleur bleue */
+input[type="checkbox"]:checked + .tech-label {
+    background-color: #cce5ff;  /* Fond bleu clair */
+    border-color: #007bff;      /* Bordure bleue */
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);  /* Ombre bleue */
+}
+
+input[type="checkbox"]:checked + .tech-label::after {
+    color: #007bff;
+}
+
+/* Ou pour une couleur violette */
+input[type="checkbox"]:checked + .tech-label {
+    background-color: #e8e4ff;  /* Fond violet clair */
+    border-color: #6f42c1;      /* Bordure violette */
+    box-shadow: 0 0 8px rgba(111, 66, 193, 0.2);  /* Ombre violette */
+}
+
+input[type="checkbox"]:checked + .tech-label::after {
+    color: #6f42c1;
+}
+
+.tech-label:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+/* Animation de transition */
+.tech-label, .tech-label * {
+    transition: all 0.3s ease;
+}
+</style>
+{% endblock %}

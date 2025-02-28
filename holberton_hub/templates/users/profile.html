@@ -1,0 +1,498 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load markdown_filters %}
+{% load user_tags %}  <!-- Ajouter cette ligne -->
+
+{% block title %}Profil - {{ user.username }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <!-- Photo de profil -->
+                    {% if user.profile_picture %}
+                        <img src="{{ user.profile_picture.url }}" class="rounded-circle mb-3"
+                             style="width: 150px; height: 150px; object-fit: cover;">
+                    {% else %}
+                        <img src="{% static 'images/default_avatar.png' %}" class="rounded-circle mb-3"
+                             style="width: 150px; height: 150px; object-fit: cover;">
+                    {% endif %}
+
+                    <h3>{{ user.username }}</h3>
+                    <!-- <p class="text-muted mb-3">{{ user.email }}</p> -->
+
+                    {% if user.is_company %}
+                        <!-- Profil Entreprise -->
+                        {% if user.company_website %}
+                            <div class="mb-3">
+                                <i class="fas fa-globe"></i>
+                                <a href="{{ user.company_website }}" target="_blank" class="ms-2">Site Web</a>
+                            </div>
+                        {% endif %}
+
+                        {% if user.company_location %}
+                            <div class="mb-3">
+                                <i class="fas fa-map-marker-alt"></i>
+                                {% if user.company_coordinates %}
+                                    <a href="https://www.google.com/maps?q={{ user.company_coordinates }}"
+                                       target="_blank" class="ms-2">{{ user.company_location }}</a>
+                                {% else %}
+                                    <span class="ms-2">{{ user.company_location }}</span>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+
+                        {% if user.company_bio %}
+                            <div class="mb-3">
+                                <h5>Présentation de l'entreprise</h5>
+                                <p class="text-muted">{{ user.company_bio }}</p>
+                            </div>
+                        {% endif %}
+
+                    {% else %}
+                        <!-- Profil Étudiant -->
+                        {% if user.specialty %}
+                            <p><strong>Spécialité:</strong> {{ user.get_specialty_display }}</p>
+                        {% endif %}
+                        {% if user.cohort %}
+                            <p><strong>Cohorte:</strong> {{ user.cohort }}</p>
+                        {% endif %}
+                        {% if user.campus %}
+                            <p><strong>Campus:</strong> {{ user.campus }}</p>
+                        {% endif %}
+                        {% if user.bio %}
+                            <p>{{ user.bio }}</p>
+                        {% endif %}
+                    {% endif %}
+
+                    <!-- Réseaux sociaux -->
+                    <div class="social-links mt-3 mb-4">
+                        {% if user.linkedin_profile %}
+                            <a href="{{ user.linkedin_profile }}" target="_blank" class="btn btn-outline-primary me-2">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                        {% endif %}
+                        {% if user.github_profile %}
+                            <a href="{{ user.github_profile }}" target="_blank" class="btn btn-outline-secondary">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        {% endif %}
+                    </div>
+
+                    <!-- Séparateur -->
+                    <hr class="my-4">
+
+                    <!-- Compétences -->
+                    <div class="skills-section">
+                        <h5 class="mb-3">Compétences</h5>
+                        {% if user.skills %}
+                            <div class="skills-container">
+                                {% for skill in user.skills %}
+                                    <div class="tech-badge" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ skill|get_tech_display }}">
+                                        {% if skill == 'PYTHON' %}<i class="fab fa-python"></i>
+                                        {% elif skill == 'DJANGO' %}<i class="fab fa-python"></i>
+                                        {% elif skill == 'FLASK' %}<i class="fab fa-python"></i>
+                                        {% elif skill == 'HTML' %}<i class="fab fa-html5"></i>
+                                        {% elif skill == 'CSS' %}<i class="fab fa-css3-alt"></i>
+                                        {% elif skill == 'JAVASCRIPT' %}<i class="fab fa-js"></i>
+                                        {% elif skill == 'TYPESCRIPT' %}<i class="fab fa-js"></i>
+                                        {% elif skill == 'REACT' %}<i class="fab fa-react"></i>
+                                        {% elif skill == 'NEXTJS' %}<i class="fab fa-react"></i>
+                                        {% elif skill == 'VUEJS' %}<i class="fab fa-vuejs"></i>
+                                        {% elif skill == 'NUXTJS' %}<i class="fab fa-vuejs"></i>
+                                        {% elif skill == 'ANGULAR' %}<i class="fab fa-angular"></i>
+                                        {% elif skill == 'SVELTE' %}<i class="fas fa-code"></i>
+                                        {% elif skill == 'NODEJS' %}<i class="fab fa-node-js"></i>
+                                        {% elif skill == 'EXPRESS' %}<i class="fab fa-node-js"></i>
+                                        {% elif skill == 'PHP' %}<i class="fab fa-php"></i>
+                                        {% elif skill == 'LARAVEL' %}<i class="fab fa-laravel"></i>
+                                        {% elif skill == 'SYMFONY' %}<i class="fab fa-symfony"></i>
+                                        {% elif skill == 'JAVA' %}<i class="fab fa-java"></i>
+                                        {% elif skill == 'SPRING' %}<i class="fas fa-leaf"></i>
+                                        {% elif skill == 'KOTLIN' %}<i class="fab fa-android"></i>
+                                        {% elif skill == 'SWIFT' %}<i class="fab fa-swift"></i>
+                                        {% elif skill == 'CSHARP' %}<i class="fab fa-microsoft"></i>
+                                        {% elif skill == 'DOTNET' %}<i class="fab fa-microsoft"></i>
+                                        {% elif skill == 'RUBY' %}<i class="fas fa-gem"></i>
+                                        {% elif skill == 'RAILS' %}<i class="fas fa-train"></i>
+                                        {% elif skill == 'GO' %}<i class="fas fa-circle"></i>
+                                        {% elif skill == 'RUST' %}<i class="fas fa-cog"></i>
+                                        {% elif skill == 'DOCKER' %}<i class="fab fa-docker"></i>
+                                        {% elif skill == 'KUBERNETES' %}<i class="fas fa-dharmachakra"></i>
+                                        {% elif skill == 'GIT' %}<i class="fab fa-git-alt"></i>
+                                        {% elif skill == 'GITHUB' %}<i class="fab fa-github"></i>
+                                        {% elif skill == 'GITLAB' %}<i class="fab fa-gitlab"></i>
+                                        {% elif skill == 'BITBUCKET' %}<i class="fab fa-bitbucket"></i>
+                                        {% elif skill == 'AWS' %}<i class="fab fa-aws"></i>
+                                        {% elif skill == 'AZURE' %}<i class="fab fa-microsoft"></i>
+                                        {% elif skill == 'GCP' %}<i class="fab fa-google"></i>
+                                        {% elif skill == 'DIGITALOCEAN' %}<i class="fab fa-digital-ocean"></i>
+                                        {% elif skill == 'HEROKU' %}<i class="fas fa-cloud"></i>
+                                        {% elif skill == 'NETLIFY' %}<i class="fas fa-cloud-upload-alt"></i>
+                                        {% elif skill == 'NGINX' %}<i class="fas fa-server"></i>
+                                        {% elif skill == 'APACHE' %}<i class="fas fa-server"></i>
+                                        {% elif skill == 'MYSQL' %}<i class="fas fa-database"></i>
+                                        {% elif skill == 'POSTGRESQL' %}<i class="fas fa-database"></i>
+                                        {% elif skill == 'MONGODB' %}<i class="fas fa-leaf"></i>
+                                        {% elif skill == 'REDIS' %}<i class="fas fa-database"></i>
+                                        {% elif skill == 'ELASTICSEARCH' %}<i class="fas fa-search"></i>
+                                        {% elif skill == 'GRAPHQL' %}<i class="fas fa-project-diagram"></i>
+                                        {% elif skill == 'LINUX' %}<i class="fab fa-linux"></i>
+                                        {% elif skill == 'UBUNTU' %}<i class="fab fa-ubuntu"></i>
+                                        {% elif skill == 'WINDOWS' %}<i class="fab fa-windows"></i>
+                                        {% elif skill == 'MACOS' %}<i class="fab fa-apple"></i>
+                                        {% elif skill == 'ANDROID' %}<i class="fab fa-android"></i>
+                                        {% elif skill == 'IOS' %}<i class="fab fa-apple"></i>
+                                        {% elif skill == 'FLUTTER' %}<i class="fas fa-mobile-alt"></i>
+                                        {% elif skill == 'REACT_NATIVE' %}<i class="fab fa-react"></i>
+                                        {% elif skill == 'WORDPRESS' %}<i class="fab fa-wordpress"></i>
+                                        {% elif skill == 'DRUPAL' %}<i class="fab fa-drupal"></i>
+                                        {% elif skill == 'BOOTSTRAP' %}<i class="fab fa-bootstrap"></i>
+                                        {% elif skill == 'TAILWIND' %}<i class="fab fa-css3"></i>
+                                        {% elif skill == 'SASS' %}<i class="fab fa-sass"></i>
+                                        {% elif skill == 'WEBPACK' %}<i class="fas fa-box-open"></i>
+                                        {% elif skill == 'BABEL' %}<i class="fas fa-boxes"></i>
+                                        {% elif skill == 'NPM' %}<i class="fab fa-npm"></i>
+                                        {% elif skill == 'YARN' %}<i class="fab fa-yarn"></i>
+                                        {% elif skill == 'JENKINS' %}<i class="fab fa-jenkins"></i>
+                                        {% elif skill == 'TRAVIS' %}<i class="fas fa-check-circle"></i>
+                                        {% elif skill == 'CIRCLECI' %}<i class="fas fa-circle-notch"></i>
+                                        {% elif skill == 'ANSIBLE' %}<i class="fas fa-terminal"></i>
+                                        {% elif skill == 'TERRAFORM' %}<i class="fas fa-cubes"></i>
+                                        {% elif skill == 'JIRA' %}<i class="fab fa-jira"></i>
+                                        {% elif skill == 'TRELLO' %}<i class="fab fa-trello"></i>
+                                        {% elif skill == 'FIGMA' %}<i class="fab fa-figma"></i>
+                                        {% elif skill == 'PHOTOSHOP' %}<i class="fas fa-paint-brush"></i>
+                                        {% elif skill == 'ILLUSTRATOR' %}<i class="fas fa-pencil-alt"></i>
+                                        {% elif skill == 'JEST' %}<i class="fas fa-vial"></i>
+                                        {% elif skill == 'CYPRESS' %}<i class="fas fa-check-double"></i>
+                                        {% elif skill == 'SELENIUM' %}<i class="fas fa-robot"></i>
+                                        {% elif skill == 'PYTORCH' %}<i class="fas fa-fire"></i>
+                                        {% elif skill == 'TENSORFLOW' %}<i class="fas fa-brain"></i>
+                                        {% else %}<i class="fas fa-code"></i>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p class="text-muted">Aucune compétence renseignée</p>
+                        {% endif %}
+                    </div>
+
+                    {% if request.user == user %}
+                        <div class="mt-4">
+                            <a href="{% url 'profile_edit' %}" class="btn btn-primary">
+                                Modifier le profil
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <!-- Projets actifs créés -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4>Mes projets actifs</h4>
+                    <div class="row">
+                        {% for project in projects_created %}
+                            <div class="col-md-6 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5>{{ project.title }}</h5>
+                                        <div class="markdown-content">
+                                            {% with description=project.description|truncatewords:28 %}
+                                                {{ description|markdown_to_html|safe }}
+                                            {% endwith %}
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="badge bg-info">{{ project.get_project_type_display }}</span>
+                                            <span class="badge bg-{{ project.status|lower }}">{{ project.get_status_display }}</span>
+                                        </div>
+                                        <a href="{% url 'project_detail' project.id %}" class="btn btn-primary btn-sm mt-2">Voir</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <p>Vous n'avez pas de projets actifs.</p>
+                            <!-- Débogage -->
+                            <div class="text-muted small">
+                                <p>User ID: {{ user.id }}</p>
+                                <p>Username: {{ user.username }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projets archivés -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4>Mes projets archivés</h4>
+                    <div class="row">
+                        {% for project in projects_archived %}
+                            <div class="col-md-6 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5>{{ project.title }}</h5>
+                                        <span class="badge bg-secondary">Archivé le {{ project.archived_date|date:"d/m/Y" }}</span>
+                                        <div class="markdown-content">
+                                            {% with description=project.description|truncatewords:28 %}
+                                                {{ description|markdown_to_html|safe }}
+                                            {% endwith %}
+                                        </div>
+                                        <a href="{% url 'project_detail' project.id %}" class="btn btn-secondary btn-sm">Voir</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <p>Vous n'avez pas de projets archivés.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projets rejoints actifs -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4>Projets rejoints actifs</h4>
+                    <div class="row">
+                        {% for project in projects_joined %}
+                            <div class="col-md-6 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5>{{ project.title }}</h5>
+                                        <div class="markdown-content">
+                                            {% with description=project.description|truncatewords:28 %}
+                                                {{ description|markdown_to_html|safe }}
+                                            {% endwith %}
+                                        </div>
+                                        <a href="{% url 'project_detail' project.id %}" class="btn btn-primary btn-sm mt-2">Voir</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <p>Vous n'avez pas encore rejoint de projets actifs.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projets rejoints archivés -->
+            <div class="card">
+                <div class="card-body">
+                    <h4>Projets rejoints archivés</h4>
+                    <div class="row">
+                        {% for project in projects_joined_archived %}
+                            <div class="col-md-6 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5>{{ project.title }}</h5>
+                                        <span class="badge bg-secondary">Archivé le {{ project.archived_date|date:"d/m/Y" }}</span>
+                                        <div class="markdown-content">
+                                            {% with description=project.description|truncatewords:28 %}
+                                                {{ description|markdown_to_html|safe }}
+                                            {% endwith %}
+                                        </div>
+                                        <a href="{% url 'project_detail' project.id %}" class="btn btn-secondary btn-sm">Voir</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <p>Vous n'avez pas encore rejoint de projets archivés.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+.markdown-content {
+    font-size: 0.4em;
+    max-height: 80px;
+    line-height: 1.3;
+    overflow: hidden;
+    color: #666;
+    margin: 10px 0;
+}
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3 {
+    margin-top: 0rem;
+    margin-bottom: 0.5rem;
+}
+
+.skills-section {
+    text-align: center;
+}
+
+.skills-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.skill-badge {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.skill-badge:hover {
+    transform: scale(1.1);
+}
+
+.skill-badge i {
+    font-size: 1.5rem;
+    color: #0066cc;  /* Couleur primaire de votre choix */
+}
+
+.skill-badge:hover i {
+    color: #004494;  /* Couleur plus foncée au survol */
+}
+
+.tech-logo {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+}
+
+.badge {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
+}
+
+hr {
+    border-top: 2px solid #e9ecef;
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tech-badge i.fa-python { color: #3776AB; }
+.tech-badge i.fa-js { color: #F7DF1E; }
+.tech-badge i.fa-html5 { color: #E34F26; }
+.tech-badge i.fa-css3-alt { color: #1572B6; }
+.tech-badge i.fa-react { color: #61DAFB; }
+.tech-badge i.fa-vuejs { color: #4FC08D; }
+.tech-badge i.fa-angular { color: #DD0031; }
+.tech-badge i.fa-node-js { color: #339933; }
+.tech-badge i.fa-php { color: #777BB4; }
+.tech-badge i.fa-java { color: #007396; }
+.tech-badge i.fa-docker { color: #2496ED; }
+.tech-badge i.fa-git-alt { color: #F05032; }
+.tech-badge i.fa-aws { color: #FF9900; }
+.tech-badge i.fa-linux { color: #000000; }
+.tech-badge i.fa-windows { color: #0078D6; }
+.tech-badge i.fa-apple { color: #999999; }
+.tech-badge i.fa-android { color: #3DDC84; }
+.tech-badge i.fa-wordpress { color: #21759B; }
+.tech-badge i.fa-bootstrap { color: #7952B3; }
+.tech-badge i.fa-sass { color: #CC6699; }
+.tech-badge i.fa-npm { color: #CB3837; }
+.tech-badge i.fa-yarn { color: #2C8EBB; }
+.tech-badge i.fa-github { color: #181717; }
+.tech-badge i.fa-gitlab { color: #FCA121; }
+.tech-badge i.fa-bitbucket { color: #0052CC; }
+.tech-badge i.fa-digital-ocean { color: #0080FF; }
+.tech-badge i.fa-ubuntu { color: #E95420; }
+.tech-badge i.fa-centos { color: #262577; }
+.tech-badge i.fa-debian { color: #A81D33; }
+.tech-badge i.fa-fedora { color: #294172; }
+.tech-badge i.fa-slack { color: #4A154B; }
+.tech-badge i.fa-trello { color: #0079BF; }
+.tech-badge i.fa-jira { color: #0052CC; }
+
+.tech-badge {
+    font-size: 1.6rem;
+}
+
+/* Mise à jour complète des couleurs des technologies */
+.tech-badge i.fa-python { color: #3776AB; }
+.tech-badge i.fa-django { color: #092E20; }
+.tech-badge i.fa-flask { color: #000000; }
+.tech-badge i.fa-html5 { color: #E34F26; }
+.tech-badge i.fa-css3-alt { color: #1572B6; }
+.tech-badge i.fa-js { color: #F7DF1E; }
+.tech-badge i.fa-react { color: #61DAFB; }
+.tech-badge i.fa-vuejs { color: #4FC08D; }
+.tech-badge i.fa-angular { color: #DD0031; }
+.tech-badge i.fa-node-js { color: #339933; }
+.tech-badge i.fa-php { color: #777BB4; }
+.tech-badge i.fa-java { color: #007396; }
+.tech-badge i.fa-docker { color: #2496ED; }
+.tech-badge i.fa-git-alt { color: #F05032; }
+.tech-badge i.fa-aws { color: #FF9900; }
+.tech-badge i.fa-linux { color: #000000; }
+.tech-badge i.fa-windows { color: #0078D6; }
+.tech-badge i.fa-apple { color: #999999; }
+.tech-badge i.fa-android { color: #3DDC84; }
+.tech-badge i.fa-wordpress { color: #21759B; }
+.tech-badge i.fa-bootstrap { color: #7952B3; }
+.tech-badge i.fa-sass { color: #CC6699; }
+.tech-badge i.fa-npm { color: #CB3837; }
+.tech-badge i.fa-yarn { color: #2C8EBB; }
+.tech-badge i.fa-github { color: #181717; }
+.tech-badge i.fa-gitlab { color: #FCA121; }
+.tech-badge i.fa-bitbucket { color: #0052CC; }
+.tech-badge i.fa-digital-ocean { color: #0080FF; }
+.tech-badge i.fa-ubuntu { color: #E95420; }
+.tech-badge i.fa-microsoft { color: #00A4EF; }
+.tech-badge i.fa-google { color: #4285F4; }
+.tech-badge i.fa-swift { color: #FA7343; }
+.tech-badge i.fa-drupal { color: #0678BE; }
+.tech-badge i.fa-laravel { color: #FF2D20; }
+.tech-badge i.fa-symfony { color: #000000; }
+.tech-badge i.fa-jira { color: #0052CC; }
+.tech-badge i.fa-trello { color: #0079BF; }
+.tech-badge i.fa-figma { color: #F24E1E; }
+
+/* Icônes Font Awesome personnalisées */
+.tech-badge i.fa-gem { color: #CC342D; } /* Ruby */
+.tech-badge i.fa-leaf { color: #6DB33F; } /* Spring */
+.tech-badge i.fa-train { color: #CC0000; } /* Rails */
+.tech-badge i.fa-circle { color: #00ADD8; } /* Go */
+.tech-badge i.fa-cog { color: #000000; } /* Rust */
+.tech-badge i.fa-dharmachakra { color: #326CE5; } /* Kubernetes */
+.tech-badge i.fa-cloud { color: #430098; } /* Heroku */
+.tech-badge i.fa-cloud-upload-alt { color: #00C7B7; } /* Netlify */
+.tech-badge i.fa-server { color: #009639; } /* Nginx/Apache */
+.tech-badge i.fa-database { color: #4479A1; } /* Databases */
+.tech-badge i.fa-search { color: #005571; } /* Elasticsearch */
+.tech-badge i.fa-project-diagram { color: #E10098; } /* GraphQL */
+.tech-badge i.fa-mobile-alt { color: #02569B; } /* Flutter */
+.tech-badge i.fa-box-open { color: #8DD6F9; } /* Webpack */
+.tech-badge i.fa-boxes { color: #F9DC3E; } /* Babel */
+.tech-badge i.fa-terminal { color: #EE0000; } /* Ansible */
+.tech-badge i.fa-cubes { color: #7B42BC; } /* Terraform */
+.tech-badge i.fa-check-circle { color: #3EAAAF; } /* Travis */
+.tech-badge i.fa-circle-notch { color: #343434; } /* CircleCI */
+.tech-badge i.fa-vial { color: #C21325; } /* Jest */
+.tech-badge i.fa-check-double { color: #17202C; } /* Cypress */
+.tech-badge i.fa-robot { color: #43B02A; } /* Selenium */
+.tech-badge i.fa-fire { color: #EE4C2C; } /* PyTorch */
+.tech-badge i.fa-brain { color: #FF6F00; } /* TensorFlow */
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialiser tous les tooltips Bootstrap
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+});
+</script>
+{% endblock %}

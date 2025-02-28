@@ -1,0 +1,32 @@
+#!/bin/bash
+
+cd /var/www/vhosts/holberton_hub
+
+# Vérifier si les processus existent
+if [ ! -f django.pid ] || [ ! -f ngrok.pid ] || ! ps -p $(cat django.pid 2>/dev/null) > /dev/null || ! ps -p $(cat ngrok.pid 2>/dev/null) > /dev/null; then
+    echo "Un ou plusieurs services sont arrêtés. Redémarrage..."
+    ./stop_server.sh
+    ./start_server.sh
+    exit 0
+fi
+
+# Vérifier si Django répond
+if ! curl -s http://localhost:8000 > /dev/null; then
+    echo "Django ne répond pas. Redémarrage..."
+    ./stop_server.sh
+    ./start_server.sh
+    exit 0
+fi
+
+# Vérifier si ngrok répond
+if ! curl -s http://localhost:4040/api/tunnels > /dev/null; then
+    echo "Ngrok ne répond pas. Redémarrage..."
+    ./stop_server.sh
+    ./start_server.sh
+    exit 0
+fi
+
+# Afficher l'URL actuelle
+echo "Services en cours d'exécution"
+echo "URL Ngrok actuelle :"
+curl -s http://localhost:4040/api/tunnels | grep -o '"public_url":"[^"]*' | cut -d'"' -f4
