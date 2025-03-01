@@ -1,0 +1,193 @@
+/**
+ * Resident Evil Theme
+ * A biohazard-inspired theme based on Umbrella Corporation aesthetics
+ */
+
+:root {
+    /* Main colors */
+    --theme-primary: #de1818;       /* Umbrella Red */
+    --theme-primary-hover: #b40f0f;
+    --theme-secondary: #2b2b2b;     /* Dark Gray */
+    --theme-secondary-hover: #1d1d1d;
+    --theme-success: #1b8057;
+    --theme-danger: #de1818;
+    --theme-warning: #f6c700;
+    --theme-info: #1e7cc1;
+
+    /* Background colors */
+    --theme-bg-primary: #0f0f0f;
+    --theme-bg-secondary: #050505;
+    --theme-bg-tertiary: #1a1a1a;
+
+    /* Text colors */
+    --theme-text-primary: #dedede;
+    --theme-text-secondary: #ababab;
+    --theme-text-muted: #707070;
+
+    /* Border colors */
+    --theme-border-color: #222222;
+    --theme-border-color-dark: #333333;
+
+    /* Component colors */
+    --theme-card-bg: #191919;
+    --theme-card-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    --theme-input-bg: #111111;
+    --theme-input-border: #222222;
+    --theme-input-focus-border: #de1818;
+
+    /* Button colors */
+    --theme-btn-primary-bg: #de1818;
+    --theme-btn-primary-text: #ffffff;
+    --theme-btn-secondary-bg: #2b2b2b;
+    --theme-btn-secondary-text: #dedede;
+
+    /* Navigation colors */
+    --theme-nav-bg: #000000;
+    --theme-nav-text: #dedede;
+    --theme-nav-active: #de1818;
+
+    /* Footer colors */
+    --theme-footer-bg: #000000;
+    --theme-footer-text: #dedede;
+
+    /* Theme transition */
+    --theme-transition: all 0.3s ease;
+}
+
+/* Apply theme variables */
+body {
+    background-color: var(--theme-bg-secondary);
+    color: var(--theme-text-primary);
+    transition: var(--theme-transition);
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23de1818' fill-opacity='0.09'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Cards and Containers */
+.card {
+    background-color: var(--theme-card-bg);
+    border: 1px solid var(--theme-border-color);
+    box-shadow: var(--theme-card-shadow);
+}
+
+.card-header {
+    background-color: var(--theme-bg-tertiary);
+    border-bottom: 2px solid var(--theme-primary);
+    color: var(--theme-text-primary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+}
+
+h1, h2, h3 {
+    color: var(--theme-primary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Add biohazard symbol to navbar brand */
+.navbar-brand {
+    position: relative;
+    padding-left: 30px !important;
+}
+
+.navbar-brand:before {
+    content: "☣";
+    position: absolute;
+    left: 0;
+    font-size: 1.2rem;
+}
+
+/* Navbar */
+.navbar-dark {
+    background-color: var(--theme-nav-bg) !important;
+    border-bottom: 3px solid var(--theme-primary);
+}
+
+.navbar-dark .navbar-brand,
+.navbar-dark .nav-link {
+    color: var(--theme-nav-text);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+}
+
+.navbar-dark .nav-link.active {
+    color: var(--theme-nav-active) !important;
+}
+
+/* Forms */
+.form-control,
+.form-select {
+    background-color: var(--theme-input-bg);
+    border-color: var(--theme-input-border);
+    color: var(--theme-text-primary);
+    border-radius: 0;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--theme-input-focus-border);
+    box-shadow: 0 0 0 0.25rem rgba(222, 24, 24, 0.25);
+}
+
+/* Buttons */
+.btn {
+    border-radius: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+
+.btn-primary {
+    background-color: var(--theme-btn-primary-bg);
+    border-color: var(--theme-btn-primary-bg);
+    color: var(--theme-btn-primary-text);
+}
+
+.btn-primary:hover {
+    background-color: var(--theme-primary-hover);
+    border-color: var(--theme-primary-hover);
+}
+
+/* Links */
+a {
+    color: var(--theme-primary);
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+a:hover {
+    color: var(--theme-primary-hover);
+    text-decoration: none;
+}
+
+/* Footer */
+footer.bg-dark {
+    background-color: var(--theme-footer-bg) !important;
+    color: var(--theme-footer-text);
+    border-top: 3px solid var(--theme-primary);
+}
+
+/* Jumbotron */
+.jumbotron {
+    background-color: var(--theme-bg-tertiary) !important;
+    border-left: 5px solid var(--theme-primary);
+}
+
+/* Typing effect for text */
+.typing-effect {
+    border-right: 2px solid var(--theme-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: var(--theme-primary) }
+}

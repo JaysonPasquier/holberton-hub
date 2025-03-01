@@ -1,0 +1,269 @@
+
+/**
+ * Holberton School Theme
+ * Featuring Holberton School brand colors and styling
+ */
+
+:root {
+    /* Holberton Brand Colors */
+    --theme-primary: #0d4ea1;       /* Holberton blue */
+    --theme-primary-hover: #0a3b7a;
+    --theme-secondary: #f04739;     /* Holberton red */
+    --theme-secondary-hover: #d43c30;
+    --theme-tertiary: #484848;      /* Dark gray */
+    --theme-light: #f7f7f7;         /* Light gray */
+    --theme-success: #00a876;
+    --theme-danger: #f04739;
+    --theme-warning: #ff9800;
+    --theme-info: #00bcd4;
+
+    /* Background colors */
+    --theme-bg-primary: #ffffff;
+    --theme-bg-secondary: #f7f7f7;
+    --theme-bg-tertiary: #e9ecef;
+
+    /* Text colors */
+    --theme-text-primary: #303030;
+    --theme-text-secondary: #484848;
+    --theme-text-muted: #6c757d;
+
+    /* Border colors */
+    --theme-border-color: #e9ecef;
+    --theme-border-color-dark: #ced4da;
+
+    /* Component colors */
+    --theme-card-bg: #ffffff;
+    --theme-card-shadow: 0 0.125rem 0.25rem rgba(13, 78, 161, 0.075);
+    --theme-input-bg: #ffffff;
+    --theme-input-border: #ced4da;
+    --theme-input-focus-border: #0d4ea1;
+
+    /* Button colors */
+    --theme-btn-primary-bg: #0d4ea1;
+    --theme-btn-primary-text: #ffffff;
+    --theme-btn-secondary-bg: #f04739;
+    --theme-btn-secondary-text: #ffffff;
+
+    /* Navigation colors */
+    --theme-nav-bg: #0d4ea1;
+    --theme-nav-text: #ffffff;
+    --theme-nav-active: #ffffff;
+
+    /* Footer colors */
+    --theme-footer-bg: #0d4ea1;
+    --theme-footer-text: #ffffff;
+
+    /* Theme transition */
+    --theme-transition: all 0.3s ease;
+}
+
+/* Apply theme variables */
+body {
+    background-color: var(--theme-bg-secondary);
+    color: var(--theme-text-primary);
+    transition: var(--theme-transition);
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Cards and Containers */
+.card {
+    background-color: var(--theme-card-bg);
+    border-color: var(--theme-border-color);
+    box-shadow: var(--theme-card-shadow);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.card-header {
+    background-color: var(--theme-bg-tertiary);
+    border-bottom: 2px solid var(--theme-primary);
+    font-weight: 600;
+}
+
+.list-group-item {
+    background-color: var(--theme-card-bg);
+    border-color: var(--theme-border-color);
+}
+
+.modal-content {
+    background-color: var(--theme-card-bg);
+    border-color: var(--theme-border-color);
+    border-radius: 8px;
+}
+
+/* Text */
+.text-muted {
+    color: var(--theme-text-muted) !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    color: var(--theme-primary);
+}
+
+/* Navbar - Holberton style */
+.navbar-dark {
+    background-color: var(--theme-nav-bg) !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-dark .navbar-brand {
+    color: var(--theme-nav-text);
+    font-weight: 700;
+}
+
+.navbar-dark .navbar-brand::before {
+    content: "H";
+    background-color: var(--theme-secondary);
+    color: white;
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-right: 8px;
+    font-weight: bold;
+}
+
+.navbar-dark .nav-link {
+    color: var(--theme-nav-text) !important;
+    font-weight: 500;
+    position: relative;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.navbar-dark .nav-link:hover::after,
+.navbar-dark .nav-link.active::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0.5rem;
+    right: 0.5rem;
+    height: 3px;
+    background-color: var(--theme-secondary);
+    border-radius: 3px 3px 0 0;
+}
+
+/* Forms */
+.form-control,
+.form-select {
+    background-color: var(--theme-input-bg);
+    border-color: var(--theme-input-border);
+    color: var(--theme-text-primary);
+    border-radius: 6px;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--theme-input-focus-border);
+    box-shadow: 0 0 0 0.25rem rgba(13, 78, 161, 0.25);
+}
+
+.form-label {
+    font-weight: 500;
+    color: var(--theme-text-secondary);
+}
+
+/* Buttons - Holberton style */
+.btn {
+    border-radius: 6px;
+    font-weight: 500;
+    padding: 0.5rem 1.5rem;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background-color: var(--theme-btn-primary-bg);
+    border-color: var(--theme-btn-primary-bg);
+    color: var(--theme-btn-primary-text);
+}
+
+.btn-primary:hover {
+    background-color: var(--theme-primary-hover);
+    border-color: var(--theme-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(13, 78, 161, 0.3);
+}
+
+.btn-secondary {
+    background-color: var(--theme-btn-secondary-bg);
+    border-color: var(--theme-btn-secondary-bg);
+    color: var(--theme-btn-secondary-text);
+}
+
+.btn-secondary:hover {
+    background-color: var(--theme-secondary-hover);
+    border-color: var(--theme-secondary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(240, 71, 57, 0.3);
+}
+
+.btn-outline-primary {
+    border-color: var(--theme-btn-primary-bg);
+    color: var(--theme-btn-primary-bg);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--theme-btn-primary-bg);
+    color: var(--theme-btn-primary-text);
+    transform: translateY(-2px);
+}
+
+/* Footer */
+footer.bg-dark {
+    background-color: var(--theme-footer-bg) !important;
+    color: var(--theme-footer-text);
+    border-top: 4px solid var(--theme-secondary);
+}
+
+/* Links */
+a {
+    color: var(--theme-primary);
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+a:hover {
+    color: var(--theme-secondary);
+    text-decoration: none;
+}
+
+/* Badge styling */
+.badge {
+    font-weight: 500;
+    padding: 0.5em 0.8em;
+    border-radius: 6px;
+}
+
+/* Skills badges - more rounded in Holberton theme */
+.skill-badge {
+    border-radius: 20px;
+    padding: 0.5em 1em;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.skill-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Theme switcher */
+.theme-switcher {
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.theme-switcher:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: rotate(15deg);
+}
+
+.theme-switcher.active {
+    background-color: var(--theme-secondary);
+    color: white;
+}

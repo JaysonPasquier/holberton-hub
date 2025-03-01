@@ -1,0 +1,256 @@
+/**
+ * The Last of Us Theme
+ * A theme inspired by The Last of Us game with character images and fonts
+ */
+
+/* Import The Last of Us style font - you'll need to add this font file */
+@font-face {
+    font-family: 'LastOfUsFont';
+    src: url('/static/fonts/games/lastofus-font.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    /* The Last of Us color palette */
+    --theme-primary: #799156;       /* Olive green */
+    --theme-primary-hover: #5f7444;
+    --theme-secondary: #3b3a30;     /* Dark earth tone */
+    --theme-secondary-hover: #2a2920;
+    --theme-success: #4d6a3b;
+    --theme-danger: #8b2e2e;
+    --theme-warning: #d6bd74;
+    --theme-info: #5e81a2;
+
+    /* Background colors - dark, muted tones */
+    --theme-bg-primary: #1c1c1a;
+    --theme-bg-secondary: #141412;
+    --theme-bg-tertiary: #252521;
+
+    /* Text colors - aged, weathered look */
+    --theme-text-primary: #d8d8d0;
+    --theme-text-secondary: #a6a69e;
+    --theme-text-muted: #7a7a72;
+
+    /* Game-specific variables */
+    --lastofus-font: 'LastOfUsFont', 'Georgia', serif;
+
+    /* Other theme variables */
+    --theme-border-color: #2a2a25;
+    --theme-border-color-dark: #3a3a33;
+    --theme-card-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+
+    /* Navigation colors */
+    --theme-nav-bg: #101010;
+    --theme-nav-text: #d8d8d0;
+    --theme-nav-active: #799156;
+
+    /* Footer colors */
+    --theme-footer-bg: #101010;
+    --theme-footer-text: #d8d8d0;
+
+    /* Theme transition */
+    --theme-transition: all 0.3s ease;
+}
+
+/* Apply theme variables - you'll need to add the texture and character images */
+body {
+    background-color: var(--theme-bg-secondary);
+    color: var(--theme-text-primary);
+    font-family: 'Roboto', sans-serif;
+
+    /* Subtle spore/fungal texture - add your texture image */
+    background-image: url('/static/images/games/last-of-us/spore-texture.png');
+
+    /* Set up for the character images */
+    position: relative;
+    z-index: 1;
+}
+
+/* Joel character on left side - add your image */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 300px;
+    z-index: -1;
+    background-image: url('/static/images/games/last-of-us/joel.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom left;
+    pointer-events: none;
+    opacity: 0.15;
+}
+
+/* Ellie character on right side - add your image */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 300px;
+    z-index: -1;
+    background-image: url('/static/images/games/last-of-us/ellie.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom right;
+    pointer-events: none;
+    opacity: 0.15;
+}
+
+/* Apply Last of Us font to headings */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--lastofus-font);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--theme-primary);
+}
+
+/* Cards and Containers - weathered look */
+.card {
+    background-color: var(--theme-bg-tertiary);
+    border: 1px solid var(--theme-border-color);
+    box-shadow: var(--theme-card-shadow);
+    border-radius: 0; /* The Last of Us UI is more rectangular */
+}
+
+.card-header {
+    background-color: var(--theme-secondary);
+    border-bottom: 1px solid var(--theme-border-color-dark);
+    color: var(--theme-text-primary);
+    font-family: var(--lastofus-font);
+    text-transform: uppercase;
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+}
+
+h1, h2, h3 {
+    color: var(--theme-primary);
+}
+
+/* Custom styles for firefly effect */
+.navbar-brand:after {
+    content: "✧";
+    position: relative;
+    margin-left: 8px;
+    color: var(--theme-primary);
+    animation: firefly 4s infinite alternate;
+}
+
+@keyframes firefly {
+    0%, 100% { opacity: 0.3; text-shadow: 0 0 8px var(--theme-primary); }
+    50% { opacity: 1; text-shadow: 0 0 15px var(--theme-primary); }
+}
+
+/* Game-styled navbar */
+.navbar-dark {
+    background-color: var(--theme-nav-bg);
+    font-family: var(--lastofus-font);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 3px solid var(--theme-primary);
+}
+
+.navbar-dark .navbar-brand,
+.navbar-dark .nav-link {
+    color: var(--theme-nav-text);
+}
+
+.navbar-dark .nav-link.active {
+    color: var(--theme-nav-active) !important;
+}
+
+/* Add firefly logo effect to navbar brand */
+.navbar-brand {
+    position: relative;
+    font-family: var(--lastofus-font) !important;
+}
+
+.navbar-brand::after {
+    content: "✧";
+    margin-left: 8px;
+    color: var(--theme-primary);
+}
+
+/* Forms */
+.form-control,
+.form-select {
+    background-color: var(--theme-input-bg);
+    border-color: var(--theme-input-border);
+    color: var(--theme-text-primary);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--theme-input-focus-border);
+    box-shadow: 0 0 0 0.25rem rgba(230, 198, 25, 0.25);
+}
+
+/* Buttons - The Last of Us style */
+.btn-primary {
+    background-color: var(--theme-btn-primary-bg);
+    border-color: var(--theme-btn-primary-bg);
+    color: var(--theme-btn-primary-text);
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    background-color: var(--theme-primary-hover);
+    border-color: var(--theme-primary-hover);
+    box-shadow: 0 0 10px rgba(230, 198, 25, 0.4);
+}
+
+.btn-secondary {
+    background-color: var(--theme-btn-secondary-bg);
+    border-color: var(--theme-btn-secondary-bg);
+}
+
+.btn {
+    border-radius: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: var(--lastofus-font);
+    font-size: 0.9rem;
+}
+
+/* Links */
+a {
+    color: var(--theme-primary);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--theme-primary-hover);
+    text-decoration: underline;
+}
+
+/* Footer */
+footer.bg-dark {
+    background-color: var(--theme-footer-bg) !important;
+    color: var(--theme-footer-text);
+    border-top: 1px solid var(--theme-primary);
+}
+
+/* Jumbotron */
+.jumbotron {
+    position: relative;
+    background-color: var(--theme-bg-tertiary);
+    border: none;
+}
+
+.jumbotron::after {
+    content: "";
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    width: 150px;
+    height: 70px;
+    background-image: url('/static/images/games/last-of-us/logo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.7;
+}

@@ -1,0 +1,189 @@
+/**
+ * Dark Souls Theme
+ * A medieval dark fantasy theme inspired by the Dark Souls series
+ */
+
+:root {
+    /* Main colors */
+    --theme-primary: #e9a846;       /* Bonfire amber */
+    --theme-primary-hover: #c28a2e;
+    --theme-secondary: #6b3c2a;     /* Ember red-brown */
+    --theme-secondary-hover: #522d1f;
+    --theme-success: #357352;
+    --theme-danger: #9c2b2b;
+    --theme-warning: #e9a846;
+    --theme-info: #3a5c81;
+
+    /* Background colors */
+    --theme-bg-primary: #121212;
+    --theme-bg-secondary: #0a0a0a;
+    --theme-bg-tertiary: #1a1a1a;
+
+    /* Text colors */
+    --theme-text-primary: #c7b89d;  /* Ancient parchment */
+    --theme-text-secondary: #9b8e7a;
+    --theme-text-muted: #6c6558;
+
+    /* Border colors */
+    --theme-border-color: #2a2520;
+    --theme-border-color-dark: #433a31;
+
+    /* Component colors */
+    --theme-card-bg: #1a1816;
+    --theme-card-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    --theme-input-bg: #0e0d0c;
+    --theme-input-border: #2a2520;
+    --theme-input-focus-border: #e9a846;
+
+    /* Button colors */
+    --theme-btn-primary-bg: #e9a846;
+    --theme-btn-primary-text: #121212;
+    --theme-btn-secondary-bg: #6b3c2a;
+    --theme-btn-secondary-text: #c7b89d;
+
+    /* Navigation colors */
+    --theme-nav-bg: #0a0908;
+    --theme-nav-text: #c7b89d;
+    --theme-nav-active: #e9a846;
+
+    /* Footer colors */
+    --theme-footer-bg: #0a0908;
+    --theme-footer-text: #c7b89d;
+
+    /* Theme transition */
+    --theme-transition: all 0.3s ease;
+}
+
+/* Apply theme variables */
+body {
+    background-color: var(--theme-bg-secondary);
+    color: var(--theme-text-primary);
+    transition: var(--theme-transition);
+    font-family: 'Times New Roman', Times, serif;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath fill='%23333333' fill-opacity='0.08' d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+/* Cards and Containers */
+.card {
+    background-color: var(--theme-card-bg);
+    border: 1px solid var(--theme-border-color);
+    box-shadow: var(--theme-card-shadow);
+}
+
+.card-header {
+    background-color: var(--theme-bg-tertiary);
+    border-bottom: 1px solid var(--theme-border-color-dark);
+    color: var(--theme-text-primary);
+    letter-spacing: 1px;
+    font-variant: small-caps;
+}
+
+h1, h2, h3 {
+    color: var(--theme-primary);
+    font-variant: small-caps;
+    letter-spacing: 1px;
+}
+
+/* Custom bonfire effect for navbar brand */
+.navbar-brand {
+    position: relative;
+    padding-left: 30px !important;
+}
+
+.navbar-brand:before {
+    content: "🔥";
+    position: absolute;
+    left: 0;
+    font-size: 1.2rem;
+    animation: flicker 3s infinite alternate;
+}
+
+@keyframes flicker {
+    0%, 100% { opacity: 1; text-shadow: 0 0 10px rgba(233, 168, 70, 0.8); }
+    25% { opacity: 0.8; text-shadow: 0 0 5px rgba(233, 168, 70, 0.6); }
+    50% { opacity: 0.9; text-shadow: 0 0 15px rgba(233, 168, 70, 1); }
+    75% { opacity: 0.7; text-shadow: 0 0 5px rgba(233, 168, 70, 0.7); }
+}
+
+/* Navbar */
+.navbar-dark {
+    background-color: var(--theme-nav-bg) !important;
+    border-bottom: 1px solid var(--theme-border-color-dark);
+}
+
+.navbar-dark .navbar-brand,
+.navbar-dark .nav-link {
+    color: var(--theme-nav-text);
+    font-variant: small-caps;
+    letter-spacing: 1px;
+}
+
+.navbar-dark .nav-link.active {
+    color: var(--theme-nav-active) !important;
+}
+
+/* Forms */
+.form-control,
+.form-select {
+    background-color: var(--theme-input-bg);
+    border-color: var(--theme-input-border);
+    color: var(--theme-text-primary);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--theme-input-focus-border);
+    box-shadow: 0 0 0 0.25rem rgba(233, 168, 70, 0.25);
+}
+
+/* Buttons */
+.btn {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+
+.btn-primary {
+    background-color: var(--theme-btn-primary-bg);
+    border-color: var(--theme-btn-primary-bg);
+    color: var(--theme-btn-primary-text);
+}
+
+.btn-primary:hover {
+    background-color: var(--theme-primary-hover);
+    border-color: var(--theme-primary-hover);
+}
+
+/* Links */
+a {
+    color: var(--theme-primary);
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+a:hover {
+    color: var(--theme-primary-hover);
+    text-decoration: none;
+}
+
+/* Footer */
+footer.bg-dark {
+    background-color: var(--theme-footer-bg) !important;
+    color: var(--theme-footer-text);
+    border-top: 1px solid var(--theme-border-color-dark);
+}
+
+/* Jumbotron */
+.jumbotron {
+    background-color: var(--theme-bg-tertiary) !important;
+    box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--theme-border-color-dark);
+}
+
+/* You Died animation - triggered on certain errors */
+@keyframes youDied {
+    0% { opacity: 0; transform: scale(0.9); }
+    10% { opacity: 1; transform: scale(1); }
+    90% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.1); }
+}

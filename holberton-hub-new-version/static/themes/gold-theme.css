@@ -1,0 +1,140 @@
+/**
+ * Gold Theme
+ * A luxurious theme with gold/amber as the primary color
+ */
+
+:root {
+    /* Main colors */
+    --theme-primary: #ffc107;       /* Gold/Amber */
+    --theme-primary-hover: #ffb300;
+    --theme-secondary: #ffd54f;     /* Light Gold */
+    --theme-secondary-hover: #ffca28;
+    --theme-success: #4caf50;
+    --theme-danger: #f44336;
+    --theme-warning: #ff9800;
+    --theme-info: #2196f3;
+
+    /* Background colors */
+    --theme-bg-primary: #ffffff;
+    --theme-bg-secondary: #fffaf0;
+    --theme-bg-tertiary: #fff8e1;
+
+    /* Text colors */
+    --theme-text-primary: #3e2723;
+    --theme-text-secondary: #4e342e;
+    --theme-text-muted: #795548;
+
+    /* Border colors */
+    --theme-border-color: #e0e0e0;
+    --theme-border-color-dark: #bdbdbd;
+
+    /* Component colors */
+    --theme-card-bg: #ffffff;
+    --theme-card-shadow: 0 2px 6px rgba(255, 193, 7, 0.1);
+    --theme-input-bg: #ffffff;
+    --theme-input-border: #ffe082;
+    --theme-input-focus-border: #ffc107;
+
+    /* Button colors */
+    --theme-btn-primary-bg: #ffc107;
+    --theme-btn-primary-text: #212121;
+    --theme-btn-secondary-bg: #ffd54f;
+    --theme-btn-secondary-text: #212121;
+
+    /* Navigation colors */
+    --theme-nav-bg: #f57f17;
+    --theme-nav-text: #ffffff;
+    --theme-nav-active: #ffecb3;
+
+    /* Footer colors */
+    --theme-footer-bg: #f57f17;
+    --theme-footer-text: #ffffff;
+
+    /* Theme transition */
+    --theme-transition: all 0.3s ease;
+}
+
+/* Apply theme variables */
+body {
+    background-color: var(--theme-bg-secondary);
+    color: var(--theme-text-primary);
+    transition: var(--theme-transition);
+}
+
+/* Cards and Containers */
+.card {
+    background-color: var(--theme-card-bg);
+    border-color: var(--theme-border-color);
+    box-shadow: var(--theme-card-shadow);
+}
+
+.card-header {
+    background-color: var(--theme-bg-tertiary);
+    border-bottom-color: var(--theme-primary);
+    color: var(--theme-text-primary);
+}
+
+h1, h2, h3 {
+    color: var(--theme-primary-hover);
+}
+
+/* Navbar */
+.navbar-dark {
+    background-color: var(--theme-nav-bg) !important;
+}
+
+.navbar-dark .navbar-brand,
+.navbar-dark .nav-link {
+    color: var(--theme-nav-text);
+}
+
+.navbar-dark .nav-link.active {
+    color: var(--theme-nav-active) !important;
+}
+
+/* Forms */
+.form-control,
+.form-select {
+    background-color: var(--theme-input-bg);
+    border-color: var(--theme-input-border);
+    color: var(--theme-text-primary);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--theme-input-focus-border);
+    box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--theme-btn-primary-bg);
+    border-color: var(--theme-btn-primary-bg);
+    color: var(--theme-btn-primary-text);
+}
+
+.btn-primary:hover {
+    background-color: var(--theme-primary-hover);
+    border-color: var(--theme-primary-hover);
+}
+
+/* Links */
+a {
+    color: #ff8f00; /* Darker gold for better readability on links */
+}
+
+a:hover {
+    color: #f57f17;
+}
+
+/* Footer */
+footer.bg-dark {
+    background-color: var(--theme-footer-bg) !important;
+    color: var(--theme-footer-text);
+}
+
+/* Jumbotron */
+.jumbotron {
+    background-color: var(--theme-bg-primary) !important;
+    border-bottom: 2px solid var(--theme-primary);
+}

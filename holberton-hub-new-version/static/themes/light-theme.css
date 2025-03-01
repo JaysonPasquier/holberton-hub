@@ -1,0 +1,171 @@
+
+/**
+ * Light Theme (Default)
+ * A clean, light theme with subtle shadows and neutral colors
+ */
+
+:root {
+    /* Main colors */
+    --theme-primary: #0284c7;
+    --theme-primary-hover: #0369a1;
+    --theme-secondary: #64748b;
+    --theme-success: #22c55e;
+    --theme-danger: #ef4444;
+    --theme-warning: #f59e0b;
+    --theme-info: #06b6d4;
+
+    /* Background colors */
+    --theme-bg-primary: #ffffff;
+    --theme-bg-secondary: #f8fafc;
+    --theme-bg-tertiary: #f1f5f9;
+
+    /* Text colors */
+    --theme-text-primary: #0f172a;
+    --theme-text-secondary: #475569;
+    --theme-text-muted: #94a3b8;
+
+    /* Border colors */
+    --theme-border-color: #e2e8f0;
+    --theme-border-color-dark: #cbd5e1;
+
+    /* Component colors */
+    --theme-card-bg: #ffffff;
+    --theme-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --theme-input-bg: #ffffff;
+    --theme-input-border: #d1d5db;
+    --theme-input-focus-border: #0284c7;
+
+    /* Button colors */
+    --theme-btn-primary-bg: #0284c7;
+    --theme-btn-primary-text: #ffffff;
+    --theme-btn-secondary-bg: #f1f5f9;
+    --theme-btn-secondary-text: #334155;
+
+    /* Navigation colors */
+    --theme-nav-bg: #1e293b;
+    --theme-nav-text: #f8fafc;
+    --theme-nav-active: #0284c7;
+
+    /* Footer colors */
+    --theme-footer-bg: #1e293b;
+    --theme-footer-text: #f8fafc;
+
+    /* Theme transition */
+    --theme-transition: all 0.3s ease;
+}
+
+/* Apply theme variables */
+body {
+    background-color: var(--theme-bg-secondary);
+    color: var(--theme-text-primary);
+    transition: var(--theme-transition);
+}
+
+/* Cards and Containers */
+.card {
+    background-color: var(--theme-card-bg);
+    border-color: var(--theme-border-color);
+    box-shadow: var(--theme-card-shadow);
+}
+
+.card-header {
+    background-color: var(--theme-bg-tertiary);
+    border-bottom-color: var(--theme-border-color);
+}
+
+.list-group-item {
+    background-color: var(--theme-card-bg);
+    border-color: var(--theme-border-color);
+}
+
+.modal-content {
+    background-color: var(--theme-card-bg);
+    border-color: var(--theme-border-color);
+}
+
+/* Text */
+.text-muted {
+    color: var(--theme-text-muted) !important;
+}
+
+/* Navbar */
+.navbar-dark {
+    background-color: var(--theme-nav-bg);
+}
+
+.navbar-dark .navbar-brand,
+.navbar-dark .nav-link {
+    color: var(--theme-nav-text);
+}
+
+.navbar-dark .nav-link.active {
+    color: var(--theme-nav-active);
+}
+
+/* Forms */
+.form-control,
+.form-select {
+    background-color: var(--theme-input-bg);
+    border-color: var(--theme-input-border);
+    color: var(--theme-text-primary);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--theme-input-focus-border);
+    box-shadow: 0 0 0 0.25rem rgba(2, 132, 199, 0.25);
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--theme-btn-primary-bg);
+    border-color: var(--theme-btn-primary-bg);
+    color: var(--theme-btn-primary-text);
+}
+
+.btn-primary:hover {
+    background-color: var(--theme-primary-hover);
+    border-color: var(--theme-primary-hover);
+}
+
+.btn-outline-primary {
+    border-color: var(--theme-btn-primary-bg);
+    color: var(--theme-btn-primary-bg);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--theme-btn-primary-bg);
+    color: var(--theme-btn-primary-text);
+}
+
+/* Footer */
+footer.bg-dark {
+    background-color: var(--theme-footer-bg) !important;
+    color: var(--theme-footer-text);
+}
+
+/* Links */
+a {
+    color: var(--theme-primary);
+}
+
+a:hover {
+    color: var(--theme-primary-hover);
+}
+
+/* Theme switcher */
+.theme-switcher {
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.theme-switcher:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.theme-switcher.active {
+    background-color: var(--theme-primary);
+    color: white;
+}

@@ -1,0 +1,116 @@
+/**
+ * Game Theme Template
+ * Use this as a starting point for creating custom game-inspired themes with assets
+ */
+
+/* Import custom game fonts - replace with your game font */
+@font-face {
+    font-family: 'GameTitleFont';
+    src: url('/static/fonts/game-title-font.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    /* Main colors - customize based on game palette */
+    --theme-primary: #main-color;
+    --theme-primary-hover: #hover-color;
+    --theme-secondary: #secondary-color;
+    --theme-secondary-hover: #secondary-hover;
+
+    /* Background colors */
+    --theme-bg-primary: #main-bg;
+    --theme-bg-secondary: #secondary-bg;
+    --theme-bg-tertiary: #tertiary-bg;
+
+    /* Text colors */
+    --theme-text-primary: #text-color;
+    --theme-text-secondary: #secondary-text;
+    --theme-text-muted: #muted-text;
+
+    /* Game-specific variables */
+    --game-title-font: 'GameTitleFont', fallback-font;
+    --game-header-transform: uppercase; /* or normal, lowercase, etc. */
+    --game-element-border-radius: 0; /* or specific px value */
+
+    /* Other theme variables as needed */
+    --theme-border-color: #border-color;
+    --theme-card-shadow: 0 2px 10px rgba(0, 0, 0, alpha);
+}
+
+/* Apply background images to body */
+body {
+    background-color: var(--theme-bg-secondary);
+    color: var(--theme-text-primary);
+
+    /* Optional: Background image pattern or texture */
+    background-image: url('/static/images/games/game-bg-texture.png');
+
+    /* For fixed character images on sides (like Joel and Ellie) */
+    position: relative;
+    z-index: 1;
+}
+
+/* Game character images on sides - fixed position */
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    height: 100vh;
+    width: 300px; /* Adjust based on image size */
+    z-index: -1;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    pointer-events: none; /* So users can click through */
+    opacity: 0.2; /* Adjust for subtlety */
+}
+
+body::before {
+    left: 0;
+    background-image: url('/static/images/games/left-character.png');
+}
+
+body::after {
+    right: 0;
+    background-image: url('/static/images/games/right-character.png');
+}
+
+/* Apply game title font to headings */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--game-title-font);
+    text-transform: var(--game-header-transform);
+    color: var(--theme-primary);
+}
+
+/* Game-styled navbar */
+.navbar {
+    font-family: var(--game-title-font);
+    background-color: var(--theme-nav-bg);
+    background-image: url('/static/images/games/navbar-texture.png');
+    background-blend-mode: multiply;
+}
+
+/* Game-styled jumbotron with game logo */
+.jumbotron {
+    position: relative;
+    background-color: var(--theme-bg-tertiary);
+    border: none;
+}
+
+.jumbotron::after {
+    content: "";
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    width: 150px;
+    height: 70px;
+    background-image: url('/static/images/games/game-logo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.7;
+}
+
+/* Add any other custom styling for game-specific elements */

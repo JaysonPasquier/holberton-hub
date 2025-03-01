@@ -1,0 +1,201 @@
+
+/**
+ * Dark Theme
+ * A modern dark theme with good contrast and reduced eye strain
+ */
+
+:root {
+    /* Main colors - slightly different hues for dark mode */
+    --theme-primary: #3b82f6;
+    --theme-primary-hover: #60a5fa;
+    --theme-secondary: #94a3b8;
+    --theme-success: #4ade80;
+    --theme-danger: #f87171;
+    --theme-warning: #fbbf24;
+    --theme-info: #22d3ee;
+
+    /* Background colors - darker shades */
+    --theme-bg-primary: #0f172a;
+    --theme-bg-secondary: #1e293b;
+    --theme-bg-tertiary: #334155;
+
+    /* Text colors - lighter for contrast */
+    --theme-text-primary: #f1f5f9;
+    --theme-text-secondary: #cbd5e1;
+    --theme-text-muted: #94a3b8;
+
+    /* Border colors */
+    --theme-border-color: #334155;
+    --theme-border-color-dark: #475569;
+
+    /* Component colors */
+    --theme-card-bg: #1e293b;
+    --theme-card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+    --theme-input-bg: #0f172a;
+    --theme-input-border: #334155;
+    --theme-input-focus-border: #3b82f6;
+
+    /* Button colors */
+    --theme-btn-primary-bg: #3b82f6;
+    --theme-btn-primary-text: #ffffff;
+    --theme-btn-secondary-bg: #334155;
+    --theme-btn-secondary-text: #f1f5f9;
+
+    /* Navigation colors */
+    --theme-nav-bg: #0f172a;
+    --theme-nav-text: #f8fafc;
+    --theme-nav-active: #60a5fa;
+
+    /* Footer colors */
+    --theme-footer-bg: #0f172a;
+    --theme-footer-text: #f8fafc;
+
+    /* Theme transition */
+    --theme-transition: all 0.3s ease;
+}
+
+/* Apply theme variables */
+body {
+    background-color: var(--theme-bg-secondary);
+    color: var(--theme-text-primary);
+    transition: var(--theme-transition);
+}
+
+/* Cards and Containers */
+.card {
+    background-color: var(--theme-card-bg);
+    border-color: var(--theme-border-color);
+    box-shadow: var(--theme-card-shadow);
+}
+
+.card-header {
+    background-color: var(--theme-bg-tertiary);
+    border-bottom-color: var(--theme-border-color);
+}
+
+.list-group-item {
+    background-color: var(--theme-card-bg);
+    border-color: var(--theme-border-color);
+    color: var(--theme-text-primary);
+}
+
+.list-group-item-action:hover {
+    background-color: var(--theme-bg-tertiary);
+}
+
+.dropdown-menu {
+    background-color: var(--theme-bg-tertiary);
+    border-color: var(--theme-border-color);
+}
+
+.dropdown-item {
+    color: var(--theme-text-primary);
+}
+
+.dropdown-item:hover {
+    background-color: var(--theme-bg-primary);
+    color: var(--theme-text-primary);
+}
+
+.modal-content {
+    background-color: var(--theme-card-bg);
+    border-color: var(--theme-border-color);
+}
+
+/* Text */
+.text-muted {
+    color: var(--theme-text-muted) !important;
+}
+
+/* Navbar */
+.navbar-dark {
+    background-color: var(--theme-nav-bg);
+}
+
+.navbar-dark .navbar-brand,
+.navbar-dark .nav-link {
+    color: var(--theme-nav-text);
+}
+
+.navbar-dark .nav-link.active {
+    color: var(--theme-nav-active);
+}
+
+/* Forms */
+.form-control,
+.form-select {
+    background-color: var(--theme-input-bg);
+    border-color: var(--theme-input-border);
+    color: var(--theme-text-primary);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--theme-input-focus-border);
+    box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.25);
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--theme-btn-primary-bg);
+    border-color: var(--theme-btn-primary-bg);
+    color: var(--theme-btn-primary-text);
+}
+
+.btn-primary:hover {
+    background-color: var(--theme-primary-hover);
+    border-color: var(--theme-primary-hover);
+}
+
+.btn-outline-primary {
+    border-color: var(--theme-btn-primary-bg);
+    color: var(--theme-btn-primary-bg);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--theme-btn-primary-bg);
+    color: var(--theme-btn-primary-text);
+}
+
+/* Increase contrast for some elements in dark mode */
+.btn-outline-secondary {
+    border-color: var(--theme-text-secondary);
+    color: var(--theme-text-secondary);
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--theme-text-secondary);
+    color: var(--theme-bg-secondary);
+}
+
+/* Footer */
+footer.bg-dark {
+    background-color: var(--theme-footer-bg) !important;
+    color: var(--theme-footer-text);
+}
+
+/* Links */
+a {
+    color: var(--theme-primary);
+}
+
+a:hover {
+    color: var(--theme-primary-hover);
+}
+
+/* Theme switcher */
+.theme-switcher {
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.theme-switcher:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.theme-switcher.active {
+    background-color: var(--theme-primary);
+    color: white;
+}

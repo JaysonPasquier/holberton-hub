@@ -1,0 +1,282 @@
+/**
+ * Holberton School Theme - Updated color scheme
+ * Featuring Holberton School brand colors with better balance
+ */
+
+:root {
+    /* Holberton Brand Colors - revised with better color balance */
+    --theme-primary: #f04739;       /* Red as primary brand color */
+    --theme-primary-hover: #d43c30;
+    --theme-secondary: #444444;     /* Dark gray as secondary color */
+    --theme-secondary-hover: #333333;
+    --theme-tertiary: #f8f9fa;      /* Light background */
+    --theme-accent: #f04739;        /* Red for accents/highlights */
+    --theme-success: #28a745;
+    --theme-danger: #f04739;
+    --theme-warning: #ffc107;
+    --theme-info: #17a2b8;
+
+    /* Background colors - clean whites */
+    --theme-bg-primary: #ffffff;
+    --theme-bg-secondary: #f8f9fa;
+    --theme-bg-tertiary: #f1f4f8;
+
+    /* Text colors */
+    --theme-text-primary: #212529;
+    --theme-text-secondary: #495057;
+    --theme-text-muted: #6c757d;
+
+    /* Border colors */
+    --theme-border-color: #e9ecef;
+    --theme-border-color-dark: #ced4da;
+
+    /* Component colors */
+    --theme-card-bg: #ffffff;
+    --theme-card-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    --theme-input-bg: #ffffff;
+    --theme-input-border: #ced4da;
+    --theme-input-focus-border: #f04739;
+
+    /* Button colors */
+    --theme-btn-primary-bg: #f04739;
+    --theme-btn-primary-text: #ffffff;
+    --theme-btn-secondary-bg: #444444;
+    --theme-btn-secondary-text: #ffffff;
+
+    /* Navigation colors */
+    --theme-nav-bg: #444444;
+    --theme-nav-text: #ffffff;
+    --theme-nav-active: #f04739;
+
+    /* Footer colors */
+    --theme-footer-bg: #444444;
+    --theme-footer-text: #ffffff;
+
+    /* Theme transition */
+    --theme-transition: all 0.3s ease;
+}
+
+/* Apply theme variables */
+body {
+    background-color: var(--theme-bg-secondary);
+    color: var(--theme-text-primary);
+    transition: var(--theme-transition);
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Cards and Containers */
+.card {
+    background-color: var(--theme-card-bg);
+    border-color: var(--theme-border-color);
+    box-shadow: var(--theme-card-shadow);
+    border-radius: 4px;
+}
+
+.card-header {
+	color:  #000000;
+    background-color: var(--theme-bg-tertiary);
+    border-bottom: 2px solid var(--theme-primary);
+    font-weight: 600;
+}
+
+.list-group-item {
+    background-color: var(--theme-card-bg);
+    border-color: var(--theme-border-color);
+}
+
+.modal-content {
+    background-color: var(--theme-card-bg);
+    border-color: var(--theme-border-color);
+    border-radius: 4px;
+}
+
+/* Text - only important headers in red */
+.text-muted {
+    color: var(--theme-text-muted) !important;
+}
+
+h1, h2, h3 {
+    color: var(--theme-primary);
+    font-weight: 600;
+}
+
+h4, h5, h6 {
+    font-weight: 600;
+}
+
+
+h5 {
+    font-weight: 600;
+}
+
+
+/* Navbar - Holberton style */
+.navbar-dark {
+    background-color: var(--theme-nav-bg) !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-dark .navbar-brand {
+    color: var(--theme-nav-text);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-dark .navbar-brand::before {
+    content: "";
+    background-image: url('/static/images/holberton-logo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 30px;
+    height: 30px;
+    margin-right: 8px;
+    display: inline-block;
+}
+
+.navbar-dark .nav-link {
+    color: var(--theme-nav-text) !important;
+    font-weight: 500;
+    position: relative;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+.navbar-dark .nav-link.active {
+    color: var(--theme-nav-active) !important;
+}
+
+/* Forms */
+.form-control,
+.form-select {
+    background-color: var(--theme-input-bg);
+    border-color: var(--theme-input-border);
+    color: var(--theme-text-primary);
+    border-radius: 4px;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--theme-primary);
+    box-shadow: 0 0 0 0.25rem rgba(240, 71, 57, 0.25);
+}
+
+.form-label {
+    font-weight: 500;
+    color: var(--theme-text-secondary);
+}
+
+/* Buttons - minimalist gray with red accents */
+.btn {
+    border-radius: 4px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background-color: var(--theme-btn-primary-bg);
+    border-color: var(--theme-btn-primary-bg);
+    color: var(--theme-btn-primary-text);
+}
+
+.btn-primary:hover {
+    background-color: var(--theme-primary-hover);
+    border-color: var(--theme-primary-hover);
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background-color: var(--theme-btn-secondary-bg);
+    border-color: var(--theme-btn-secondary-bg);
+    color: var(--theme-btn-secondary-text);
+}
+
+.btn-secondary:hover {
+    background-color: var(--theme-secondary-hover);
+    border-color: var(--theme-secondary-hover);
+    transform: translateY(-1px);
+}
+
+.btn-outline-primary {
+    border-color: var(--theme-btn-primary-bg);
+    color: var(--theme-btn-primary-bg);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--theme-btn-primary-bg);
+    color: var(--theme-btn-primary-text);
+}
+
+/* Jumbotron */
+.jumbotron {
+    background-color: #fff !important;
+    border-bottom: 3px solid var(--theme-primary);
+    position: relative;
+    overflow: hidden;
+}
+
+.jumbotron::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 150px;
+    height: 150px;
+    background-image: url('/static/images/holberton-logo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.05;
+    transform: translate(30%, -30%);
+    pointer-events: none;
+}
+
+.jumbotron h1 {
+    color: var(--theme-primary);
+}
+
+/* Footer */
+footer.bg-dark {
+    background-color: var(--theme-footer-bg) !important;
+    color: var(--theme-footer-text);
+    border-top: 3px solid var(--theme-primary);
+}
+
+/* Links */
+a {
+    color: var(--theme-primary);
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+a:hover {
+    color: var(--theme-primary-hover);
+    text-decoration: none;
+}
+
+/* Badge styling */
+.badge {
+    font-weight: 500;
+}
+
+/* Skills badges */
+.skill-badge {
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+/* Theme switcher */
+.theme-switcher {
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.theme-switcher:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.theme-switcher.active {
+    background-color: var(--theme-primary);
+    color: white;
+}

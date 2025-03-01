@@ -1,0 +1,817 @@
+{% extends "base.html" %}
+
+{% block title %}Choose a Theme | Holberton Hub{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="mb-3">Choose a Theme</h1>
+            <p class="lead">Select a visual theme for your Holberton Hub experience.</p>
+        </div>
+    </div>
+
+    <!-- Row 1: Basic Themes -->
+    <h3 class="mb-3">Basic Themes</h3>
+    <div class="row g-4 mb-5">
+        <!-- Light Theme -->
+        <div class="col-md-4">
+            <div class="card h-100 theme-preview light-preview">
+                <div class="card-header">
+                    <h5>Light Theme</h5>
+                </div>
+                <div class="card-body">
+                    <div class="preview-window">
+                        <div class="preview-navbar">
+                            <div class="preview-brand">Holberton Hub</div>
+                            <div class="preview-nav-items"></div>
+                        </div>
+                        <div class="preview-content">
+                            <div class="preview-heading">Welcome</div>
+                            <div class="preview-text">Light theme preview.</div>
+                            <div class="preview-button">Button</div>
+                        </div>
+                    </div>
+                    <p class="mt-3">A clean, light theme with a simple color scheme.</p>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-outline-primary w-100 btn-theme-select" data-theme="light">
+                        Select Light Theme
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dark Theme -->
+        <div class="col-md-4">
+            <div class="card h-100 theme-preview dark-preview">
+                <div class="card-header">
+                    <h5>Dark Theme</h5>
+                </div>
+                <div class="card-body">
+                    <div class="preview-window">
+                        <div class="preview-navbar">
+                            <div class="preview-brand">Holberton Hub</div>
+                            <div class="preview-nav-items"></div>
+                        </div>
+                        <div class="preview-content">
+                            <div class="preview-heading">Welcome to Holberton Hub</div>
+                            <div class="preview-text">This is how the dark theme looks.</div>
+                            <div class="preview-button">Button</div>
+                        </div>
+                    </div>
+                    <p class="mt-3">A dark theme to reduce eye strain in low-light environments.</p>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-outline-primary w-100 btn-theme-select" data-theme="dark">
+                        Select Dark Theme
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Holberton Theme -->
+        <div class="col-md-4">
+            <div class="card h-100 theme-preview holberton-preview">
+                <div class="card-header">
+                    <h5>Holberton Theme</h5>
+                </div>
+                <div class="card-body">
+                    <div class="preview-window">
+                        <div class="preview-navbar">
+                            <div class="preview-brand">
+                                <img src="/static/images/holberton-logo.png" alt="H" width="20" height="20" class="me-1">
+                                Holberton Hub
+                            </div>
+                            <div class="preview-nav-items"></div>
+                        </div>
+                        <div class="preview-content">
+                            <div class="preview-heading">Welcome to Holberton Hub</div>
+                            <div class="preview-text">This is how the Holberton theme looks.</div>
+                            <div class="preview-button">Button</div>
+                        </div>
+                    </div>
+                    <p class="mt-3">A theme styled with Holberton School brand colors and design elements.</p>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-outline-primary w-100 btn-theme-select" data-theme="holberton">
+                        Select Holberton Theme
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 2: Colorful Themes -->
+    <h3 class="mb-3">Colorful Themes</h3>
+    <div class="row g-4">
+        <!-- Purple Theme -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 theme-preview purple-preview">
+                <div class="card-header">
+                    <h5>Purple Theme</h5>
+                </div>
+                <div class="card-body">
+                    <div class="preview-window">
+                        <div class="preview-navbar">
+                            <div class="preview-brand">Holberton Hub</div>
+                            <div class="preview-nav-items"></div>
+                        </div>
+                        <div class="preview-content">
+                            <div class="preview-heading">Welcome</div>
+                            <div class="preview-text">Purple theme preview.</div>
+                            <div class="preview-button">Button</div>
+                        </div>
+                    </div>
+                    <p class="mt-3">A modern theme with deep purple as the main color.</p>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-outline-primary w-100 btn-theme-select" data-theme="purple">
+                        Select Purple Theme
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pink Theme -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 theme-preview pink-preview">
+                <div class="card-header">
+                    <h5>Pink Theme</h5>
+                </div>
+                <div class="card-body">
+                    <div class="preview-window">
+                        <div class="preview-navbar">
+                            <div class="preview-brand">Holberton Hub</div>
+                            <div class="preview-nav-items"></div>
+                        </div>
+                        <div class="preview-content">
+                            <div class="preview-heading">Welcome</div>
+                            <div class="preview-text">Pink theme preview.</div>
+                            <div class="preview-button">Button</div>
+                        </div>
+                    </div>
+                    <p class="mt-3">A vibrant theme with pink as the primary color.</p>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-outline-primary w-100 btn-theme-select" data-theme="pink">
+                        Select Pink Theme
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orange Theme -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 theme-preview orange-preview">
+                <div class="card-header">
+                    <h5>Orange Theme</h5>
+                </div>
+                <div class="card-body">
+                    <div class="preview-window">
+                        <div class="preview-navbar">
+                            <div class="preview-brand">Holberton Hub</div>
+                            <div class="preview-nav-items"></div>
+                        </div>
+                        <div class="preview-content">
+                            <div class="preview-heading">Welcome</div>
+                            <div class="preview-text">Orange theme preview.</div>
+                            <div class="preview-button">Button</div>
+                        </div>
+                    </div>
+                    <p class="mt-3">A warm theme with orange as the primary color.</p>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-outline-primary w-100 btn-theme-select" data-theme="orange">
+                        Select Orange Theme
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Green Theme -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 theme-preview green-preview">
+                <div class="card-header">
+                    <h5>Green Theme</h5>
+                </div>
+                <div class="card-body">
+                    <div class="preview-window">
+                        <div class="preview-navbar">
+                            <div class="preview-brand">Holberton Hub</div>
+                            <div class="preview-nav-items"></div>
+                        </div>
+                        <div class="preview-content">
+                            <div class="preview-heading">Welcome</div>
+                            <div class="preview-text">Green theme preview.</div>
+                            <div class="preview-button">Button</div>
+                        </div>
+                    </div>
+                    <p class="mt-3">A nature-inspired theme with green as the primary color.</p>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-outline-primary w-100 btn-theme-select" data-theme="green">
+                        Select Green Theme
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Blue Theme -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 theme-preview blue-preview">
+                <div class="card-header">
+                    <h5>Blue Theme</h5>
+                </div>
+                <div class="card-body">
+                    <div class="preview-window">
+                        <div class="preview-navbar">
+                            <div class="preview-brand">Holberton Hub</div>
+                            <div class="preview-nav-items"></div>
+                        </div>
+                        <div class="preview-content">
+                            <div class="preview-heading">Welcome</div>
+                            <div class="preview-text">Blue theme preview.</div>
+                            <div class="preview-button">Button</div>
+                        </div>
+                    </div>
+                    <p class="mt-3">A calming theme with blue as the primary color.</p>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-outline-primary w-100 btn-theme-select" data-theme="blue">
+                        Select Blue Theme
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Teal Theme -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 theme-preview teal-preview">
+                <div class="card-header">
+                    <h5>Teal Theme</h5>
+                </div>
+                <div class="card-body">
+                    <div class="preview-window">
+                        <div class="preview-navbar">
+                            <div class="preview-brand">Holberton Hub</div>
+                            <div class="preview-nav-items"></div>
+                        </div>
+                        <div class="preview-content">
+                            <div class="preview-heading">Welcome</div>
+                            <div class="preview-text">Teal theme preview.</div>
+                            <div class="preview-button">Button</div>
+                        </div>
+                    </div>
+                    <p class="mt-3">A refreshing theme with teal/turquoise as the primary color.</p>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-outline-primary w-100 btn-theme-select" data-theme="teal">
+                        Select Teal Theme
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gold Theme -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 theme-preview gold-preview">
+                <div class="card-header">
+                    <h5>Gold Theme</h5>
+                </div>
+                <div class="card-body">
+                    <div class="preview-window">
+                        <div class="preview-navbar">
+                            <div class="preview-brand">Holberton Hub</div>
+                            <div class="preview-nav-items"></div>
+                        </div>
+                        <div class="preview-content">
+                            <div class="preview-heading">Welcome</div>
+                            <div class="preview-text">Gold theme preview.</div>
+                            <div class="preview-button">Button</div>
+                        </div>
+                    </div>
+                    <p class="mt-3">A luxurious theme with gold/amber as the primary color.</p>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-outline-primary w-100 btn-theme-select" data-theme="gold">
+                        Select Gold Theme
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Red Theme -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 theme-preview red-preview">
+                <div class="card-header">
+                    <h5>Red Theme</h5>
+                </div>
+                <div class="card-body">
+                    <div class="preview-window">
+                        <div class="preview-navbar">
+                            <div class="preview-brand">Holberton Hub</div>
+                            <div class="preview-nav-items"></div>
+                        </div>
+                        <div class="preview-content">
+                            <div class="preview-heading">Welcome</div>
+                            <div class="preview-text">Red theme preview.</div>
+                            <div class="preview-button">Button</div>
+                        </div>
+                    </div>
+                    <p class="mt-3">A bold theme with red as the primary color.</p>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-outline-primary w-100 btn-theme-select" data-theme="red">
+                        Select Red Theme
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gray Theme -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 theme-preview gray-preview">
+                <div class="card-header">
+                    <h5>Gray Theme</h5>
+                </div>
+                <div class="card-body">
+                    <div class="preview-window">
+                        <div class="preview-navbar">
+                            <div class="preview-brand">Holberton Hub</div>
+                            <div class="preview-nav-items"></div>
+                        </div>
+                        <div class="preview-content">
+                            <div class="preview-heading">Welcome</div>
+                            <div class="preview-text">Gray theme preview.</div>
+                            <div class="preview-button">Button</div>
+                        </div>
+                    </div>
+                    <p class="mt-3">A sleek monochrome theme with elegant gray tones.</p>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-outline-primary w-100 btn-theme-select" data-theme="gray">
+                        Select Gray Theme
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game-Inspired Themes section removed as requested -->
+
+</div>
+
+<style>
+    .theme-preview {
+        transition: transform 0.2s;
+        border-width: 2px;
+    }
+
+    .theme-preview:hover {
+        transform: translateY(-5px);
+    }
+
+    .preview-window {
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .preview-navbar {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 12px;
+        align-items: center;
+    }
+
+    .preview-brand {
+        font-weight: bold;
+    }
+
+    .preview-nav-items {
+        display: flex;
+        gap: 8px;
+    }
+
+    .preview-content {
+        padding: 16px;
+        min-height: 120px;
+    }
+
+    .preview-heading {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    .preview-text {
+        margin-bottom: 12px;
+        font-size: 0.9rem;
+    }
+
+    .preview-button {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    /* Light Theme Preview */
+    .light-preview .preview-window {
+        background-color: #f8fafc;
+    }
+
+    .light-preview .preview-navbar {
+        background-color: #1e293b;
+        color: white;
+    }
+
+    .light-preview .preview-content {
+        background-color: white;
+        color: #0f172a;
+    }
+
+    .light-preview .preview-button {
+        background-color: #0284c7;
+        color: white;
+    }
+
+    /* Dark Theme Preview */
+    .dark-preview .preview-window {
+        background-color: #1e293b;
+    }
+
+    .dark-preview .preview-navbar {
+        background-color: #0f172a;
+        color: #f8fafc;
+    }
+
+    .dark-preview .preview-content {
+        background-color: #1e293b;
+        color: #f1f5f9;
+    }
+
+    .dark-preview .preview-button {
+        background-color: #3b82f6;
+        color: white;
+    }
+
+    /* Holberton Theme Preview */
+    .holberton-preview .preview-window {
+        background-color: #f8f9fa;
+    }
+
+    .holberton-preview .preview-navbar {
+        background-color: #444444;
+        color: white;
+    }
+
+    .holberton-preview .preview-content {
+        background-color: white;
+        color: #212529;
+    }
+
+    .holberton-preview .preview-heading {
+        color: #f04739;
+    }
+
+    .holberton-preview .preview-button {
+        background-color: #f04739;
+        color: white;
+    }
+
+    /* Purple Theme Preview */
+    .purple-preview .preview-window {
+        background-color: #f5f5f5;
+    }
+
+    .purple-preview .preview-navbar {
+        background-color: #4a148c;
+        color: white;
+    }
+
+    .purple-preview .preview-content {
+        background-color: white;
+        color: #212121;
+    }
+
+    .purple-preview .preview-heading {
+        color: #7b1fa2;
+    }
+
+    .purple-preview .preview-button {
+        background-color: #7b1fa2;
+        color: white;
+    }
+
+    /* Pink Theme Preview */
+    .pink-preview .preview-window {
+        background-color: #fafafa;
+    }
+
+    .pink-preview .preview-navbar {
+        background-color: #c2185b;
+        color: white;
+    }
+
+    .pink-preview .preview-content {
+        background-color: white;
+        color: #212121;
+    }
+
+    .pink-preview .preview-heading {
+        color: #e91e63;
+    }
+
+    .pink-preview .preview-button {
+        background-color: #e91e63;
+        color: white;
+    }
+
+    /* Orange Theme Preview */
+    .orange-preview .preview-window {
+        background-color: #f9f9f9;
+    }
+
+    .orange-preview .preview-navbar {
+        background-color: #e64a19;
+        color: white;
+    }
+
+    .orange-preview .preview-content {
+        background-color: white;
+        color: #263238;
+    }
+
+    .orange-preview .preview-heading {
+        color: #ff5722;
+    }
+
+    .orange-preview .preview-button {
+        background-color: #ff5722;
+        color: white;
+    }
+
+    /* Green Theme Preview */
+    .green-preview .preview-window {
+        background-color: #f9f9f9;
+    }
+
+    .green-preview .preview-navbar {
+        background-color: #1b5e20;
+        color: white;
+    }
+
+    .green-preview .preview-content {
+        background-color: white;
+        color: #212121;
+    }
+
+    .green-preview .preview-heading {
+        color: #2e7d32;
+    }
+
+    .green-preview .preview-button {
+        background-color: #2e7d32;
+        color: white;
+    }
+
+    /* Blue Theme Preview */
+    .blue-preview .preview-window {
+        background-color: #f9fafb;
+    }
+
+    .blue-preview .preview-navbar {
+        background-color: #01579b;
+        color: white;
+    }
+
+    .blue-preview .preview-content {
+        background-color: white;
+        color: #263238;
+    }
+
+    .blue-preview .preview-heading {
+        color: #0277bd;
+    }
+
+    .blue-preview .preview-button {
+        background-color: #0277bd;
+        color: white;
+    }
+
+    /* Teal Theme Preview */
+    .teal-preview .preview-window {
+        background-color: #f9f9f9;
+    }
+
+    .teal-preview .preview-navbar {
+        background-color: #00796b;
+        color: white;
+    }
+
+    .teal-preview .preview-content {
+        background-color: white;
+        color: #212121;
+    }
+
+    .teal-preview .preview-heading {
+        color: #009688;
+    }
+
+    .teal-preview .preview-button {
+        background-color: #009688;
+        color: white;
+    }
+
+    /* Gold Theme Preview */
+    .gold-preview .preview-window {
+        background-color: #f9f9f9;
+    }
+
+    .gold-preview .preview-navbar {
+        background-color: #ffb300;
+        color: white;
+    }
+
+    .gold-preview .preview-content {
+        background-color: white;
+        color: #212121;
+    }
+
+    .gold-preview .preview-heading {
+        color: #ffb300;
+    }
+
+    .gold-preview .preview-button {
+        background-color: #ffb300;
+        color: white;
+    }
+
+    /* Red Theme Preview */
+    .red-preview .preview-window {
+        background-color: #f9f9f9;
+    }
+
+    .red-preview .preview-navbar {
+        background-color: #d32f2f;
+        color: white;
+    }
+
+    .red-preview .preview-content {
+        background-color: white;
+        color: #212121;
+    }
+
+    .red-preview .preview-heading {
+        color: #f44336;
+    }
+
+    .red-preview .preview-button {
+        background-color: #f44336;
+        color: white;
+    }
+
+    /* Mint Theme Preview */
+    .mint-preview .preview-window {
+        background-color: #f5f8f7;
+    }
+
+    .mint-preview .preview-navbar {
+        background-color: #00796b;
+        color: white;
+    }
+
+    .mint-preview .preview-content {
+        background-color: white;
+        color: #263238;
+    }
+
+    .mint-preview .preview-heading {
+        color: #26a69a;
+    }
+
+    .mint-preview .preview-button {
+        background-color: #26a69a;
+        color: white;
+    }
+
+    /* Gray Theme Preview */
+    .gray-preview .preview-window {
+        background-color: #f5f5f5;
+    }
+
+    .gray-preview .preview-navbar {
+        background-color: #37474f;
+        color: white;
+    }
+
+    .gray-preview .preview-content {
+        background-color: white;
+        color: #212121;
+    }
+
+    .gray-preview .preview-heading {
+        color: #546e7a;
+    }
+
+    .gray-preview .preview-button {
+        background-color: #546e7a;
+        color: white;
+    }
+
+    /* Last of Us Theme Preview */
+    .lastofus-preview .preview-window {
+        background-color: #2d2d2d;
+    }
+
+    .lastofus-preview .preview-navbar {
+        background-color: #1a1a1a;
+        color: #f8f8f8;
+    }
+
+    .lastofus-preview .preview-content {
+        background-color: #2d2d2d;
+        color: #f8f8f8;
+    }
+
+    .lastofus-preview .preview-button {
+        background-color: #ffcc00;
+        color: #2d2d2d;
+    }
+
+    /* Dark Souls Theme Preview */
+    .darksoul-preview .preview-window {
+        background-color: #3e3e3e;
+    }
+
+    .darksoul-preview .preview-navbar {
+        background-color: #2b2b2b;
+        color: #f8f8f8;
+    }
+
+    .darksoul-preview .preview-content {
+        background-color: #3e3e3e;
+        color: #f8f8f8;
+    }
+
+    .darksoul-preview .preview-button {
+        background-color: #ff4500;
+        color: #3e3e3e;
+    }
+
+    /* Resident Evil Theme Preview */
+    .resident-preview .preview-window {
+        background-color: #1c1c1c;
+    }
+
+    .resident-preview .preview-navbar {
+        background-color: #0d0d0d;
+        color: #f8f8f8;
+    }
+
+    .resident-preview .preview-content {
+        background-color: #1c1c1c;
+        color: #f8f8f8;
+    }
+
+    .resident-preview .preview-button {
+        background-color: #ff0000;
+        color: #1c1c1c;
+    }
+</style>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle theme selection buttons
+    const themeButtons = document.querySelectorAll('.btn-theme-select');
+
+    themeButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const theme = this.getAttribute('data-theme');
+            if (window.themeManager) {
+                window.themeManager.applyTheme(theme);
+                // Highlight the selected theme card
+                const cards = document.querySelectorAll('.theme-preview');
+                cards.forEach(card => {
+                    card.style.borderColor = 'rgba(0,0,0,0.125)';
+                });
+                this.closest('.theme-preview').style.borderColor = '#4CAF50';
+            }
+        });
+    });
+
+    // Highlight current theme on page load
+    const currentTheme = localStorage.getItem('holberton-hub-theme') || 'light';
+    const activeThemeCard = document.querySelector(`.${currentTheme}-preview`);
+    if (activeThemeCard) {
+        activeThemeCard.style.borderColor = '#4CAF50';
+    }
+});
+</script>
+{% endblock %}

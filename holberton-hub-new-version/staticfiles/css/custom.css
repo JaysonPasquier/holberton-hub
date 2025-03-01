@@ -1,0 +1,38 @@
+/**
+ * Custom CSS that applies across all themes
+ */
+
+/* Animation for theme transitions */
+body, .card, .navbar, .btn, .form-control, .badge, .alert {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Theme switcher styles */
+.theme-switcher {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 50%;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 0 5px;
+    transition: all 0.2s ease;
+}
+
+.theme-switcher:hover {
+    transform: scale(1.1);
+}
+
+/* Theme icon styles */
+.theme-icon-active,
+.theme-icon-inactive {
+    font-size: 1.2rem;
+}
+
+/* Accessibility focus styles */
+:focus {
+    outline: 2px solid var(--theme-primary);
+    outline-offset: 2px;
+}

@@ -1,0 +1,140 @@
+/**
+ * Pink Theme
+ * A vibrant theme with pink as the primary color
+ */
+
+:root {
+    /* Main colors */
+    --theme-primary: #e91e63;       /* Pink */
+    --theme-primary-hover: #ec407a;
+    --theme-secondary: #f48fb1;     /* Light pink */
+    --theme-secondary-hover: #f06292;
+    --theme-success: #4caf50;
+    --theme-danger: #f44336;
+    --theme-warning: #ffb74d;
+    --theme-info: #29b6f6;
+
+    /* Background colors */
+    --theme-bg-primary: #ffffff;
+    --theme-bg-secondary: #fafafa;
+    --theme-bg-tertiary: #fce4ec;
+
+    /* Text colors */
+    --theme-text-primary: #212121;
+    --theme-text-secondary: #424242;
+    --theme-text-muted: #757575;
+
+    /* Border colors */
+    --theme-border-color: #e0e0e0;
+    --theme-border-color-dark: #bdbdbd;
+
+    /* Component colors */
+    --theme-card-bg: #ffffff;
+    --theme-card-shadow: 0 2px 6px rgba(233, 30, 99, 0.1);
+    --theme-input-bg: #ffffff;
+    --theme-input-border: #d1d9e6;
+    --theme-input-focus-border: #e91e63;
+
+    /* Button colors */
+    --theme-btn-primary-bg: #e91e63;
+    --theme-btn-primary-text: #ffffff;
+    --theme-btn-secondary-bg: #f48fb1;
+    --theme-btn-secondary-text: #212121;
+
+    /* Navigation colors */
+    --theme-nav-bg: #c2185b;
+    --theme-nav-text: #ffffff;
+    --theme-nav-active: #f8bbd0;
+
+    /* Footer colors */
+    --theme-footer-bg: #c2185b;
+    --theme-footer-text: #ffffff;
+
+    /* Theme transition */
+    --theme-transition: all 0.3s ease;
+}
+
+/* Apply theme variables */
+body {
+    background-color: var(--theme-bg-secondary);
+    color: var(--theme-text-primary);
+    transition: var(--theme-transition);
+}
+
+/* Cards and Containers */
+.card {
+    background-color: var(--theme-card-bg);
+    border-color: var(--theme-border-color);
+    box-shadow: var(--theme-card-shadow);
+}
+
+.card-header {
+    background-color: var(--theme-bg-tertiary);
+    border-bottom-color: var(--theme-primary);
+    color: var(--theme-text-primary);
+}
+
+h1, h2, h3 {
+    color: var(--theme-primary);
+}
+
+/* Navbar */
+.navbar-dark {
+    background-color: var(--theme-nav-bg) !important;
+}
+
+.navbar-dark .navbar-brand,
+.navbar-dark .nav-link {
+    color: var(--theme-nav-text);
+}
+
+.navbar-dark .nav-link.active {
+    color: var(--theme-nav-active) !important;
+}
+
+/* Forms */
+.form-control,
+.form-select {
+    background-color: var(--theme-input-bg);
+    border-color: var(--theme-input-border);
+    color: var(--theme-text-primary);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--theme-input-focus-border);
+    box-shadow: 0 0 0 0.25rem rgba(233, 30, 99, 0.25);
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--theme-btn-primary-bg);
+    border-color: var(--theme-btn-primary-bg);
+    color: var(--theme-btn-primary-text);
+}
+
+.btn-primary:hover {
+    background-color: var(--theme-primary-hover);
+    border-color: var(--theme-primary-hover);
+}
+
+/* Links */
+a {
+    color: var(--theme-primary);
+}
+
+a:hover {
+    color: var(--theme-primary-hover);
+}
+
+/* Footer */
+footer.bg-dark {
+    background-color: var(--theme-footer-bg) !important;
+    color: var(--theme-footer-text);
+}
+
+/* Jumbotron */
+.jumbotron {
+    background-color: var(--theme-bg-primary) !important;
+    border-bottom: 2px solid var(--theme-primary);
+}
