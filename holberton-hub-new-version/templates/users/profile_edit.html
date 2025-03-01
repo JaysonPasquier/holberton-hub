@@ -1,0 +1,257 @@
+{% extends "base.html" %}
+{% load user_tags %}
+
+{% block title %}Edit Profile | Holberton Hub{% endblock %}
+
+{% block content %}
+<!-- Include Font Awesome for skill icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+<div class="row">
+    <div class="col-md-10 mx-auto">
+        <form method="post" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">Personal Information</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.first_name.id_for_label }}" class="form-label">First Name</label>
+                            {{ form.first_name }}
+                            {% if form.first_name.errors %}
+                                <div class="text-danger small">{{ form.first_name.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.last_name.id_for_label }}" class="form-label">Last Name</label>
+                            {{ form.last_name }}
+                            {% if form.last_name.errors %}
+                                <div class="text-danger small">{{ form.last_name.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.email.id_for_label }}" class="form-label">Email</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <div class="text-danger small">{{ form.email.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.profile_pic.id_for_label }}" class="form-label">Profile Picture</label>
+                        {{ form.profile_pic }}
+                        {% if form.profile_pic.errors %}
+                            <div class="text-danger small">{{ form.profile_pic.errors }}</div>
+                        {% endif %}
+                        {% if user.profile_pic %}
+                            <div class="mt-2">
+                                <img src="{{ user.profile_pic.url }}" alt="Current profile picture" class="rounded-circle" style="max-width: 100px;">
+                                <p class="form-text">Current profile picture</p>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.bio.id_for_label }}" class="form-label">Bio</label>
+                        {{ form.bio }}
+                        {% if form.bio.errors %}
+                            <div class="text-danger small">{{ form.bio.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">Skills</h3>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <label class="form-label">{{ form.skills_known.label }}</label>
+                        {{ form.skills_known }}
+                        {% if form.skills_known.errors %}
+                            <div class="text-danger small">{{ form.skills_known.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">{{ form.skills_to_learn.label }}</label>
+                        {{ form.skills_to_learn }}
+                        {% if form.skills_to_learn.errors %}
+                            <div class="text-danger small">{{ form.skills_to_learn.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">Professional Platforms</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.github_url.id_for_label }}" class="form-label">
+                                <i class="fab fa-github me-2"></i>GitHub
+                            </label>
+                            {{ form.github_url }}
+                            {% if form.github_url.errors %}
+                                <div class="text-danger small">{{ form.github_url.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.linkedin_url.id_for_label }}" class="form-label">
+                                <i class="fab fa-linkedin me-2"></i>LinkedIn
+                            </label>
+                            {{ form.linkedin_url }}
+                            {% if form.linkedin_url.errors %}
+                                <div class="text-danger small">{{ form.linkedin_url.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.stackoverflow_url.id_for_label }}" class="form-label">
+                                <i class="fab fa-stack-overflow me-2"></i>Stack Overflow
+                            </label>
+                            {{ form.stackoverflow_url }}
+                            {% if form.stackoverflow_url.errors %}
+                                <div class="text-danger small">{{ form.stackoverflow_url.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.devto_url.id_for_label }}" class="form-label">
+                                <i class="fab fa-dev me-2"></i>Dev.to
+                            </label>
+                            {{ form.devto_url }}
+                            {% if form.devto_url.errors %}
+                                <div class="text-danger small">{{ form.devto_url.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.medium_url.id_for_label }}" class="form-label">
+                                <i class="fab fa-medium me-2"></i>Medium
+                            </label>
+                            {{ form.medium_url }}
+                            {% if form.medium_url.errors %}
+                                <div class="text-danger small">{{ form.medium_url.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.website.id_for_label }}" class="form-label">
+                                <i class="fas fa-globe me-2"></i>Personal Website
+                            </label>
+                            {{ form.website }}
+                            {% if form.website.errors %}
+                                <div class="text-danger small">{{ form.website.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">Social Media</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.twitter_url.id_for_label }}" class="form-label">
+                                <i class="fab fa-twitter me-2"></i>Twitter/X
+                            </label>
+                            {{ form.twitter_url }}
+                            {% if form.twitter_url.errors %}
+                                <div class="text-danger small">{{ form.twitter_url.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.discord_username.id_for_label }}" class="form-label">
+                                <i class="fab fa-discord me-2"></i>Discord
+                            </label>
+                            {{ form.discord_username }}
+                            {% if form.discord_username.errors %}
+                                <div class="text-danger small">{{ form.discord_username.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.instagram_url.id_for_label }}" class="form-label">
+                                <i class="fab fa-instagram me-2"></i>Instagram
+                            </label>
+                            {{ form.instagram_url }}
+                            {% if form.instagram_url.errors %}
+                                <div class="text-danger small">{{ form.instagram_url.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.youtube_url.id_for_label }}" class="form-label">
+                                <i class="fab fa-youtube me-2"></i>YouTube
+                            </label>
+                            {{ form.youtube_url }}
+                            {% if form.youtube_url.errors %}
+                                <div class="text-danger small">{{ form.youtube_url.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.twitch_url.id_for_label }}" class="form-label">
+                                <i class="fab fa-twitch me-2"></i>Twitch
+                            </label>
+                            {{ form.twitch_url }}
+                            {% if form.twitch_url.errors %}
+                                <div class="text-danger small">{{ form.twitch_url.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.facebook_url.id_for_label }}" class="form-label">
+                                <i class="fab fa-facebook me-2"></i>Facebook
+                            </label>
+                            {{ form.facebook_url }}
+                            {% if form.facebook_url.errors %}
+                                <div class="text-danger small">{{ form.facebook_url.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.mastodon_url.id_for_label }}" class="form-label">
+                                <i class="fab fa-mastodon me-2"></i>Mastodon
+                            </label>
+                            {{ form.mastodon_url }}
+                            {% if form.mastodon_url.errors %}
+                                <div class="text-danger small">{{ form.mastodon_url.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-grid mb-5">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Apply for {{ job.title }} | Holberton Hub{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3>Apply for: {{ job.title }}</h3>
+            </div>
+            <div class="card-body">
+                <div class="mb-4">
+                    <h5>Job Description</h5>
+                    <p>{{ job.description|linebreaks }}</p>
+
+                    {% if job.skills_required %}
+                        <h5>Skills Required</h5>
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            {% for skill in job.skills_required.split %}
+                                <span class="badge bg-secondary">{{ skill }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="{{ form.message.id_for_label }}" class="form-label">
+                            Why are you interested in this job?
+                        </label>
+                        {{ form.message }}
+                        {% if form.message.errors %}
+                            <div class="text-danger small">{{ form.message.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">
+                            Explain why you're interested and how your skills match the requirements.
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'job_detail' job.pk %}" class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Submit Application</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

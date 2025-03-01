@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}{% if form.instance.pk %}Edit{% else %}Create{% endif %} Job | Holberton Hub{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h3>{% if form.instance.pk %}Edit{% else %}Create New{% endif %} Job</h3>
+            </div>
+            <div class="card-body">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="{{ form.title.id_for_label }}" class="form-label">Title</label>
+                        {{ form.title }}
+                        {% if form.title.errors %}
+                            <div class="text-danger small">{{ form.title.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+                        {{ form.description }}
+                        {% if form.description.errors %}
+                            <div class="text-danger small">{{ form.description.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Describe the project in detail, including goals and requirements.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.skills_required.id_for_label }}" class="form-label">Skills Required</label>
+                        {{ form.skills_required }}
+                        {% if form.skills_required.errors %}
+                            <div class="text-danger small">{{ form.skills_required.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Enter skills separated by commas (e.g., Python, JavaScript, Django)</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.deadline.id_for_label }}" class="form-label">Deadline (Optional)</label>
+                            {{ form.deadline }}
+                            {% if form.deadline.errors %}
+                                <div class="text-danger small">{{ form.deadline.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.max_participants.id_for_label }}" class="form-label">Maximum Participants</label>
+                            {{ form.max_participants }}
+                            {% if form.max_participants.errors %}
+                                <div class="text-danger small">{{ form.max_participants.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {% if form.instance.pk %}
+                    <div class="mb-3">
+                        <label for="{{ form.status.id_for_label }}" class="form-label">Status</label>
+                        {{ form.status }}
+                        {% if form.status.errors %}
+                            <div class="text-danger small">{{ form.status.errors }}</div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% if form.instance.pk %}{% url 'job_detail' form.instance.pk %}{% else %}{% url 'job_list' %}{% endif %}" class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">
+                            {% if form.instance.pk %}Save Changes{% else %}Create Job{% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

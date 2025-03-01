@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Holberton Hub - Home{% endblock %}
+
+{% block content %}
+<div class="px-4 py-5 my-5 text-center">
+    <h1 class="display-5 fw-bold">Welcome to Holberton Hub</h1>
+    <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4">
+            Connect with other developers, share your projects,
+            and find collaborators for your next big idea!
+        </p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <a href="{% url 'job_list' %}" class="btn btn-primary btn-lg px-4 gap-3">Explore Jobs</a>
+            {% if user.is_authenticated %}
+            <a href="{% url 'job_create' %}" class="btn btn-outline-secondary btn-lg px-4">Create a Job</a>
+            {% else %}
+            <a href="{% url 'register' %}" class="btn btn-outline-secondary btn-lg px-4">Join Now</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="row mb-5">
+    <div class="col-md-4">
+        <div class="h-100 p-5 text-bg-dark rounded-3">
+            <h2>Find Projects</h2>
+            <p>Discover exciting projects posted by other developers that match your skills and interests.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="h-100 p-5 bg-body-tertiary border rounded-3">
+            <h2>Post Jobs</h2>
+            <p>Have a project idea? Post a job and find talented developers to join your team.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="h-100 p-5 bg-body-tertiary border rounded-3">
+            <h2>Build Your Profile</h2>
+            <p>Showcase your skills, portfolio and connect with other developers in the community.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

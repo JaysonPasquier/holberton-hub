@@ -1,0 +1,361 @@
+{% extends "base.html" %}
+{% load user_tags %}
+
+{% block title %}{{ profile_user.username }}'s Profile | Holberton Hub{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                {% if profile_user.profile_pic %}
+                    <img src="{{ profile_user.profile_pic.url }}" class="rounded-circle img-fluid mb-3" style="max-width: 150px;">
+                {% else %}
+                    <img src="https://via.placeholder.com/150" class="rounded-circle img-fluid mb-3" alt="Profile Picture">
+                {% endif %}
+
+                <h5 class="card-title">{{ profile_user.get_full_name|default:profile_user.username }}</h5>
+                <p class="text-muted">@{{ profile_user.username }}</p>
+
+                {% if user == profile_user %}
+                <a href="{% url 'profile_edit' %}" class="btn btn-outline-primary">Edit Profile</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">Contact & Social</div>
+            <div class="card-body">
+                {% if profile_user.email %}
+                <p><strong>Email:</strong> {{ profile_user.email }}</p>
+                {% endif %}
+
+                <!-- Professional Links -->
+                {% if profile_user.github_url or profile_user.linkedin_url or profile_user.stackoverflow_url or profile_user.devto_url or profile_user.medium_url or profile_user.website %}
+                <h6 class="text-muted mt-3 mb-2">Professional</h6>
+                <div class="d-flex flex-wrap gap-2">
+                    {% if profile_user.github_url %}
+                    <a href="{{ profile_user.github_url }}" class="btn btn-sm social-btn github" target="_blank">
+                        <i class="fab fa-github me-1"></i> GitHub
+                    </a>
+                    {% endif %}
+
+                    {% if profile_user.linkedin_url %}
+                    <a href="{{ profile_user.linkedin_url }}" class="btn btn-sm social-btn linkedin" target="_blank">
+                        <i class="fab fa-linkedin me-1"></i> LinkedIn
+                    </a>
+                    {% endif %}
+
+                    {% if profile_user.stackoverflow_url %}
+                    <a href="{{ profile_user.stackoverflow_url }}" class="btn btn-sm social-btn stackoverflow" target="_blank">
+                        <i class="fab fa-stack-overflow me-1"></i> Stack Overflow
+                    </a>
+                    {% endif %}
+
+                    {% if profile_user.devto_url %}
+                    <a href="{{ profile_user.devto_url }}" class="btn btn-sm social-btn devto" target="_blank">
+                        <i class="fab fa-dev me-1"></i> Dev.to
+                    </a>
+                    {% endif %}
+
+                    {% if profile_user.medium_url %}
+                    <a href="{{ profile_user.medium_url }}" class="btn btn-sm social-btn medium" target="_blank">
+                        <i class="fab fa-medium me-1"></i> Medium
+                    </a>
+                    {% endif %}
+
+                    {% if profile_user.website %}
+                    <a href="{{ profile_user.website }}" class="btn btn-sm social-btn website" target="_blank">
+                        <i class="fas fa-globe me-1"></i> Website
+                    </a>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                <!-- Social Links -->
+                {% if profile_user.twitter_url or profile_user.discord_username or profile_user.instagram_url or profile_user.youtube_url or profile_user.facebook_url or profile_user.twitch_url or profile_user.mastodon_url %}
+                <h6 class="text-muted mt-3 mb-2">Social</h6>
+                <div class="d-flex flex-wrap gap-2">
+                    {% if profile_user.twitter_url %}
+                    <a href="{{ profile_user.twitter_url }}" class="btn btn-sm social-btn twitter" target="_blank">
+                        <i class="fab fa-twitter me-1"></i> Twitter
+                    </a>
+                    {% endif %}
+
+                    {% if profile_user.discord_username %}
+                    <div class="btn btn-sm social-btn discord">
+                        <i class="fab fa-discord me-1"></i> {{ profile_user.discord_username }}
+                    </div>
+                    {% endif %}
+
+                    {% if profile_user.instagram_url %}
+                    <a href="{{ profile_user.instagram_url }}" class="btn btn-sm social-btn instagram" target="_blank">
+                        <i class="fab fa-instagram me-1"></i> Instagram
+                    </a>
+                    {% endif %}
+
+                    {% if profile_user.youtube_url %}
+                    <a href="{{ profile_user.youtube_url }}" class="btn btn-sm social-btn youtube" target="_blank">
+                        <i class="fab fa-youtube me-1"></i> YouTube
+                    </a>
+                    {% endif %}
+
+                    {% if profile_user.facebook_url %}
+                    <a href="{{ profile_user.facebook_url }}" class="btn btn-sm social-btn facebook" target="_blank">
+                        <i class="fab fa-facebook me-1"></i> Facebook
+                    </a>
+                    {% endif %}
+
+                    {% if profile_user.twitch_url %}
+                    <a href="{{ profile_user.twitch_url }}" class="btn btn-sm social-btn twitch" target="_blank">
+                        <i class="fab fa-twitch me-1"></i> Twitch
+                    </a>
+                    {% endif %}
+
+                    {% if profile_user.mastodon_url %}
+                    <a href="{{ profile_user.mastodon_url }}" class="btn btn-sm social-btn mastodon" target="_blank" rel="me">
+                        <i class="fab fa-mastodon me-1"></i> Mastodon
+                    </a>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">About</div>
+            <div class="card-body">
+                {% if profile_user.bio %}
+                    <p>{{ profile_user.bio|linebreaks }}</p>
+                {% else %}
+                    <p class="text-muted">No bio provided.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">Skills I Know & Can Teach</div>
+            <div class="card-body">
+                {% if profile_user.get_skills_known_list %}
+                    <div class="d-flex flex-wrap gap-2 skills-known-container" data-skill-colors='{"PYTHON":"#3776AB","DJANGO":"#092E20","FLASK":"#000000","HTML":"#E34F26","CSS":"#1572B6","JAVASCRIPT":"#F7DF1E","TYPESCRIPT":"#3178C6","REACT":"#61DAFB","NEXTJS":"#000000","VUEJS":"#4FC08D","NUXTJS":"#00DC82","ANGULAR":"#DD0031","SVELTE":"#FF3E00","NODEJS":"#339933","EXPRESS":"#000000","PHP":"#777BB4","LARAVEL":"#FF2D20","SYMFONY":"#000000","JAVA":"#007396","SPRING":"#6DB33F","KOTLIN":"#7F52FF","SWIFT":"#FA7343","CSHARP":"#239120","DOTNET":"#512BD4","RUBY":"#CC342D","RAILS":"#CC0000","GO":"#00ADD8","RUST":"#000000","DOCKER":"#2496ED","KUBERNETES":"#326CE5","GIT":"#F05032","GITHUB":"#181717","GITLAB":"#FC6D26","BITBUCKET":"#0052CC","AWS":"#FF9900","AZURE":"#0078D4","GCP":"#4285F4","DIGITALOCEAN":"#0080FF","HEROKU":"#430098","NETLIFY":"#00C7B7","NGINX":"#009639","APACHE":"#D22128","MYSQL":"#4479A1","POSTGRESQL":"#4169E1","MONGODB":"#47A248","REDIS":"#DC382D","ELASTICSEARCH":"#005571","GRAPHQL":"#E10098","LINUX":"#FCC624","UBUNTU":"#E95420","WINDOWS":"#0078D6","MACOS":"#000000","ANDROID":"#3DDC84","IOS":"#000000","FLUTTER":"#02569B","REACT_NATIVE":"#61DAFB","WORDPRESS":"#21759B","DRUPAL":"#0678BE","BOOTSTRAP":"#7952B3","TAILWIND":"#38B2AC","SASS":"#CC6699","WEBPACK":"#8DD6F9","BABEL":"#F9DC3E","NPM":"#CB3837","YARN":"#2C8EBB","JENKINS":"#D24939","TRAVIS":"#3EAAAF","CIRCLECI":"#343434","ANSIBLE":"#EE0000","TERRAFORM":"#7B42BC","JIRA":"#0052CC","TRELLO":"#0079BF","FIGMA":"#F24E1E","PHOTOSHOP":"#31A8FF","ILLUSTRATOR":"#FF9A00","JEST":"#C21325","CYPRESS":"#17202C","SELENIUM":"#43B02A","PYTORCH":"#EE4C2C","TENSORFLOW":"#FF6F00"}'>
+                        {% for skill in profile_user.get_skills_known_list %}
+                            <span class="badge skill-badge d-flex align-items-center" data-skill="{{ skill }}">
+                                <div class="skill-icon me-1">
+                                    <i class="{{ skill|skill_icon }}"></i>
+                                </div>
+                                {{ skill|skill_display }}
+                            </span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted">No skills listed.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">Skills I Want to Learn</div>
+            <div class="card-body">
+                {% if profile_user.get_skills_to_learn_list %}
+                    <div class="d-flex flex-wrap gap-2 skills-to-learn-container" data-skill-colors='{"PYTHON":"#3776AB","DJANGO":"#092E20","FLASK":"#000000","HTML":"#E34F26","CSS":"#1572B6","JAVASCRIPT":"#F7DF1E","TYPESCRIPT":"#3178C6","REACT":"#61DAFB","NEXTJS":"#000000","VUEJS":"#4FC08D","NUXTJS":"#00DC82","ANGULAR":"#DD0031","SVELTE":"#FF3E00","NODEJS":"#339933","EXPRESS":"#000000","PHP":"#777BB4","LARAVEL":"#FF2D20","SYMFONY":"#000000","JAVA":"#007396","SPRING":"#6DB33F","KOTLIN":"#7F52FF","SWIFT":"#FA7343","CSHARP":"#239120","DOTNET":"#512BD4","RUBY":"#CC342D","RAILS":"#CC0000","GO":"#00ADD8","RUST":"#000000","DOCKER":"#2496ED","KUBERNETES":"#326CE5","GIT":"#F05032","GITHUB":"#181717","GITLAB":"#FC6D26","BITBUCKET":"#0052CC","AWS":"#FF9900","AZURE":"#0078D4","GCP":"#4285F4","DIGITALOCEAN":"#0080FF","HEROKU":"#430098","NETLIFY":"#00C7B7","NGINX":"#009639","APACHE":"#D22128","MYSQL":"#4479A1","POSTGRESQL":"#4169E1","MONGODB":"#47A248","REDIS":"#DC382D","ELASTICSEARCH":"#005571","GRAPHQL":"#E10098","LINUX":"#FCC624","UBUNTU":"#E95420","WINDOWS":"#0078D6","MACOS":"#000000","ANDROID":"#3DDC84","IOS":"#000000","FLUTTER":"#02569B","REACT_NATIVE":"#61DAFB","WORDPRESS":"#21759B","DRUPAL":"#0678BE","BOOTSTRAP":"#7952B3","TAILWIND":"#38B2AC","SASS":"#CC6699","WEBPACK":"#8DD6F9","BABEL":"#F9DC3E","NPM":"#CB3837","YARN":"#2C8EBB","JENKINS":"#D24939","TRAVIS":"#3EAAAF","CIRCLECI":"#343434","ANSIBLE":"#EE0000","TERRAFORM":"#7B42BC","JIRA":"#0052CC","TRELLO":"#0079BF","FIGMA":"#F24E1E","PHOTOSHOP":"#31A8FF","ILLUSTRATOR":"#FF9A00","JEST":"#C21325","CYPRESS":"#17202C","SELENIUM":"#43B02A","PYTORCH":"#EE4C2C","TENSORFLOW":"#FF6F00"}'>
+                        {% for skill in profile_user.get_skills_to_learn_list %}
+                            <span class="badge skill-badge d-flex align-items-center" data-skill="{{ skill }}">
+                                <div class="skill-icon me-1">
+                                    <i class="{{ skill|skill_icon }}"></i>
+                                </div>
+                                {{ skill|skill_display }}
+                            </span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted">No skills listed.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                {% if user == profile_user %}
+                My Jobs
+                {% else %}
+                {{ profile_user.username }}'s Jobs
+                {% endif %}
+            </div>
+            <div class="card-body">
+                {% if profile_user.jobs_created.all %}
+                    <div class="list-group">
+                        {% for job in profile_user.jobs_created.all %}
+                            <a href="{% url 'job_detail' job.id %}" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">{{ job.title }}</h5>
+                                    <small>{{ job.created_at|date }}</small>
+                                </div>
+                                <p class="mb-1">{{ job.description|truncatechars:100 }}</p>
+                                <small class="text-muted">Status: {{ job.get_status_display }}</small>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted">No jobs posted yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .skill-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .badge {
+        font-weight: 400;
+        font-size: 0.85rem;
+        padding: 0.35em 0.65em;
+    }
+
+    .skill-badge {
+        border: none;
+        border-radius: 4px;
+        color: white;
+        text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    /* White text for light backgrounds */
+    .skill-badge.is-light {
+        color: #333;
+        text-shadow: none;
+    }
+
+    /* Social Media Button Styles */
+    .social-btn {
+        transition: all 0.2s;
+        margin-bottom: 0.5rem;
+        color: #fff;
+        text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+    }
+
+    .social-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        color: #fff;
+    }
+
+    /* Professional Platform Colors */
+    .social-btn.github {
+        background-color: #181717;
+        border-color: #181717;
+    }
+
+    .social-btn.linkedin {
+        background-color: #0077B5;
+        border-color: #0077B5;
+    }
+
+    .social-btn.stackoverflow {
+        background-color: #F48024;
+        border-color: #F48024;
+    }
+
+    .social-btn.devto {
+        background-color: #0A0A0A;
+        border-color: #0A0A0A;
+    }
+
+    .social-btn.medium {
+        background-color: #000000;
+        border-color: #000000;
+    }
+
+    .social-btn.website {
+        background-color: #428bca;
+        border-color: #428bca;
+    }
+
+    /* Social Media Colors */
+    .social-btn.twitter {
+        background-color: #1DA1F2;
+        border-color: #1DA1F2;
+    }
+
+    .social-btn.discord {
+        background-color: #5865F2;
+        border-color: #5865F2;
+    }
+
+    .social-btn.instagram {
+        background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
+        border-color: #C13584;
+    }
+
+    .social-btn.youtube {
+        background-color: #FF0000;
+        border-color: #FF0000;
+    }
+
+    .social-btn.facebook {
+        background-color: #1877F2;
+        border-color: #1877F2;
+    }
+
+    .social-btn.twitch {
+        background-color: #6441A4;
+        border-color: #6441A4;
+    }
+
+    .social-btn.mastodon {
+        background-color: #3088D4;
+        border-color: #3088D4;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to determine if a color is light or dark
+    function isLight(color) {
+        // Convert hex to RGB
+        let hex = color.replace('#', '');
+        let r = parseInt(hex.substr(0, 2), 16);
+        let g = parseInt(hex.substr(2, 2), 16);
+        let b = parseInt(hex.substr(4, 2), 16);
+
+        // Calculate brightness
+        let brightness = (r * 299 + g * 587 + b * 114) / 1000;
+
+        return brightness > 155; // Threshold for "light" colors
+    }
+
+    // Function to apply colors to skill badges
+    function applySkillColors(containerSelector) {
+        const container = document.querySelector(containerSelector);
+        if (!container) return;
+
+        const skillColors = JSON.parse(container.dataset.skillColors);
+
+        container.querySelectorAll('.skill-badge').forEach(function(badge) {
+            const skill = badge.dataset.skill;
+            const color = skillColors[skill] || '#6c757d';
+
+            // Apply background color
+            badge.style.backgroundColor = color;
+
+            // Determine if we need light or dark text
+            if (isLight(color)) {
+                badge.classList.add('is-light');
+            } else {
+                badge.classList.remove('is-light');
+            }
+        });
+    }
+
+    // Apply to both skill containers
+    applySkillColors('.skills-known-container');
+    applySkillColors('.skills-to-learn-container');
+});
+</script>
+{% endblock %}

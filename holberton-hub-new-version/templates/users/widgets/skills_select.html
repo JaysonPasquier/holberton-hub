@@ -1,0 +1,106 @@
+{% load user_tags %}
+
+<div class="skills-select-container" data-skill-colors='{"PYTHON":"#3776AB","DJANGO":"#092E20","FLASK":"#000000","HTML":"#E34F26","CSS":"#1572B6","JAVASCRIPT":"#F7DF1E","TYPESCRIPT":"#3178C6","REACT":"#61DAFB","NEXTJS":"#000000","VUEJS":"#4FC08D","NUXTJS":"#00DC82","ANGULAR":"#DD0031","SVELTE":"#FF3E00","NODEJS":"#339933","EXPRESS":"#000000","PHP":"#777BB4","LARAVEL":"#FF2D20","SYMFONY":"#000000","JAVA":"#007396","SPRING":"#6DB33F","KOTLIN":"#7F52FF","SWIFT":"#FA7343","CSHARP":"#239120","DOTNET":"#512BD4","RUBY":"#CC342D","RAILS":"#CC0000","GO":"#00ADD8","RUST":"#000000","DOCKER":"#2496ED","KUBERNETES":"#326CE5","GIT":"#F05032","GITHUB":"#181717","GITLAB":"#FC6D26","BITBUCKET":"#0052CC","AWS":"#FF9900","AZURE":"#0078D4","GCP":"#4285F4","DIGITALOCEAN":"#0080FF","HEROKU":"#430098","NETLIFY":"#00C7B7","NGINX":"#009639","APACHE":"#D22128","MYSQL":"#4479A1","POSTGRESQL":"#4169E1","MONGODB":"#47A248","REDIS":"#DC382D","ELASTICSEARCH":"#005571","GRAPHQL":"#E10098","LINUX":"#FCC624","UBUNTU":"#E95420","WINDOWS":"#0078D6","MACOS":"#000000","ANDROID":"#3DDC84","IOS":"#000000","FLUTTER":"#02569B","REACT_NATIVE":"#61DAFB","WORDPRESS":"#21759B","DRUPAL":"#0678BE","BOOTSTRAP":"#7952B3","TAILWIND":"#38B2AC","SASS":"#CC6699","WEBPACK":"#8DD6F9","BABEL":"#F9DC3E","NPM":"#CB3837","YARN":"#2C8EBB","JENKINS":"#D24939","TRAVIS":"#3EAAAF","CIRCLECI":"#343434","ANSIBLE":"#EE0000","TERRAFORM":"#7B42BC","JIRA":"#0052CC","TRELLO":"#0079BF","FIGMA":"#F24E1E","PHOTOSHOP":"#31A8FF","ILLUSTRATOR":"#FF9A00","JEST":"#C21325","CYPRESS":"#17202C","SELENIUM":"#43B02A","PYTORCH":"#EE4C2C","TENSORFLOW":"#FF6F00"}'>
+    <div class="skills-grid">
+        {% for choice_value, choice_label in widget.choices %}
+            <div class="skill-item">
+                <input type="checkbox"
+                       name="{{ widget.name }}"
+                       value="{{ choice_value }}"
+                       id="id_{{ widget.name }}_{{ forloop.counter }}"
+                       {% if choice_value in widget.value %}checked{% endif %}
+                       class="skill-checkbox"
+                       data-skill="{{ choice_value }}">
+                <label for="id_{{ widget.name }}_{{ forloop.counter }}"
+                       class="skill-label"
+                       data-skill="{{ choice_value }}">
+                    <div class="skill-icon-wrapper">
+                        <i class="{{ widget.icons|get_item:choice_value }}"></i>
+                    </div>
+                    <span class="skill-text">{{ choice_label }}</span>
+                </label>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .skill-item {
+        position: relative;
+    }
+
+    .skill-checkbox {
+        position: absolute;
+        opacity: 0;
+    }
+
+    .skill-label {
+        display: flex;
+        align-items: center;
+        padding: 8px 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .skill-checkbox:checked + .skill-label {
+        color: white;
+        border-color: transparent;
+    }
+
+    .skill-icon-wrapper {
+        margin-right: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .skill-text {
+        flex-grow: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get skill colors from data attribute
+    const container = document.querySelector('.skills-select-container');
+    const skillColors = JSON.parse(container.dataset.skillColors);
+
+    // Set initial styles
+    const checkboxes = document.querySelectorAll('.skill-checkbox');
+
+    // Function to update label appearance based on checkbox status
+    function updateLabelStyles(checkbox) {
+        const label = document.querySelector(`label[for="${checkbox.id}"]`);
+        const skill = checkbox.dataset.skill;
+        const color = skillColors[skill] || '#6c757d';
+
+        if (checkbox.checked) {
+            label.style.backgroundColor = color;
+        } else {
+            label.style.backgroundColor = '';
+        }
+    }
+
+    // Initialize all checkboxes
+    checkboxes.forEach(function(checkbox) {
+        updateLabelStyles(checkbox);
+
+        // Add change event listener
+        checkbox.addEventListener('change', function() {
+            updateLabelStyles(this);
+        });
+    });
+});
+</script>
