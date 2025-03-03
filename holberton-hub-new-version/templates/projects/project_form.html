@@ -1,0 +1,409 @@
+{% extends 'base.html' %}
+{% load skill_tags %}
+
+{% block title %}{{ action }} Project | Holberton Hub{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/skill-badges.css">
+<style>
+    /* Additional styles to ensure form compatibility across themes */
+    .skill-selection-container {
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .theme-dark .skill-selection-container,
+    .theme-dark #selected-skills,
+    .theme-dark #skills-list,
+    [class*="theme-dark"] .skill-selection-container,
+    [class*="theme-dark"] #selected-skills,
+    [class*="theme-dark"] #skills-list {
+        background-color: #1a202c !important;
+        border-color: #4a5568 !important;
+    }
+
+    /* Override Bootstrap's bg-light in dark themes */
+    .theme-dark .bg-light,
+    [class*="theme-dark"] .bg-light {
+        background-color: #1a202c !important;
+    }
+
+    /* Fix form control visibility in dark themes */
+    .theme-dark .form-check-label {
+        color: #e2e8f0;
+    }
+
+    /* Company fields animation */
+    .company-field {
+        transition: all 0.3s ease-in-out;
+    }
+
+    /* Ensure skill badges are visible in both light and dark themes */
+    .skill-badge {
+        color: white !important;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1>{{ action }} Project</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form method="post" enctype="multipart/form-data" id="project-form">
+                        {% csrf_token %}
+
+                        <!-- Title -->
+                        <div class="mb-3">
+                            <label for="{{ form.title.id_for_label }}" class="form-label">Project Title *</label>
+                            {{ form.title }}
+                            {% if form.title.errors %}
+                                <div class="text-danger">{{ form.title.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Is Company Project -->
+                        <div class="form-check mb-3">
+                            {{ form.is_company_project }}
+                            <label for="{{ form.is_company_project.id_for_label }}" class="form-check-label">
+                                Is this a company project?
+                            </label>
+                        </div>
+
+                        <!-- Company (only shown if is_company_project is checked) -->
+                        <div class="mb-3 company-field" style="display: none;">
+                            <label for="{{ form.company.id_for_label }}" class="form-label">Company</label>
+                            {{ form.company }}
+                            {% if form.company.errors %}
+                                <div class="text-danger">{{ form.company.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Is Paid (only shown if is_company_project is checked) -->
+                        <div class="form-check mb-3 company-field" style="display: none;">
+                            {{ form.is_paid }}
+                            <label for="{{ form.is_paid.id_for_label }}" class="form-check-label">
+                                Is this a paid project?
+                            </label>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-3">
+                            <label for="{{ form.description.id_for_label }}" class="form-label">Description *</label>
+                            {{ form.description }}
+                            {% if form.description.errors %}
+                                <div class="text-danger">{{ form.description.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Requirements -->
+                        <div class="mb-3">
+                            <label for="{{ form.requirements.id_for_label }}" class="form-label">Requirements (Optional)</label>
+                            {{ form.requirements }}
+                            {% if form.requirements.errors %}
+                                <div class="text-danger">{{ form.requirements.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Skills Required -->
+                        <div class="mb-3">
+                            <label class="form-label">Skills Required</label>
+                            <div class="skill-selection-container border p-3 rounded bg-light">
+                                <!-- Selected skills will appear here -->
+                                <div id="selected-skills" class="mb-3 d-flex flex-wrap gap-2">
+                                    {% if project and project.skills.all %}
+                                        {% for skill in project.skills.all %}
+                                            <div class="skill-badge badge d-flex align-items-center"
+                                                data-skill-code="{{ skill.code }}">
+                                                <i class="{{ skill.code|get_skill_icon }} me-1"></i>
+                                                {{ skill.name }}
+                                                <input type="hidden" name="skills" value="{{ skill.code }}">
+                                                <button type="button" class="btn-close btn-close-white ms-2" aria-label="Remove"></button>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+
+                                <!-- Skill search input -->
+                                <div class="input-group mb-3">
+                                    <input type="text" id="skill-search" class="form-control" placeholder="Search skills...">
+                                </div>
+
+                                <!-- Skills selection -->
+                                <div id="skills-list" class="d-flex flex-wrap gap-2">
+                                    {% for skill_code, skill_name in skill_choices %}
+                                        <div class="skill-option badge d-flex align-items-center"
+                                             data-value="{{ skill_code }}"
+                                             data-icon="{{ skill_code|get_skill_icon }}"
+                                             data-color="{{ skill_code|get_skill_color }}">
+                                            <i class="{{ skill_code|get_skill_icon }} me-1"></i>
+                                            {{ skill_name }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- GitHub URL -->
+                        <div class="mb-3">
+                            <label for="{{ form.github_url.id_for_label }}" class="form-label">GitHub URL (Optional)</label>
+                            {{ form.github_url }}
+                            {% if form.github_url.errors %}
+                                <div class="text-danger">{{ form.github_url.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Figma URL -->
+                        <div class="mb-3">
+                            <label for="{{ form.figma_url.id_for_label }}" class="form-label">Figma URL (Optional)</label>
+                            {{ form.figma_url }}
+                            {% if form.figma_url.errors %}
+                                <div class="text-danger">{{ form.figma_url.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Other URL -->
+                        <div class="mb-3">
+                            <label for="{{ form.other_url.id_for_label }}" class="form-label">Other URL (Optional)</label>
+                            {{ form.other_url }}
+                            {% if form.other_url.errors %}
+                                <div class="text-danger">{{ form.other_url.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Image -->
+                        <div class="mb-3">
+                            <label for="{{ form.image.id_for_label }}" class="form-label">Project Image (Optional)</label>
+                            {{ form.image }}
+                            {% if form.image.errors %}
+                                <div class="text-danger">{{ form.image.errors }}</div>
+                            {% endif %}
+                            <div class="form-text">Upload an image to showcase your project.</div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary">{{ action }} Project</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Tips for a Great Project</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li>✅ Clearly describe what your project is about</li>
+                        <li>✅ Be specific about the skills you're looking for</li>
+                        <li>✅ Add links to designs or code repositories if available</li>
+                        <li>✅ Mention if it's paid or volunteer work</li>
+                        <li>✅ Include any deadlines or time expectations</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get elements
+    const skillSearch = document.getElementById('skill-search');
+    const skillsList = document.getElementById('skills-list');
+    const selectedSkills = document.getElementById('selected-skills');
+    const skillOptions = document.querySelectorAll('.skill-option');
+    const isCompanyProject = document.getElementById('is_company_project');
+    const companyFields = document.querySelectorAll('.company-field');
+
+    // Show/hide company fields based on checkbox
+    isCompanyProject.addEventListener('change', function() {
+        companyFields.forEach(field => {
+            field.style.display = this.checked ? 'block' : 'none';
+        });
+    });
+
+    // Initial state of company fields
+    companyFields.forEach(field => {
+        field.style.display = isCompanyProject.checked ? 'block' : 'none';
+    });
+
+    // Apply colors to all skill badges and options
+    document.querySelectorAll('.skill-badge').forEach(badge => {
+        const skillCode = badge.dataset.skillCode;
+        applySkillColor(badge, skillCode);
+    });
+
+    document.querySelectorAll('.skill-option').forEach(option => {
+        const color = option.dataset.color;
+        if (color) {
+            option.style.backgroundColor = color;
+        }
+        option.style.cursor = 'pointer';
+    });
+
+    // Define skill colors
+    const skillColors = {
+        'PYTHON': '#3776AB',
+        'DJANGO': '#092E20',
+        'FLASK': '#000000',
+        'HTML': '#E34F26',
+        'CSS': '#1572B6',
+        'JAVASCRIPT': '#F7DF1E',
+        // Add the rest of your skill colors here
+    };
+
+    function applySkillColor(badge, skillCode) {
+        if (skillCode && skillColors[skillCode]) {
+            badge.style.backgroundColor = skillColors[skillCode];
+            badge.style.color = 'white';
+        } else {
+            // Default color
+            badge.style.backgroundColor = '#6c757d';
+            badge.style.color = 'white';
+        }
+    }
+
+    // Filter skills when typing in search box
+    skillSearch.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        skillOptions.forEach(option => {
+            const skillName = option.textContent.toLowerCase().trim();
+            option.style.display = skillName.includes(searchTerm) ? 'block' : 'none';
+        });
+    });
+
+    // Add skill when clicked
+    skillsList.addEventListener('click', function(e) {
+        const target = e.target.closest('.skill-option');
+        if (target) {
+            const skillValue = target.dataset.value;
+            const skillName = target.textContent.trim();
+            const skillIcon = target.dataset.icon;
+            const skillColor = target.dataset.color;
+
+            // Check if already selected
+            const existingInputs = selectedSkills.querySelectorAll(`input[value="${skillValue}"]`);
+            if (existingInputs.length === 0) {
+                addSkillBadge(skillValue, skillName, skillIcon, skillColor);
+            }
+        }
+    });
+
+    // Remove skill when close button is clicked
+    selectedSkills.addEventListener('click', function(e) {
+        if (e.target.classList.contains('btn-close')) {
+            e.target.closest('.skill-badge').remove();
+        }
+    });
+
+    // Function to add a skill badge
+    function addSkillBadge(value, name, icon, color) {
+        const badge = document.createElement('div');
+        badge.className = 'skill-badge badge d-flex align-items-center';
+        badge.dataset.skillCode = value;
+        badge.style.backgroundColor = color;
+        badge.style.color = 'white';
+        badge.innerHTML = `
+            <i class="${icon} me-1"></i>
+            ${name}
+            <input type="hidden" name="skills" value="${value}">
+            <button type="button" class="btn-close btn-close-white ms-2" aria-label="Remove"></button>
+        `;
+        selectedSkills.appendChild(badge);
+    }
+
+    // Add form classes for styling
+    document.querySelectorAll('#project-form input[type=text], #project-form input[type=url], #project-form select, #project-form textarea').forEach(el => {
+        el.classList.add('form-control');
+    });
+    document.querySelectorAll('#project-form input[type=file]').forEach(el => {
+        el.classList.add('form-control');
+    });
+
+    // Initialize Select2 before applying colors
+    $('.select2-multiple').select2({
+        theme: 'bootstrap-5',
+        width: '100%',
+        placeholder: 'Select skills...',
+        allowClear: true
+    });
+
+    function isLight(color) {
+        let hex = color.replace('#', '');
+        let r = parseInt(hex.substr(0, 2), 16);
+        let g = parseInt(hex.substr(2, 2), 16);
+        let b = parseInt(hex.substr(4, 2), 16);
+        let brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        return brightness > 155;
+    }
+
+    // Get skill colors from data attribute
+    const containers = document.querySelectorAll('.skills-container');
+    containers.forEach(container => {
+        if (!container) return;
+
+        const skillColors = JSON.parse(container.dataset.skillColors);
+        const select = container.querySelector('select');
+
+        if (select) {
+            $(select).on('select2:open', function() {
+                setTimeout(function() {
+                    document.querySelectorAll('.select2-results__option').forEach(option => {
+                        const skillCode = option.textContent.toUpperCase()
+                            .replace(/[^A-Z0-9]/g, '_')
+                            .replace(/_+/g, '_');
+                        const color = skillColors[skillCode] || '#6c757d';
+
+                        option.style.backgroundColor = color;
+                        if (isLight(color)) {
+                            option.style.color = '#000';
+                        } else {
+                            option.style.color = '#fff';
+                        }
+                    });
+                }, 0);
+            });
+
+            // Apply colors to selected items
+            $(select).on('change', function() {
+                setTimeout(function() {
+                    document.querySelectorAll('.select2-selection__choice').forEach(choice => {
+                        const skillCode = choice.title.toUpperCase()
+                            .replace(/[^A-Z0-9]/g, '_')
+                            .replace(/_+/g, '_');
+                        const color = skillColors[skillCode] || '#6c757d';
+
+                        choice.style.backgroundColor = color;
+                        choice.style.borderColor = color;
+                        if (isLight(color)) {
+                            choice.style.color = '#000';
+                        } else {
+                            choice.style.color = '#fff';
+                        }
+                    });
+                }, 0);
+            }).trigger('change');
+        }
+    });
+});
+</script>
+{% endblock %}

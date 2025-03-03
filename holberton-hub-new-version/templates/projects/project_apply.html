@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% load skill_tags %}
+
+{% block title %}Apply for {{ project.title }} | Holberton Hub{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/skill-badges.css">
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3>Apply for: {{ project.title }}</h3>
+            </div>
+            <div class="card-body">
+                <div class="mb-4">
+                    <h5>Project Description</h5>
+                    <p>{{ project.description|linebreaks }}</p>
+
+                    {% if project.skills.all %}
+                        <h5>Skills Required</h5>
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            {% for skill in project.skills.all %}
+                                <span class="skill-badge badge" data-skill-code="{{ skill.code }}">
+                                    <i class="{{ skill.code|get_skill_icon }} me-1"></i> {{ skill.name }}
+                                </span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="{{ form.message.id_for_label }}" class="form-label">
+                            Why are you interested in this project?
+                        </label>
+                        {{ form.message }}
+                        {% if form.message.errors %}
+                            <div class="text-danger small">{{ form.message.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">
+                            Explain why you're interested and how your skills match the requirements.
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'project_detail' project.pk %}" class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Submit Application</button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-muted">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        Posted by:
+                        <a href="{% url 'user_profile' project.creator.username %}">{{ project.creator.username }}</a>
+                    </div>
+                    <div>
+                        Created: {{ project.created_at|date:"F j, Y" }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Apply colors to skill badges
+    document.querySelectorAll('.skill-badge').forEach(badge => {
+        const skillCode = badge.dataset.skillCode;
+
+        // Define skill colors
+        const skillColors = {
+            'PYTHON': '#3776AB',
+            'DJANGO': '#092E20',
+            'FLASK': '#000000',
+            'HTML': '#E34F26',
+            'CSS': '#1572B6',
+            'JAVASCRIPT': '#F7DF1E',
+            'TYPESCRIPT': '#3178C6',
+            'REACT': '#61DAFB',
+            'ANGULAR': '#DD0031',
+            'VUEJS': '#4FC08D',
+            'NODEJS': '#339933',
+            'PHP': '#777BB4',
+            'LARAVEL': '#FF2D20',
+            'JAVA': '#007396',
+            'SPRING': '#6DB33F',
+            'RUBY': '#CC342D',
+            'RAILS': '#CC0000',
+            // Add other skills as needed
+        };
+
+        // Apply color based on skill code
+        if (skillCode && skillColors[skillCode]) {
+            badge.style.backgroundColor = skillColors[skillCode];
+            badge.style.color = 'white';
+        } else {
+            // Default color if not found
+            badge.style.backgroundColor = '#6c757d';
+            badge.style.color = 'white';
+        }
+    });
+
+    // Add form classes
+    document.querySelector('#id_message').classList.add('form-control');
+});
+</script>
+{% endblock %}

@@ -1,0 +1,79 @@
+/* Enhanced skill badge styling for cross-theme compatibility */
+.skill-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5em 0.75em;
+    font-size: 0.85rem;
+    color: white !important; /* Force white text */
+    margin-right: 4px;
+    margin-bottom: 4px;
+    border-radius: 0.25rem;
+    /* Add border and shadow for better visibility */
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    /* Text readability enhancement */
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    /* Apply the style attribute color as a CSS variable for maximum priority */
+    --skill-badge-bg-color: attr(style background-color);
+}
+
+/* Ensure skill badges keep their colors */
+.skill-badge[style*="background-color"] {
+    background-color: var(--skill-badge-bg-color) !important;
+}
+
+/* Ensure all badge content is properly visible */
+.skill-badge i,
+.skill-badge span,
+.skill-option i,
+.skill-option span {
+    color: inherit;
+}
+
+.badge[data-color] {
+    color: white !important; /* Ensure text is always white */
+}
+
+.skill-option {
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 0.5em 0.75em;
+    color: white;
+    /* Add border for better definition */
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    /* Add text shadow for better contrast on any background */
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.skill-option:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Fix close buttons in skill badges */
+.skill-badge .btn-close {
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.skill-badge .btn-close:hover {
+    opacity: 1;
+}
+
+/* Dark theme specific adjustments */
+body[class*="theme-dark"] .card,
+body[class*="theme-dark"] .list-group-item {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Theme transitions for smooth theme changes */
+.skill-selection-container,
+.skill-badge,
+.skill-option,
+.form-control,
+.form-select,
+.form-check-input,
+.btn {
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}

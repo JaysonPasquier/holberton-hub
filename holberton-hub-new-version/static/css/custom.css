@@ -36,3 +36,97 @@ body, .card, .navbar, .btn, .form-control, .badge, .alert {
     outline: 2px solid var(--theme-primary);
     outline-offset: 2px;
 }
+
+/* Skill badges */
+.skill-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5em 0.7em;
+    font-size: 0.85rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+/* Skill options */
+.skill-option {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0.5em 0.7em;
+    font-size: 0.85rem;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.skill-option:hover {
+    background-color: #4a5568;
+    transform: translateY(-2px);
+}
+
+/* Skill selection container */
+.skill-selection-container {
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    border: 1px solid #dee2e6;
+}
+
+#selected-skills {
+    min-height: 45px;
+    padding: 10px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    border: 1px solid #dee2e6;
+}
+
+#skills-list {
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+/* Search input */
+#skill-search {
+    margin-bottom: 10px;
+}
+
+/* Styling for skill categories in dropdowns */
+optgroup[label] {
+    font-weight: 700;
+    color: #495057;
+    background-color: #f8f9fa;
+    padding: 8px;
+    border-bottom: 1px solid #dee2e6;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+/* If using Select2, we need different styles */
+.select2-container--default .select2-results__group {
+    background-color: #f8f9fa;
+    font-weight: 700;
+    padding: 6px 8px;
+    border-bottom: 1px solid #dee2e6;
+    color: #495057;
+}
+
+/* Dark mode support */
+[data-bs-theme="dark"] optgroup[label],
+.dark-mode optgroup[label] {
+    color: #adb5bd;
+    background-color: #343a40;
+    border-color: #495057;
+}
+
+[data-bs-theme="dark"] .select2-container--default .select2-results__group,
+.dark-mode .select2-container--default .select2-results__group {
+    color: #adb5bd;
+    background-color: #343a40;
+    border-color: #495057;
+}

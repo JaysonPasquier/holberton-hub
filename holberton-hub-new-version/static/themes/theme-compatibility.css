@@ -1,0 +1,189 @@
+/* Dark theme compatibility styles */
+body.theme-dark .card,
+body.theme-dark .list-group-item,
+body.theme-dark .card-header,
+body.theme-dark .card-body,
+body.theme-dark .card-footer {
+    background-color: #2d3748;
+    color: #f7fafc;
+    border-color: #4a5568;
+}
+
+body.theme-dark .text-muted {
+    color: #cbd5e0 !important;
+}
+
+body.theme-dark .btn-outline-primary {
+    color: #63b3ed;
+    border-color: #63b3ed;
+}
+
+body.theme-dark .btn-outline-primary:hover {
+    background-color: #2b6cb0;
+    color: #fff;
+    border-color: #2b6cb0;
+}
+
+/* Form specific dark theme styles */
+body.theme-dark .form-control,
+body.theme-dark .form-select,
+body.theme-dark textarea.form-control {
+    background-color: #1a202c;
+    border-color: #4a5568;
+    color: #f7fafc;
+}
+
+body.theme-dark .form-control:focus,
+body.theme-dark .form-select:focus,
+body.theme-dark textarea.form-control:focus {
+    background-color: #2d3748;
+    color: #f7fafc;
+    border-color: #63b3ed;
+    box-shadow: 0 0 0 0.25rem rgba(99, 179, 237, 0.25);
+}
+
+body.theme-dark .form-check-input {
+    background-color: #1a202c;
+    border-color: #4a5568;
+}
+
+body.theme-dark .form-check-input:checked {
+    background-color: #4299e1;
+    border-color: #4299e1;
+}
+
+body.theme-dark .form-text {
+    color: #a0aec0 !important;
+}
+
+body.theme-dark .form-label {
+    color: #e2e8f0;
+}
+
+/* Skill selection container in forms */
+body.theme-dark .skill-selection-container {
+    background-color: #1a202c !important;
+    border-color: #4a5568 !important;
+}
+
+body.theme-dark .skill-selection-container .form-control {
+    background-color: #2d3748;
+    border-color: #4a5568;
+}
+
+/* Dark theme adjustments for the skill options */
+body.theme-dark .skill-option {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Apply appropriate text colors to headings in dark mode */
+body.theme-dark h1,
+body.theme-dark h2,
+body.theme-dark h3,
+body.theme-dark h4,
+body.theme-dark h5,
+body.theme-dark h6,
+body.theme-dark .card-title {
+    color: #f7fafc;
+}
+
+/* Apply similar dark styles to holberton dark theme variant */
+body.theme-holberton-dark .card,
+body.theme-holberton-dark .list-group-item,
+body.theme-holberton-dark .card-header,
+body.theme-holberton-dark .card-body,
+body.theme-holberton-dark .card-footer {
+    background-color: #2d3748;
+    color: #f7fafc;
+    border-color: #4a5568;
+}
+
+/* Style fixes for skill badges to ensure proper visibility in dark mode */
+body.theme-dark .skill-badge i {
+    color: white !important;
+}
+
+/* Make sure the badge text is readable regardless of the badge color */
+.skill-badge {
+    color: white !important;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+    font-weight: 500;
+}
+
+/* Add a subtle border to ensure visibility on any background */
+.skill-badge {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Style adjustments for other dark themes */
+body[class*="theme-"][class*="dark"] .card,
+body[class*="theme-"][class*="dark"] .list-group-item,
+body[class*="theme-"][class*="dark"] .card-header,
+body[class*="theme-"][class*="dark"] .card-body,
+body[class*="theme-"][class*="dark"] .card-footer {
+    background-color: rgba(33, 33, 33, 0.95);
+    color: #f7fafc;
+    border-color: #4a5568;
+}
+
+/* Apply similar styles to all dark theme variants */
+body[class*="theme-dark"] .form-control,
+body[class*="theme-dark"] .form-select,
+body[class*="theme-dark"] textarea.form-control {
+    background-color: #1a202c;
+    border-color: #4a5568;
+    color: #f7fafc;
+}
+
+body[class*="theme-dark"] .form-control:focus,
+body[class*="theme-dark"] .form-select:focus,
+body[class*="theme-dark"] textarea.form-control:focus {
+    background-color: #2d3748;
+    color: #f7fafc;
+}
+
+/* Style for the file input in dark themes */
+body[class*="theme-dark"] input[type="file"].form-control::file-selector-button {
+    background-color: #4a5568;
+    color: #f7fafc;
+    border-color: #2d3748;
+}
+
+/* Fix for background colors */
+body[class*="theme-dark"] .bg-light {
+    background-color: #2d3748 !important;
+}
+
+/* Add these specific styles for the selected skills container in dark themes */
+body.theme-dark .skill-selection-container,
+body.theme-dark #selected-skills,
+body.theme-dark #skills-list,
+body[class*="theme-dark"] .skill-selection-container,
+body[class*="theme-dark"] #selected-skills,
+body[class*="theme-dark"] #skills-list {
+    background-color: #1a202c !important;
+    border-color: #4a5568 !important;
+}
+
+/* Fix the bg-light class usage in dark themes */
+body.theme-dark .bg-light,
+body[class*="theme-dark"] .bg-light {
+    background-color: #1a202c !important;
+    border-color: #4a5568 !important;
+}
+
+/* Fix for active/hover states in skill containers */
+body.theme-dark .skill-selection-container:focus-within,
+body[class*="theme-dark"] .skill-selection-container:focus-within {
+    border-color: #63b3ed !important;
+    box-shadow: 0 0 0 0.25rem rgba(99, 179, 237, 0.25);
+}
+
+/* Fix the search input background to match the container */
+body.theme-dark #skill-search,
+body[class*="theme-dark"] #skill-search {
+    background-color: #2d3748;
+    color: #f7fafc;
+    border-color: #4a5568;
+}

@@ -1,8 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import CustomUser
-from .widgets import SkillsSelectWidget
 import json
+from .skills_constants import SKILL_CHOICES
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
@@ -13,28 +13,42 @@ class SkillsField(forms.MultipleChoiceField):
     def __init__(self, *args, **kwargs):
         from .skills_constants import SKILL_CHOICES
         kwargs['choices'] = SKILL_CHOICES
-        kwargs['widget'] = SkillsSelectWidget()
         kwargs['required'] = False
         super().__init__(*args, **kwargs)
 
     def prepare_value(self, value):
         if isinstance(value, str):
             try:
-                return json.loads(value)
-            except:
+                # Parse JSON and ensure we get complete strings
+                parsed = json.loads(value)
+                if isinstance(parsed, str):
+                    return [parsed]
+                return parsed
+            except (json.JSONDecodeError, TypeError):
                 return []
         return value
 
     def clean(self, value):
-        # Ensure the value is a list even if it comes as a single item
-        if value and not isinstance(value, (list, tuple)):
-            value = [value]
-        return super().clean(value)
+        if not value:
+            return []
+        if isinstance(value, str):
+            return [value]
+        return value
 
 class CustomUserChangeForm(UserChangeForm):
-    password = None  # Remove password field from the form
-    skills_known = SkillsField(label='Skills I Know & Can Teach')
-    skills_to_learn = SkillsField(label='Skills I Want to Learn')
+    password = None
+    skills_known = forms.MultipleChoiceField(
+        choices=SKILL_CHOICES,
+        required=False,
+        label='Skills I Know & Can Teach',
+        widget=forms.SelectMultiple(attrs={'class': 'form-control select2-multiple'})
+    )
+    skills_to_learn = forms.MultipleChoiceField(
+        choices=SKILL_CHOICES,
+        required=False,
+        label='Skills I Want to Learn',
+        widget=forms.SelectMultiple(attrs={'class': 'form-control select2-multiple'})
+    )
 
     class Meta:
         model = CustomUser

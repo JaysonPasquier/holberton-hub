@@ -46,6 +46,21 @@
                     </div>
                 </form>
             </div>
+            <div class="card-footer text-muted">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        Posted by:
+                        {% if job.employer %}
+                            <a href="{% url 'user_profile' job.employer.username %}">{{ job.employer.username }}</a>
+                        {% else %}
+                            Unknown
+                        {% endif %}
+                    </div>
+                    <div>
+                        Created: {{ job.created_at|date:"F j, Y" }}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

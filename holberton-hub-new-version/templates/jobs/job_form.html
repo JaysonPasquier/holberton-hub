@@ -1,81 +1,291 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% load skill_tags %}
 
-{% block title %}{% if form.instance.pk %}Edit{% else %}Create{% endif %} Job | Holberton Hub{% endblock %}
+{% block title %}{{ action }} Job | Holberton Hub{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/skill-badges.css">
+<style>
+    /* Additional styles to ensure form compatibility across themes */
+    .skill-selection-container {
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .theme-dark .skill-selection-container,
+    .theme-dark #selected-skills,
+    .theme-dark #skills-list,
+    [class*="theme-dark"] .skill-selection-container,
+    [class*="theme-dark"] #selected-skills,
+    [class*="theme-dark"] #skills-list {
+        background-color: #1a202c !important;
+        border-color: #4a5568 !important;
+    }
+
+    /* Override Bootstrap's bg-light in dark themes */
+    .theme-dark .bg-light,
+    [class*="theme-dark"] .bg-light {
+        background-color: #1a202c !important;
+    }
+
+    /* Ensure skill badges are visible in both light and dark themes */
+    .skill-badge {
+        color: white !important;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-lg-8 mx-auto">
-        <div class="card">
-            <div class="card-header">
-                <h3>{% if form.instance.pk %}Edit{% else %}Create New{% endif %} Job</h3>
-            </div>
-            <div class="card-body">
-                <form method="post" novalidate>
-                    {% csrf_token %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1>{{ action }} Job</h1>
+        </div>
+    </div>
 
-                    <div class="mb-3">
-                        <label for="{{ form.title.id_for_label }}" class="form-label">Title</label>
-                        {{ form.title }}
-                        {% if form.title.errors %}
-                            <div class="text-danger small">{{ form.title.errors }}</div>
-                        {% endif %}
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
-                        {{ form.description }}
-                        {% if form.description.errors %}
-                            <div class="text-danger small">{{ form.description.errors }}</div>
-                        {% endif %}
-                        <div class="form-text">Describe the project in detail, including goals and requirements.</div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="{{ form.skills_required.id_for_label }}" class="form-label">Skills Required</label>
-                        {{ form.skills_required }}
-                        {% if form.skills_required.errors %}
-                            <div class="text-danger small">{{ form.skills_required.errors }}</div>
-                        {% endif %}
-                        <div class="form-text">Enter skills separated by commas (e.g., Python, JavaScript, Django)</div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="{{ form.deadline.id_for_label }}" class="form-label">Deadline (Optional)</label>
-                            {{ form.deadline }}
-                            {% if form.deadline.errors %}
-                                <div class="text-danger small">{{ form.deadline.errors }}</div>
-                            {% endif %}
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="{{ form.max_participants.id_for_label }}" class="form-label">Maximum Participants</label>
-                            {{ form.max_participants }}
-                            {% if form.max_participants.errors %}
-                                <div class="text-danger small">{{ form.max_participants.errors }}</div>
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    {% if form.instance.pk %}
-                    <div class="mb-3">
-                        <label for="{{ form.status.id_for_label }}" class="form-label">Status</label>
-                        {{ form.status }}
-                        {% if form.status.errors %}
-                            <div class="text-danger small">{{ form.status.errors }}</div>
-                        {% endif %}
-                    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                        {% endfor %}
                     {% endif %}
 
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <a href="{% if form.instance.pk %}{% url 'job_detail' form.instance.pk %}{% else %}{% url 'job_list' %}{% endif %}" class="btn btn-outline-secondary">Cancel</a>
-                        <button type="submit" class="btn btn-primary">
-                            {% if form.instance.pk %}Save Changes{% else %}Create Job{% endif %}
-                        </button>
-                    </div>
-                </form>
+                    <form method="post" enctype="multipart/form-data" id="job-form">
+                        {% csrf_token %}
+
+                        <!-- Title -->
+                        <div class="mb-3">
+                            <label for="{{ form.title.id_for_label }}" class="form-label">Job Title *</label>
+                            {{ form.title }}
+                            {% if form.title.errors %}
+                                <div class="text-danger">{{ form.title.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Company -->
+                        <div class="mb-3">
+                            <label for="{{ form.company.id_for_label }}" class="form-label">Company *</label>
+                            {{ form.company }}
+                            {% if form.company.errors %}
+                                <div class="text-danger">{{ form.company.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Location -->
+                        <div class="mb-3">
+                            <label for="{{ form.location.id_for_label }}" class="form-label">Location *</label>
+                            {{ form.location }}
+                            {% if form.location.errors %}
+                                <div class="text-danger">{{ form.location.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Job Type -->
+                        <div class="mb-3">
+                            <label for="{{ form.job_type.id_for_label }}" class="form-label">Job Type *</label>
+                            {{ form.job_type }}
+                            {% if form.job_type.errors %}
+                                <div class="text-danger">{{ form.job_type.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-3">
+                            <label for="{{ form.description.id_for_label }}" class="form-label">Description *</label>
+                            {{ form.description }}
+                            {% if form.description.errors %}
+                                <div class="text-danger">{{ form.description.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Requirements -->
+                        <div class="mb-3">
+                            <label for="{{ form.requirements.id_for_label }}" class="form-label">Requirements</label>
+                            {{ form.requirements }}
+                            {% if form.requirements.errors %}
+                                <div class="text-danger">{{ form.requirements.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Skills Required -->
+                        <div class="mb-3">
+                            <label class="form-label">Skills Required</label>
+                            <div class="skill-selection-container border p-3 rounded bg-light">
+                                <!-- Selected skills will appear here -->
+                                <div id="selected-skills" class="mb-3 d-flex flex-wrap gap-2">
+                                    {% if job and job.skills.all %}
+                                        {% for skill in job.skills.all %}
+                                            <div class="skill-badge badge d-flex align-items-center"
+                                                 data-color="{{ skill.code|get_skill_color }}">
+                                                <i class="{{ skill.code|get_skill_icon }} me-1"></i>
+                                                {{ skill.name }}
+                                                <input type="hidden" name="skills" value="{{ skill.code }}">
+                                                <button type="button" class="btn-close btn-close-white ms-2" aria-label="Remove"></button>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+
+                                <!-- Skill search input -->
+                                <div class="input-group mb-3">
+                                    <input type="text" id="skill-search" class="form-control" placeholder="Search skills...">
+                                </div>
+
+                                <!-- Skills selection -->
+                                <div id="skills-list" class="d-flex flex-wrap gap-2">
+                                    {% for skill_code, skill_name in skill_choices %}
+                                        <div class="skill-option badge d-flex align-items-center"
+                                             data-value="{{ skill_code }}"
+                                             data-icon="{{ skill_code|get_skill_icon }}"
+                                             data-color="{{ skill_code|get_skill_color }}">
+                                            <i class="{{ skill_code|get_skill_icon }} me-1"></i>
+                                            {{ skill_name }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Application URL -->
+                        <div class="mb-3">
+                            <label for="{{ form.application_url.id_for_label }}" class="form-label">Application URL</label>
+                            {{ form.application_url }}
+                            {% if form.application_url.errors %}
+                                <div class="text-danger">{{ form.application_url.errors }}</div>
+                            {% endif %}
+                            <div class="form-text">External URL where candidates can apply (optional).</div>
+                        </div>
+
+                        <!-- Salary Range -->
+                        <div class="mb-3">
+                            <label for="{{ form.salary_min.id_for_label }}" class="form-label">Salary Range (optional)</label>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    {{ form.salary_min }}
+                                    {% if form.salary_min.errors %}
+                                        <div class="text-danger">{{ form.salary_min.errors }}</div>
+                                    {% endif %}
+                                    <div class="form-text">Minimum</div>
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form.salary_max }}
+                                    {% if form.salary_max.errors %}
+                                        <div class="text-danger">{{ form.salary_max.errors }}</div>
+                                    {% endif %}
+                                    <div class="form-text">Maximum</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary">{{ action }} Job</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Tips for a Great Job Post</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li>✅ Be clear about requirements</li>
+                        <li>✅ Provide salary information if possible</li>
+                        <li>✅ List key technologies needed</li>
+                        <li>✅ Specify if remote work is an option</li>
+                        <li>✅ Mention company benefits</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get elements
+    const skillSearch = document.getElementById('skill-search');
+    const skillsList = document.getElementById('skills-list');
+    const selectedSkills = document.getElementById('selected-skills');
+    const skillOptions = document.querySelectorAll('.skill-option');
+
+    // Apply colors to all skill badges and options
+    document.querySelectorAll('.skill-badge').forEach(badge => {
+        const color = badge.dataset.color;
+        if (color) {
+            badge.style.backgroundColor = color;
+        }
+    });
+
+    document.querySelectorAll('.skill-option').forEach(option => {
+        const color = option.dataset.color;
+        if (color) {
+            option.style.backgroundColor = color;
+        }
+        option.style.cursor = 'pointer';
+    });
+
+    // Filter skills when typing in search box
+    skillSearch.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        skillOptions.forEach(option => {
+            const skillName = option.textContent.toLowerCase().trim();
+            option.style.display = skillName.includes(searchTerm) ? 'block' : 'none';
+        });
+    });
+
+    // Add skill when clicked
+    skillsList.addEventListener('click', function(e) {
+        const target = e.target.closest('.skill-option');
+        if (target) {
+            const skillValue = target.dataset.value;
+            const skillName = target.textContent.trim();
+            const skillIcon = target.dataset.icon;
+            const skillColor = target.dataset.color;
+
+            // Check if already selected
+            const existingInputs = selectedSkills.querySelectorAll(`input[value="${skillValue}"]`);
+            if (existingInputs.length === 0) {
+                addSkillBadge(skillValue, skillName, skillIcon, skillColor);
+            }
+        }
+    });
+
+    // Remove skill when close button is clicked
+    selectedSkills.addEventListener('click', function(e) {
+        if (e.target.classList.contains('btn-close')) {
+            e.target.closest('.skill-badge').remove();
+        }
+    });
+
+    // Function to add a skill badge
+    function addSkillBadge(value, name, icon, color) {
+        const badge = document.createElement('div');
+        badge.className = 'skill-badge badge d-flex align-items-center';
+        badge.dataset.color = color;
+        badge.style.backgroundColor = color;
+        badge.innerHTML = `
+            <i class="${icon} me-1"></i>
+            ${name}
+            <input type="hidden" name="skills" value="${value}">
+            <button type="button" class="btn-close btn-close-white ms-2" aria-label="Remove"></button>
+        `;
+        selectedSkills.appendChild(badge);
+    }
+
+    // Add form classes for styling
+    document.querySelectorAll('#job-form input[type=text], #job-form input[type=number], #job-form select, #job-form textarea').forEach(el => {
+        el.classList.add('form-control');
+    });
+});
+</script>
 {% endblock %}

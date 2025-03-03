@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Holberton Hub{% endblock %}</title>
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -16,6 +16,9 @@
 
     <!-- Default theme - will be replaced by the theme manager -->
     <link id="theme-stylesheet" rel="stylesheet" href="/static/themes/light-theme.css">
+
+    <!-- Theme compatibility overrides -->
+    <link rel="stylesheet" href="/static/themes/theme-compatibility.css">
 
     <style>
         body {
@@ -33,47 +36,55 @@
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'home' %}">
-                Holberton Hub
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <a class="navbar-brand" href="{% url 'home' %}">Holberton Hub</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}">Home</a>
-                    </li>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'job_list' %}">Jobs</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'project_list' %}">Projects</a>
+                    </li>
+
+                    <!-- Fix this block - ensure proper indentation and placement -->
+                    {% if user.is_authenticated %}
+					<li class="nav-item">
+                        <a class="nav-link" href="{% url 'job_create' %}">Post a job</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'project_create' %}">Post a project</a>
+                    </li>
+                    {% endif %}
+
+                    <!-- Add any other navigation items here -->
                 </ul>
+
+                <!-- Only modify the user dropdown menu -->
                 <ul class="navbar-nav ms-auto">
                     {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'job_create' %}">Post a Job</a>
-                    </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                           data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             {{ user.username }}
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="{% url 'user_profile' user.username %}">My Profile</a></li>
-                            <li><a class="dropdown-item" href="{% url 'profile_edit' %}">Edit Profile</a></li>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+                            <!-- Add themes option back -->
                             <li><a class="dropdown-item" href="{% url 'theme_selection' %}">Change Theme</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{% url 'logout' %}">Log Out</a></li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                         </ul>
                     </li>
                     {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                        <a class="nav-link" href="{% url 'signup' %}">Sign Up</a>
                     </li>
                     {% endif %}
                 </ul>
@@ -112,6 +123,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Theme Switcher Script -->
     <script src="/static/themes/theme-switcher.js"></script>
+    <!-- Skill Colors Script -->
+    <script src="/static/js/skill-colors.js"></script>
+    <!-- Theme Content Script -->
+    <script src="/static/js/theme-content.js"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

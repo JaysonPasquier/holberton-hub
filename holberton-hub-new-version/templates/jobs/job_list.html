@@ -1,6 +1,16 @@
 {% extends "base.html" %}
+{% load skill_tags %}
 
 {% block title %}Jobs | Holberton Hub{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/skill-badges.css">
+<style>
+    .filter-section {
+        transition: all 0.3s ease;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -14,74 +24,198 @@
 <div class="card mb-4">
     <div class="card-body">
         <form method="get" class="row g-3">
+            <!-- Basic search -->
             <div class="col-md-6">
-                <input type="text" name="q" class="form-control" placeholder="Search by title or description"
+                <input type="text" name="q" class="form-control" placeholder="Search by title, company or description"
                     value="{{ request.GET.q|default:'' }}">
             </div>
+
+            <!-- Sort order -->
             <div class="col-md-3">
-                <select name="status" class="form-select">
-                    <option value="">All Statuses</option>
-                    <option value="open" {% if request.GET.status == 'open' %}selected{% endif %}>Open</option>
-                    <option value="in_progress" {% if request.GET.status == 'in_progress' %}selected{% endif %}>In Progress</option>
-                    <option value="completed" {% if request.GET.status == 'completed' %}selected{% endif %}>Completed</option>
+                <select name="sort" class="form-select">
+                    <option value="-created_at" {% if request.GET.sort == '-created_at' or not request.GET.sort %}selected{% endif %}>Newest First</option>
+                    <option value="created_at" {% if request.GET.sort == 'created_at' %}selected{% endif %}>Oldest First</option>
+                    <option value="company" {% if request.GET.sort == 'company' %}selected{% endif %}>Company A-Z</option>
+                    <option value="-company" {% if request.GET.sort == '-company' %}selected{% endif %}>Company Z-A</option>
+                    <option value="title" {% if request.GET.sort == 'title' %}selected{% endif %}>Title A-Z</option>
+                    <option value="-title" {% if request.GET.sort == '-title' %}selected{% endif %}>Title Z-A</option>
                 </select>
             </div>
+
             <div class="col-md-3">
                 <button type="submit" class="btn btn-secondary w-100">Search</button>
+            </div>
+
+            <!-- Job type filter -->
+            <div class="col-md-3">
+                <label class="form-label">Job Type</label>
+                <select name="job_type" class="form-select">
+                    <option value="">All Job Types</option>
+                    <option value="full_time" {% if request.GET.job_type == 'full_time' %}selected{% endif %}>Full-time</option>
+                    <option value="part_time" {% if request.GET.job_type == 'part_time' %}selected{% endif %}>Part-time</option>
+                    <option value="contract" {% if request.GET.job_type == 'contract' %}selected{% endif %}>Contract</option>
+                    <option value="internship" {% if request.GET.job_type == 'internship' %}selected{% endif %}>Internship</option>
+                    <option value="remote" {% if request.GET.job_type == 'remote' %}selected{% endif %}>Remote</option>
+                </select>
+            </div>
+
+            <!-- Status filter -->
+            <div class="col-md-3">
+                <label class="form-label">Status</label>
+                <select name="status" class="form-select">
+                    <option value="">All Statuses</option>
+                    <option value="active" {% if request.GET.status == 'active' %}selected{% endif %}>Active/Open</option>
+                    <option value="inactive" {% if request.GET.status == 'inactive' %}selected{% endif %}>Inactive/Closed</option>
+                </select>
+            </div>
+
+            <!-- Technology/Skills filter -->
+            <div class="col-md-3">
+                <label class="form-label">Technology</label>
+                <select name="skill" class="form-select">
+                    <option value="">All Technologies</option>
+                    {% for skill_code, skill_name in skill_choices %}
+                        <option value="{{ skill_code }}" {% if request.GET.skill == skill_code %}selected{% endif %}>{{ skill_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Location filter -->
+            <div class="col-md-3">
+                <label class="form-label">Location</label>
+                <input type="text" name="location" class="form-control" placeholder="Enter location"
+                       value="{{ request.GET.location|default:'' }}">
+            </div>
+
+            <!-- Advanced filters toggle -->
+            <div class="col-12 mt-3">
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="collapse" data-bs-target="#advancedFilters">
+                    Advanced Filters <i class="fas fa-caret-down ms-1"></i>
+                </button>
+
+                <!-- Clear filters button -->
+                <a href="{% url 'job_list' %}" class="btn btn-sm btn-outline-danger ms-2">
+                    <i class="fas fa-times me-1"></i> Clear Filters
+                </a>
+            </div>
+
+            <!-- Advanced filters section -->
+            <div class="collapse col-12 mt-2" id="advancedFilters">
+                <div class="card card-body bg-light">
+                    <div class="row">
+                        <!-- Date range filters -->
+                        <div class="col-md-6">
+                            <label class="form-label">Date Range</label>
+                            <div class="input-group">
+                                <span class="input-group-text">From</span>
+                                <input type="date" name="date_from" class="form-control" value="{{ request.GET.date_from|default:'' }}">
+                                <span class="input-group-text">To</span>
+                                <input type="date" name="date_to" class="form-control" value="{{ request.GET.date_to|default:'' }}">
+                            </div>
+                        </div>
+
+                        <!-- Salary range filter -->
+                        <div class="col-md-6">
+                            <label class="form-label">Salary Range</label>
+                            <div class="input-group">
+                                <span class="input-group-text">Min</span>
+                                <input type="number" name="salary_min" class="form-control" placeholder="Min salary"
+                                       value="{{ request.GET.salary_min|default:'' }}">
+                                <span class="input-group-text">Max</span>
+                                <input type="number" name="salary_max" class="form-control" placeholder="Max salary"
+                                       value="{{ request.GET.salary_max|default:'' }}">
+                            </div>
+                        </div>
+
+                        <!-- Company filter -->
+                        <div class="col-md-6 mt-3">
+                            <label class="form-label">Company</label>
+                            <input type="text" name="company" class="form-control" placeholder="Enter company name"
+                                   value="{{ request.GET.company|default:'' }}">
+                        </div>
+
+                        <!-- Posted by filter -->
+                        <div class="col-md-6 mt-3">
+                            <label class="form-label">Posted By</label>
+                            <input type="text" name="employer" class="form-control" placeholder="Enter username"
+                                   value="{{ request.GET.employer|default:'' }}">
+                        </div>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
 </div>
 
+<!-- Results or No Results -->
 {% if jobs %}
     <div class="row">
         {% for job in jobs %}
-            <div class="col-md-6 mb-4">
+            <div class="col-md-6 mb-4"></div>
                 <div class="card h-100">
                     <div class="card-body">
                         <h5 class="card-title">{{ job.title }}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Posted by:
-                            <a href="{% url 'user_profile' job.created_by.username %}">
-                                {{ job.created_by.username }}
-                            </a>
-                        </h6>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ job.company }}</h6>
+                        <p class="mb-1 text-muted"><i class="fas fa-map-marker-alt"></i> {{ job.location }}</p>
+
+                        <!-- Job Status and Type -->
+                        <div class="mb-2">
+                            <span class="badge {% if job.is_active %}bg-success{% else %}bg-secondary{% endif %}">
+                                {% if job.is_active %}Active{% else %}Inactive{% endif %}
+                            </span>
+                            {% if job.job_type %}
+                                <span class="badge bg-info">{{ job.get_job_type_display }}</span>
+                            {% endif %}
+                        </div>
+
                         <p class="card-text">{{ job.description|truncatechars:150 }}</p>
 
-                        {% if job.skills_required %}
-                            <div class="mb-3">
-                                <strong>Skills Required:</strong>
-                                <div class="d-flex flex-wrap gap-1 mt-1">
-                                    {% for skill in job.skills_required.split %}
-                                        <span class="badge bg-secondary">{{ skill }}</span>
-                                    {% endfor %}
-                                </div>
+                        <!-- Skills Display -->
+                        {% if job.skills.all %}
+                        <div class="mb-3">
+                            <strong class="d-block mb-1">Skills Required:</strong>
+                            <div class="d-flex flex-wrap gap-1">
+                                {% for skill in job.skills.all %}
+                                    <span class="skill-badge badge" data-skill-code="{{ skill.code }}">
+                                        <i class="{{ skill.code|get_skill_icon }} me-1"></i>
+                                        {{ skill.name }}
+                                    </span>
+                                {% endfor %}
                             </div>
+                        </div>
                         {% endif %}
 
-                        <div class="d-flex justify-content-between">
-                            <span class="badge bg-{% if job.status == 'open' %}success{% elif job.status == 'in_progress' %}warning{% else %}secondary{% endif %}">
-                                {{ job.get_status_display }}
-                            </span>
-                            <small class="text-muted">{{ job.created_at|date }}</small>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <small class="text-muted">
+                                Posted by:
+                                {% if job.employer %}
+                                    <a href="{% url 'profile' job.employer.username %}">{{ job.employer.username }}</a>
+                                    <!-- Changed from 'user_profile' to 'profile' -->
+                                {% else %}
+                                    Unknown
+                                {% endif %}
+                            </small>
+                            <a href="{% url 'job_detail' job.id %}" class="btn btn-sm btn-primary">View Details</a>
                         </div>
                     </div>
-                    <div class="card-footer bg-transparent border-0">
-                        <a href="{% url 'job_detail' job.pk %}" class="btn btn-outline-primary w-100">View Details</a>
+                    <div class="card-footer text-muted">
+                        Posted: {{ job.created_at|date:"F j, Y" }}
                     </div>
                 </div>
             </div>
         {% endfor %}
     </div>
 
+    <!-- Pagination with all filters preserved -->
     {% if is_paginated %}
     <nav aria-label="Page navigation">
         <ul class="pagination justify-content-center">
             {% if page_obj.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?page=1">&laquo; First</a>
+                <li class="page-item"></li>
+                    <a class="page-link" href="?page=1{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">&laquo; First</a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Previous</a>
                 </li>
             {% endif %}
 
@@ -92,17 +226,17 @@
                     </li>
                 {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        <a class="page-link" href="?page={{ num }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ num }}</a>
                     </li>
                 {% endif %}
             {% endfor %}
 
             {% if page_obj.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Next</a>
                 </li>
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                <li class="page-item"></li>
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Last &raquo;</a>
                 </li>
             {% endif %}
         </ul>
@@ -114,4 +248,25 @@
         <p class="mb-0">No jobs found. {% if user.is_authenticated %}<a href="{% url 'job_create' %}">Create a new job posting</a>{% endif %}</p>
     </div>
 {% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// We're using the centralized skill colors now
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if we need to show advanced filters based on if any are active
+    const params = new URLSearchParams(window.location.search);
+    if (
+        params.has('date_from') ||
+        params.has('date_to') ||
+        params.has('salary_min') ||
+        params.has('salary_max') ||
+        params.has('company') ||
+        params.has('employer')
+    ) {
+        // Show advanced filters if any are active
+        document.querySelector('#advancedFilters').classList.add('show');
+    }
+});
+</script>
 {% endblock %}

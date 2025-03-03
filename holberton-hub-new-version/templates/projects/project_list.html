@@ -1,0 +1,302 @@
+{% extends "base.html" %}
+{% load skill_tags %}
+
+{% block title %}Projects | Holberton Hub{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/skill-badges.css">
+<style>
+    .filter-section {
+        transition: all 0.3s ease;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Browse Projects</h1>
+    {% if user.is_authenticated %}
+    <a href="{% url 'project_create' %}" class="btn btn-primary">Create a New Project</a>
+    {% endif %}
+</div>
+
+<!-- Search and filters -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <!-- Basic search -->
+            <div class="col-md-6">
+                <input type="text" name="q" class="form-control" placeholder="Search by title or description"
+                    value="{{ request.GET.q|default:'' }}">
+            </div>
+
+            <!-- Sort order -->
+            <div class="col-md-3">
+                <select name="sort" class="form-select">
+                    <option value="-created_at" {% if request.GET.sort == '-created_at' or not request.GET.sort %}selected{% endif %}>Newest First</option>
+                    <option value="created_at" {% if request.GET.sort == 'created_at' %}selected{% endif %}>Oldest First</option>
+                    <option value="title" {% if request.GET.sort == 'title' %}selected{% endif %}>Title A-Z</option>
+                    <option value="-title" {% if request.GET.sort == '-title' %}selected{% endif %}>Title Z-A</option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-secondary w-100">Search</button>
+            </div>
+
+            <!-- Project type filter -->
+            <div class="col-md-3">
+                <label class="form-label">Project Type</label>
+                <select name="type" class="form-select">
+                    <option value="">All Projects</option>
+                    <option value="personal" {% if request.GET.type == 'personal' %}selected{% endif %}>Personal Projects</option>
+                    <option value="company" {% if request.GET.type == 'company' %}selected{% endif %}>Company Projects</option>
+                </select>
+            </div>
+
+            <!-- Status filter -->
+            <div class="col-md-3">
+                <label class="form-label">Status</label>
+                <select name="status" class="form-select">
+                    <option value="">All Statuses</option>
+                    <option value="active" {% if request.GET.status == 'active' %}selected{% endif %}>Active/Open</option>
+                    <option value="closed" {% if request.GET.status == 'closed' %}selected{% endif %}>Closed</option>
+                </select>
+            </div>
+
+            <!-- Payment type filter -->
+            <div class="col-md-3">
+                <label class="form-label">Payment</label>
+                <select name="paid" class="form-select">
+                    <option value="">All Payment Types</option>
+                    <option value="paid" {% if request.GET.paid == 'paid' %}selected{% endif %}>Paid Only</option>
+                    <option value="unpaid" {% if request.GET.paid == 'unpaid' %}selected{% endif %}>Unpaid/Volunteer</option>
+                </select>
+            </div>
+
+            <!-- Technology/Skills filter -->
+            <div class="col-md-3">
+                <label class="form-label">Technology</label>
+                <select name="skill" class="form-select">
+                    <option value="">All Technologies</option>
+                    {% for skill_code, skill_name in skill_choices %}
+                        <option value="{{ skill_code }}" {% if request.GET.skill == skill_code %}selected{% endif %}>{{ skill_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Advanced filters toggle -->
+            <div class="col-12 mt-3">
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="collapse" data-bs-target="#advancedFilters">
+                    Advanced Filters <i class="fas fa-caret-down ms-1"></i>
+                </button>
+
+                <!-- Clear filters button -->
+                <a href="{% url 'project_list' %}" class="btn btn-sm btn-outline-danger ms-2">
+                    <i class="fas fa-times me-1"></i> Clear Filters
+                </a>
+            </div>
+
+            <!-- Advanced filters section -->
+            <div class="collapse col-12 mt-2" id="advancedFilters">
+                <div class="card card-body bg-light">
+                    <div class="row">
+                        <!-- Date range filters -->
+                        <div class="col-md-6">
+                            <label class="form-label">Date Range</label>
+                            <div class="input-group">
+                                <span class="input-group-text">From</span>
+                                <input type="date" name="date_from" class="form-control" value="{{ request.GET.date_from|default:'' }}">
+                                <span class="input-group-text">To</span>
+                                <input type="date" name="date_to" class="form-control" value="{{ request.GET.date_to|default:'' }}">
+                            </div>
+                        </div>
+
+                        <!-- Creator filter -->
+                        <div class="col-md-6">
+                            <label class="form-label">Posted By</label>
+                            <input type="text" name="creator" class="form-control" placeholder="Enter username"
+                                   value="{{ request.GET.creator|default:'' }}">
+                        </div>
+
+                        <!-- Company filter -->
+                        <div class="col-md-6 mt-3">
+                            <label class="form-label">Company</label>
+                            <input type="text" name="company" class="form-control" placeholder="Enter company name"
+                                   value="{{ request.GET.company|default:'' }}">
+                        </div>
+
+                        <!-- Has GitHub link filter -->
+                        <div class="col-md-6 mt-3">
+                            <label class="form-label">Project Links</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="has_github" id="hasGithub" value="true"
+                                       {% if request.GET.has_github %}checked{% endif %}>
+                                <label class="form-check-label" for="hasGithub">
+                                    Has GitHub repository
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="has_figma" id="hasFigma" value="true"
+                                       {% if request.GET.has_figma %}checked{% endif %}>
+                                <label class="form-check-label" for="hasFigma">
+                                    Has Figma design
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Results or No Results -->
+{% if projects %}
+    <div class="row">
+        {% for project in projects %}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    {% if project.image %}
+                        <img src="{{ project.image.url }}" class="card-img-top" alt="{{ project.title }}" style="height: 180px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title d-flex justify-content-between">
+                            {{ project.title }}
+                            {% if project.is_company_project %}
+                                <span class="badge bg-info">Company Project</span>
+                            {% endif %}
+                        </h5>
+                        {% if project.company %}
+                            <h6 class="card-subtitle mb-2 text-muted">{{ project.company }}</h6>
+                        {% endif %}
+
+                        <!-- Project Status and Paid Status -->
+                        <div class="mb-2">
+                            <span class="badge {% if project.is_active %}bg-success{% else %}bg-secondary{% endif %}">
+                                {% if project.is_active %}Active{% else %}Closed{% endif %}
+                            </span>
+                            {% if project.is_company_project %}
+                                <span class="badge {% if project.is_paid %}bg-success{% else %}bg-warning{% endif %} ms-1">
+                                    {% if project.is_paid %}Paid{% else %}Unpaid{% endif %}
+                                </span>
+                            {% endif %}
+                        </div>
+
+                        <p class="card-text">{{ project.description|truncatechars:150 }}</p>
+
+                        <!-- Skills/Technologies Display -->
+                        {% if project.skills.all %}
+                        <div class="mb-3">
+                            <strong class="d-block mb-1">Technologies:</strong>
+                            <div class="d-flex flex-wrap gap-1">
+                                {% for skill in project.skills.all %}
+                                    <span class="skill-badge badge" data-skill-code="{{ skill.code }}">
+                                        <i class="{{ skill.code|get_skill_icon }} me-1"></i>
+                                        {{ skill.name }}
+                                    </span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- Links -->
+                        <div class="d-flex gap-2 mb-3">
+                            {% if project.github_url %}
+                                <a href="{{ project.github_url }}" target="_blank" class="btn btn-sm btn-outline-dark"></a>
+                                    <i class="fab fa-github"></i> GitHub
+                                </a>
+                            {% endif %}
+
+                            {% if project.figma_url %}
+                                <a href="{{ project.figma_url }}" target="_blank" class="btn btn-sm btn-outline-dark">
+                                    <i class="fab fa-figma"></i> Figma
+                                </a>
+                            {% endif %}
+
+                            {% if project.other_url %}
+                                <a href="{{ project.other_url }}" target="_blank" class="btn btn-sm btn-outline-secondary"></a>
+                                    <i class="fas fa-link"></i> Other Link
+                                </a>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                Posted by: <a href="{% url 'user_profile' project.creator.username %}">{{ project.creator.username }}</a>
+                            </small>
+                            <a href="{% url 'project_detail' project.id %}" class="btn btn-sm btn-primary">View Details</a>
+                        </div>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <small>Created: {{ project.created_at|date:"F j, Y" }}</small>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination with all filters preserved -->
+    {% if is_paginated %}
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">&laquo; First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Previous</a>
+                </li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }} <span class="sr-only">(current)</span></span>
+                    </li>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ num }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Next</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Last &raquo;</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+
+{% else %}
+    <div class="alert alert-info">
+        <p class="mb-0">No projects found. {% if user.is_authenticated %}<a href="{% url 'project_create' %}">Create a new project</a>{% endif %}</p>
+    </div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// We're using the centralized skill colors now
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if we need to show advanced filters based on if any are active
+    const params = new URLSearchParams(window.location.search);
+    if (
+        params.has('date_from') ||
+        params.has('date_to') ||
+        params.has('creator') ||
+        params.has('company') ||
+        params.has('has_github') ||
+        params.has('has_figma')
+    ) {
+        // Show advanced filters if any are active
+        document.querySelector('#advancedFilters').classList.add('show');
+    }
+});
+</script>
+{% endblock %}

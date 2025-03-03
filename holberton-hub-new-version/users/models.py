@@ -13,6 +13,18 @@ cloudinary.config(
     secure = True
 )
 
+class Skill(models.Model):
+    """Model representing a skill (programming language, technology, etc.)"""
+    name = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(max_length=100, unique=True)
+    description = models.TextField(blank=True, null=True)
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
 class CustomUser(AbstractUser):
     """Custom user model with additional fields"""
     bio = models.TextField(max_length=500, blank=True)
@@ -22,7 +34,7 @@ class CustomUser(AbstractUser):
                                       {'width': 300, 'height': 300, 'crop': 'fill'}
                                   ])
     # Original skills field for backward compatibility
-    skills = models.TextField(blank=True, help_text="Comma separated list of skills (deprecated)")
+    skills = models.ManyToManyField(Skill, blank=True, related_name='users')
 
     # JSON fields to store skills as lists
     skills_known = models.TextField(blank=True, default='[]',
@@ -80,3 +92,23 @@ class CustomUser(AbstractUser):
             self.skills_to_learn = json.dumps(skills_list)
         else:
             self.skills_to_learn = '[]'
+
+    @property
+    def skills_known_list(self):
+        """Return skills known as a list."""
+        if not self.skills_known:
+            return []
+        try:
+            return json.loads(self.skills_known)
+        except (ValueError, TypeError):
+            return []
+
+    @property
+    def skills_to_learn_list(self):
+        """Return skills to learn as a list."""
+        if not self.skills_to_learn:
+            return []
+        try:
+            return json.loads(self.skills_to_learn)
+        except (ValueError, TypeError):
+            return []

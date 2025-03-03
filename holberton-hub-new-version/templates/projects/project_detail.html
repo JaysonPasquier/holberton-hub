@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+{% load skill_tags %}
+
+{% block title %}{{ project.title }} | Holberton Hub{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/skill-badges.css">
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h2 class="mb-0">{{ project.title }}</h2>
+                <div>
+                    {% if project.is_company_project %}
+                        <span class="badge bg-info me-1">Company Project</span>
+                    {% endif %}
+                    <span class="badge {% if project.is_active %}bg-success{% else %}bg-secondary{% endif %}">
+                        {% if project.is_active %}Active{% else %}Closed{% endif %}
+                    </span>
+                </div>
+            </div>
+
+            {% if project.image %}
+            <img src="{{ project.image.url }}" class="card-img-top" alt="{{ project.title }}" style="max-height: 300px; object-fit: contain;">
+            {% endif %}
+
+            <div class="card-body">
+                <!-- Company and Payment Status -->
+                <div class="mb-4">
+                    {% if project.company %}
+                        <p class="mb-1"><strong>Company:</strong> {{ project.company }}</p>
+                    {% endif %}
+
+                    {% if project.is_company_project %}
+                        <p class="mb-1">
+                            <strong>Payment:</strong>
+                            {% if project.is_paid %}
+                                <span class="text-success">Paid Project</span>
+                            {% else %}
+                                <span class="text-warning">Unpaid/Volunteer</span>
+                            {% endif %}
+                        </p>
+                    {% endif %}
+                </div>
+
+                <!-- Description -->
+                <div class="mb-4">
+                    <h5>Description</h5>
+                    <p>{{ project.description|linebreaks }}</p>
+                </div>
+
+                <!-- Requirements if they exist -->
+                {% if project.requirements %}
+                <div class="mb-4">
+                    <h5>Requirements</h5>
+                    <p>{{ project.requirements|linebreaks }}</p>
+                </div>
+                {% endif %}
+
+                <!-- Skills section -->
+                {% if project.skills.all %}
+                <div class="mb-4">
+                    <h5>Required Skills</h5>
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for skill in project.skills.all %}
+                            <span class="skill-badge badge" data-skill-code="{{ skill.code }}">
+                                <i class="{{ skill.code|get_skill_icon }} me-1"></i> {{ skill.name }}
+                            </span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Links section -->
+                <div class="mb-4">
+                    <h5>Project Links</h5>
+                    <div class="d-flex flex-wrap gap-2">
+                        {% if project.github_url %}
+                            <a href="{{ project.github_url }}" target="_blank" class="btn btn-outline-dark">
+                                <i class="fab fa-github me-1"></i> GitHub Repository
+                            </a>
+                        {% endif %}
+
+                        {% if project.figma_url %}
+                            <a href="{{ project.figma_url }}" target="_blank" class="btn btn-outline-primary">
+                                <i class="fab fa-figma me-1"></i> Figma Design
+                            </a>
+                        {% endif %}
+
+                        {% if project.other_url %}
+                            <a href="{{ project.other_url }}" target="_blank" class="btn btn-outline-secondary">
+                                <i class="fas fa-link me-1"></i> Other Link
+                            </a>
+                        {% endif %}
+
+                        {% if not project.github_url and not project.figma_url and not project.other_url %}
+                            <p class="text-muted">No links provided for this project.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer text-muted">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        Posted by:
+                        <a href="{% url 'user_profile' project.creator.username %}">{{ project.creator.username }}</a>
+                    </div>
+                    <div>
+                        Created: {{ project.created_at|date:"F j, Y" }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if is_owner %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4>Applications ({{ applications|length }})</h4>
+                </div>
+                <div class="card-body">
+                    {% if applications %}
+                        <div class="list-group">
+                            {% for application in applications %}
+                                <div class="list-group-item">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h5 class="mb-0">
+                                            <a href="{% url 'user_profile' application.applicant.username %}">{{ application.applicant.username }}</a>
+                                        </h5>
+                                        <span class="badge bg-{% if application.status == 'applied' %}primary{% elif application.status == 'accepted' %}success{% else %}danger{% endif %}">
+                                            {{ application.get_status_display }}
+                                        </span>
+                                    </div>
+                                    <p>{{ application.message }}</p>
+                                    <p class="text-muted small">Applied: {{ application.applied_at|date:"F j, Y H:i" }}</p>
+
+                                    {% if application.status == 'applied' %}
+                                    <div class="d-flex gap-2">
+                                        <a href="{% url 'manage_project_application' application.id 'accept' %}" class="btn btn-sm btn-success">Accept</a>
+                                        <a href="{% url 'manage_project_application' application.id 'reject' %}" class="btn btn-sm btn-danger">Reject</a>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No applications received yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                {% if is_owner %}
+                    <h5 class="card-title mb-3">Manage Your Project</h5>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'project_update' project.pk %}" class="btn btn-outline-primary">Edit Project</a>
+                        <a href="{% url 'project_delete' project.pk %}" class="btn btn-outline-danger">Delete Project</a>
+                    </div>
+                {% elif user.is_authenticated and project.is_active %}
+                    {% if has_applied %}
+                        <div class="alert alert-info mb-0">
+                            <p class="mb-0">You have already applied to this project.</p>
+                        </div>
+                    {% else %}
+                        <h5 class="card-title mb-3">Interested in this project?</h5>
+                        <div class="d-grid">
+                            <a href="{% url 'project_apply' project.pk %}" class="btn btn-primary">Apply Now</a>
+                        </div>
+                    {% endif %}
+                {% elif not user.is_authenticated %}
+                    <div class="alert alert-info mb-0">
+                        <p class="mb-0">Please <a href="{% url 'login' %}">log in</a> to apply for this project.</p>
+                    </div>
+                {% elif not project.is_active %}
+                    <div class="alert alert-warning mb-0">
+                        <p class="mb-0">This project is no longer accepting applications.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">About the Creator</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    {% if project.creator.profile_pic %}
+                        <img src="{{ project.creator.profile_pic.url }}" alt="{{ project.creator.username }}"
+                             class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                    {% else %}
+                        <div class="bg-secondary text-white rounded-circle me-3 d-flex align-items-center justify-content-center"
+                             style="width: 50px; height: 50px;">
+                            {{ project.creator.username|first|upper }}
+                        </div>
+                    {% endif %}
+                    <div>
+                        <h6 class="mb-0">{{ project.creator.get_full_name|default:project.creator.username }}</h6>
+                        <a href="{% url 'user_profile' project.creator.username %}" class="text-decoration-none">
+                            View Profile
+                        </a>
+                    </div>
+                </div>
+
+                {% if project.creator.bio %}
+                    <p>{{ project.creator.bio|truncatechars:150 }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Apply colors to skill badges
+    document.querySelectorAll('.skill-badge').forEach(badge => {
+        const skillCode = badge.dataset.skillCode;
+
+        // Define skill colors
+        const skillColors = {
+            'PYTHON': '#3776AB',
+            'DJANGO': '#092E20',
+            'FLASK': '#000000',
+            'HTML': '#E34F26',
+            'CSS': '#1572B6',
+            'JAVASCRIPT': '#F7DF1E',
+            'TYPESCRIPT': '#3178C6',
+            'REACT': '#61DAFB',
+            'ANGULAR': '#DD0031',
+            'VUEJS': '#4FC08D',
+            'NODEJS': '#339933',
+            'PHP': '#777BB4',
+            'LARAVEL': '#FF2D20',
+            'JAVA': '#007396',
+            'SPRING': '#6DB33F',
+            'RUBY': '#CC342D',
+            'RAILS': '#CC0000',
+            // Add other skills as needed
+        };
+
+        // Apply color based on skill code
+        if (skillCode && skillColors[skillCode]) {
+            badge.style.backgroundColor = skillColors[skillCode];
+            badge.style.color = 'white';
+        } else {
+            // Default color if not found
+            badge.style.backgroundColor = '#6c757d';
+            badge.style.color = 'white';
+        }
+    });
+});
+</script>
+{% endblock %}

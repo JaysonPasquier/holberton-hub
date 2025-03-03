@@ -1,11 +1,33 @@
 {% extends "base.html" %}
-{% load user_tags %}
+{% load user_skill_tags %}
 
 {% block title %}Edit Profile | Holberton Hub{% endblock %}
 
 {% block content %}
 <!-- Include Font Awesome for skill icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css">
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Select2 -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<!-- Add this style block right after your CSS imports -->
+<style>
+.skills-list {
+    max-height: 200px;
+    overflow-y: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.skill-option {
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+</style>
 
 <div class="row">
     <div class="col-md-10 mx-auto">
@@ -74,21 +96,96 @@
                 <div class="card-body">
                     <div class="mb-4">
                         <label class="form-label">{{ form.skills_known.label }}</label>
-                        {{ form.skills_known }}
-                        {% if form.skills_known.errors %}
-                            <div class="text-danger small">{{ form.skills_known.errors }}</div>
-                        {% endif %}
+                        <div class="skill-selection-container border p-3 rounded bg-light">
+                            <!-- Selected skills -->
+                            <div id="selected-skills-known" class="mb-3 d-flex flex-wrap gap-2">
+                                {% if context_user_skills.skills_known %}
+                                    {% for skill in context_user_skills.skills_known %}
+                                        <div class="skill-badge badge d-flex align-items-center"
+                                             data-skill-code="{{ skill }}">
+                                            <i class="{{ skill|user_skill_icon }} me-1"></i>
+                                            {{ skill|user_skill_display }}
+                                            <input type="hidden" name="skills_known" value="{{ skill }}">
+                                            <button type="button" class="btn-close btn-close-white ms-2" aria-label="Remove"></button>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+
+                            <!-- Search input -->
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control skill-search" placeholder="Search skills...">
+                            </div>
+
+                            <!-- Skills list -->
+                            <div class="skills-list d-flex flex-wrap gap-2">
+                                {% for skill_code, skill_name in skill_choices %}
+                                    <div class="skill-option badge d-flex align-items-center"
+                                         data-value="{{ skill_code }}"
+                                         data-icon="{{ skill_code|user_skill_icon }}"
+                                         data-color="{{ skill_code|user_skill_color }}">
+                                        <i class="{{ skill_code|user_skill_icon }} me-1"></i>
+                                        {{ skill_name }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
                     </div>
 
                     <div class="mb-4">
                         <label class="form-label">{{ form.skills_to_learn.label }}</label>
-                        {{ form.skills_to_learn }}
-                        {% if form.skills_to_learn.errors %}
-                            <div class="text-danger small">{{ form.skills_to_learn.errors }}</div>
-                        {% endif %}
+                        <div class="skill-selection-container border p-3 rounded bg-light">
+                            <!-- Selected skills -->
+                            <div id="selected-skills-to-learn" class="mb-3 d-flex flex-wrap gap-2">
+                                {% if context_user_skills.skills_to_learn %}
+                                    {% for skill in context_user_skills.skills_to_learn %}
+                                        <div class="skill-badge badge d-flex align-items-center"
+                                             data-skill-code="{{ skill }}">
+                                            <i class="{{ skill|user_skill_icon }} me-1"></i>
+                                            {{ skill|user_skill_display }}
+                                            <input type="hidden" name="skills_to_learn" value="{{ skill }}">
+                                            <button type="button" class="btn-close btn-close-white ms-2" aria-label="Remove"></button>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+
+                            <!-- Search input -->
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control skill-search" placeholder="Search skills...">
+                            </div>
+
+                            <!-- Skills list -->
+                            <div class="skills-list d-flex flex-wrap gap-2">
+                                {% for skill_code, skill_name in skill_choices %}
+                                    <div class="skill-option badge d-flex align-items-center"
+                                         data-value="{{ skill_code }}"
+                                         data-icon="{{ skill_code|user_skill_icon }}"
+                                         data-color="{{ skill_code|user_skill_color }}">
+                                        <i class="{{ skill_code|user_skill_icon }} me-1"></i>
+                                        {{ skill_name }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            {% if debug_skills_without_colors %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">Debug: Skills Missing Colors</h3>
+                </div>
+                <div class="card-body">
+                    <ul>
+                        {% for skill in debug_skills_without_colors %}
+                            <li>{{ skill }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
 
             <div class="card mb-4">
                 <div class="card-header">
@@ -239,7 +336,7 @@
                             <label for="{{ form.mastodon_url.id_for_label }}" class="form-label">
                                 <i class="fab fa-mastodon me-2"></i>Mastodon
                             </label>
-                            {{ form.mastodon_url }}
+ 	                            {{ form.mastodon_url }}
                             {% if form.mastodon_url.errors %}
                                 <div class="text-danger small">{{ form.mastodon_url.errors }}</div>
                             {% endif %}
@@ -254,4 +351,101 @@
         </form>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const containers = document.querySelectorAll('.skill-selection-container');
+
+    // Add form submit event listener to debug what's being submitted
+    document.querySelector('form').addEventListener('submit', function(e) {
+        // Log the form data for skills
+        console.log("Skills being submitted:");
+
+        // Collect all skill inputs
+        const skillsKnown = Array.from(document.querySelectorAll('input[name="skills_known"]')).map(el => el.value);
+        const skillsToLearn = Array.from(document.querySelectorAll('input[name="skills_to_learn"]')).map(el => el.value);
+
+        console.log("Skills Known:", skillsKnown);
+        console.log("Skills To Learn:", skillsToLearn);
+    });
+
+    containers.forEach(container => {
+        const skillSearch = container.querySelector('.skill-search');
+        const skillsList = container.querySelector('.skills-list');
+        const selectedSkills = container.querySelector('[id^="selected-skills-"]');
+        const skillOptions = container.querySelectorAll('.skill-option');
+
+        // Apply colors to options
+        skillOptions.forEach(option => {
+            const color = option.dataset.color;
+            if (color) {
+                option.style.backgroundColor = color;
+                option.style.color = '#fff';
+            }
+            option.style.cursor = 'pointer';
+        });
+
+        // Filter skills
+        skillSearch.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            skillOptions.forEach(option => {
+                const skillName = option.textContent.toLowerCase().trim();
+                option.style.display = skillName.includes(searchTerm) ? 'block' : 'none';
+            });
+        });
+
+        // Add skill when clicked
+        skillsList.addEventListener('click', function(e) {
+            const target = e.target.closest('.skill-option');
+            if (target) {
+                const skillValue = target.dataset.value;
+                const skillName = target.textContent.trim();
+                const skillIcon = target.dataset.icon;
+                const skillColor = target.dataset.color;
+
+                // Check if already selected
+                const inputName = selectedSkills.id === 'selected-skills-known' ? 'skills_known' : 'skills_to_learn';
+                const existingInputs = selectedSkills.querySelectorAll(`input[value="${skillValue}"]`);
+                if (existingInputs.length === 0) {
+                    addSkillBadge(selectedSkills, skillValue, skillName, skillIcon, skillColor, inputName);
+                }
+            }
+        });
+
+        // Remove skill
+        selectedSkills.addEventListener('click', function(e) {
+            if (e.target.classList.contains('btn-close')) {
+                e.target.closest('.skill-badge').remove();
+            }
+        });
+    });
+
+    // Modified function to add skill badge with carefully constructed hidden input
+    function addSkillBadge(container, value, name, icon, color, inputName) {
+        if (!value) return;
+
+        const badge = document.createElement('div');
+        badge.className = 'skill-badge badge d-flex align-items-center';
+        badge.dataset.skillCode = value;
+        badge.style.backgroundColor = color;
+        badge.style.color = '#fff';
+
+        // Create the hidden input separately and set its value explicitly
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = inputName;
+        hiddenInput.value = value;    // This ensures the value is passed as a whole string
+
+        badge.innerHTML = `
+            <i class="${icon} me-1"></i>
+            ${name}
+            <button type="button" class="btn-close btn-close-white ms-2" aria-label="Remove"></button>
+        `;
+
+        // Append the hidden input as a DOM node, not as part of innerHTML
+        badge.appendChild(hiddenInput);
+        container.appendChild(badge);
+    }
+});
+</script>
 {% endblock %}

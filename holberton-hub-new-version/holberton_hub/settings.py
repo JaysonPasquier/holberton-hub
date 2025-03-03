@@ -26,14 +26,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Local apps
+    'users.apps.UsersConfig',  # Make sure this line exists
+    'jobs',
+    'skills',
+    'projects',  # Add the new projects app
+
     # Third-party apps
     'rest_framework',  # Keep for API endpoints
     'rest_framework.authtoken',  # Keep for API authentication
     'cloudinary',
     'cloudinary_storage',
-    # Custom apps
-    'users.apps.UsersConfig',
-    'jobs.apps.JobsConfig',
 ]
 
 # Cloudinary settings
@@ -67,6 +71,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'holberton_hub.context_processors.theme_context',  # Add this line
             ],
         },
     },
